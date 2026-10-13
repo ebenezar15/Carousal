@@ -1,0 +1,2705 @@
+{
+  "generated": "2026-10-13",
+  "fonts": [
+    {
+      "id": "montserrat",
+      "family": "Montserrat",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "montserrat/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "montserrat/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "montserrat/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "montserrat/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "montserrat/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "montserrat/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "poppins",
+      "family": "Poppins",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "poppins/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "poppins/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "poppins/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "poppins/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "poppins/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "poppins/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "archivo",
+      "family": "Archivo",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "archivo/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "archivo/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "archivo/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "archivo/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "archivo/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "archivo/latin-ext-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "plus-jakarta-sans",
+      "family": "Plus Jakarta Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "plus-jakarta-sans/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "outfit",
+      "family": "Outfit",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "outfit/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "outfit/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "outfit/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "outfit/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "outfit/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "outfit/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "sora",
+      "family": "Sora",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "sora/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "sora/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "sora/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "sora/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "sora/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "sora/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "syne",
+      "family": "Syne",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "syne/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "syne/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "syne/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "syne/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "syne/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "syne/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "lexend",
+      "family": "Lexend",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "lexend/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "lexend/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "lexend/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "lexend/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "lexend/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "lexend/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "unbounded",
+      "family": "Unbounded",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "unbounded/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "unbounded/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "unbounded/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "unbounded/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "unbounded/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "unbounded/latin-ext-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "playfair-display",
+      "family": "Playfair Display",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "playfair-display/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "playfair-display/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "playfair-display/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "playfair-display/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "playfair-display/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "playfair-display/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "playfair-display/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "playfair-display/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "lora",
+      "family": "Lora",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "lora/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "lora/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "lora/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "lora/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "lora/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "lora/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "lora/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "lora/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "merriweather",
+      "family": "Merriweather",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "merriweather/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "merriweather/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "merriweather/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "merriweather/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "merriweather/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "merriweather/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "merriweather/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "merriweather/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "source-serif-4",
+      "family": "Source Serif 4",
+      "license": "OFL-1.1",
+      "version": "5.3.1",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "libre-baskerville",
+      "family": "Libre Baskerville",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "libre-baskerville/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "libre-baskerville/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "libre-baskerville/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "libre-baskerville/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "libre-baskerville/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "libre-baskerville/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "eb-garamond",
+      "family": "EB Garamond",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "fraunces",
+      "family": "Fraunces",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "fraunces/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "fraunces/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "fraunces/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "fraunces/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "fraunces/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "fraunces/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "fraunces/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "fraunces/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "newsreader",
+      "family": "Newsreader",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "newsreader/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "newsreader/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "newsreader/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "newsreader/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "newsreader/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "newsreader/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "newsreader/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "newsreader/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "dm-serif-display",
+      "family": "DM Serif Display",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "dm-serif-display/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "dm-serif-display/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "dm-serif-display/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "dm-serif-display/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "fredoka",
+      "family": "Fredoka",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "fredoka/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "fredoka/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "fredoka/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "fredoka/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "fredoka/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "fredoka/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "nunito",
+      "family": "Nunito",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "nunito/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "nunito/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "nunito/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "nunito/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "nunito/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "nunito/latin-ext-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "baloo-2",
+      "family": "Baloo 2",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-2/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-2/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-2/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-2/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-2/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-2/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "quicksand",
+      "family": "Quicksand",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "quicksand/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "quicksand/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "quicksand/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "quicksand/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "quicksand/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "quicksand/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "comfortaa",
+      "family": "Comfortaa",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "lilita-one",
+      "family": "Lilita One",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "lilita-one/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "lilita-one/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "chewy",
+      "family": "Chewy",
+      "license": "Apache-2.0",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "chewy/latin-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "rubik",
+      "family": "Rubik",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "rubik/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "rubik/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "rubik/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "rubik/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "luckiest-guy",
+      "family": "Luckiest Guy",
+      "license": "Apache-2.0",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "luckiest-guy/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "luckiest-guy/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "inter",
+      "family": "Inter",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "dm-sans",
+      "family": "DM Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "dm-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "dm-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 500,
+          "style": "normal",
+          "file": "dm-sans/latin-500-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 500,
+          "style": "normal",
+          "file": "dm-sans/latin-ext-500-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "dm-sans/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "dm-sans/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "manrope",
+      "family": "Manrope",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "work-sans",
+      "family": "Work Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "work-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "work-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "work-sans/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "work-sans/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "work-sans/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "work-sans/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "karla",
+      "family": "Karla",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "karla/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "karla/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "karla/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "karla/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "karla/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "karla/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "figtree",
+      "family": "Figtree",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "figtree/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "figtree/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "figtree/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "figtree/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "figtree/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "figtree/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "albert-sans",
+      "family": "Albert Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "albert-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "albert-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "albert-sans/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "albert-sans/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "albert-sans/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "albert-sans/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "public-sans",
+      "family": "Public Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "public-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "public-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "public-sans/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "public-sans/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "public-sans/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "public-sans/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "mulish",
+      "family": "Mulish",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "mulish/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "mulish/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "mulish/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "mulish/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "mulish/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "mulish/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "space-grotesk",
+      "family": "Space Grotesk",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-grotesk/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-grotesk/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 500,
+          "style": "normal",
+          "file": "space-grotesk/latin-500-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 500,
+          "style": "normal",
+          "file": "space-grotesk/latin-ext-500-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-grotesk/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-grotesk/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "ibm-plex-sans",
+      "family": "IBM Plex Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "jetbrains-mono",
+      "family": "JetBrains Mono",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "ibm-plex-mono",
+      "family": "IBM Plex Mono",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-mono/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "space-mono",
+      "family": "Space Mono",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-mono/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-mono/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-mono/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-mono/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "roboto-mono",
+      "family": "Roboto Mono",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/latin-500-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/latin-ext-500-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "chakra-petch",
+      "family": "Chakra Petch",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "chakra-petch/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "chakra-petch/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "chakra-petch/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "chakra-petch/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "chakra-petch/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "chakra-petch/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "orbitron",
+      "family": "Orbitron",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "orbitron/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "orbitron/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "orbitron/latin-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "exo-2",
+      "family": "Exo 2",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "exo-2/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "exo-2/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "exo-2/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "exo-2/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "exo-2/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "exo-2/latin-ext-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "cormorant-garamond",
+      "family": "Cormorant Garamond",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "cormorant-garamond/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "cormorant-garamond/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "cormorant-garamond/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "cinzel",
+      "family": "Cinzel",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "cinzel/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "cinzel/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "cinzel/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "cinzel/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "cinzel/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "cinzel/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "bodoni-moda",
+      "family": "Bodoni Moda",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "bodoni-moda/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "bodoni-moda/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "bodoni-moda/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "bodoni-moda/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "bodoni-moda/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "bodoni-moda/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "italiana",
+      "family": "Italiana",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "italiana/latin-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "marcellus",
+      "family": "Marcellus",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "marcellus/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "marcellus/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "tenor-sans",
+      "family": "Tenor Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "tenor-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "tenor-sans/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "prata",
+      "family": "Prata",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "prata/latin-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "gilda-display",
+      "family": "Gilda Display",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "gilda-display/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "gilda-display/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "josefin-sans",
+      "family": "Josefin Sans",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 300,
+          "style": "normal",
+          "file": "josefin-sans/latin-300-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 300,
+          "style": "normal",
+          "file": "josefin-sans/latin-ext-300-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "josefin-sans/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "josefin-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "josefin-sans/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "josefin-sans/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "caveat",
+      "family": "Caveat",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "caveat/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "caveat/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "caveat/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "caveat/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "dancing-script",
+      "family": "Dancing Script",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "dancing-script/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "dancing-script/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "dancing-script/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "dancing-script/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "pacifico",
+      "family": "Pacifico",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "pacifico/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "pacifico/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "kalam",
+      "family": "Kalam",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "kalam/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "kalam/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "kalam/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "kalam/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "permanent-marker",
+      "family": "Permanent Marker",
+      "license": "Apache-2.0",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "permanent-marker/latin-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "satisfy",
+      "family": "Satisfy",
+      "license": "Apache-2.0",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "satisfy/latin-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "great-vibes",
+      "family": "Great Vibes",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "indie-flower",
+      "family": "Indie Flower",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "indie-flower/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "indie-flower/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "patrick-hand",
+      "family": "Patrick Hand",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "patrick-hand/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "patrick-hand/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "bebas-neue",
+      "family": "Bebas Neue",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "bebas-neue/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "bebas-neue/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "oswald",
+      "family": "Oswald",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "oswald/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "oswald/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "oswald/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "oswald/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "oswald/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "oswald/latin-ext-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "anton",
+      "family": "Anton",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "anton/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "anton/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "barlow-condensed",
+      "family": "Barlow Condensed",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "barlow-condensed/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "barlow-condensed/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "barlow-condensed/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "barlow-condensed/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "barlow-condensed/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "barlow-condensed/latin-ext-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "league-gothic",
+      "family": "League Gothic",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "league-gothic/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "league-gothic/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "fjalla-one",
+      "family": "Fjalla One",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "fjalla-one/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "fjalla-one/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "big-shoulders-display",
+      "family": "Big Shoulders Display",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "big-shoulders-display/latin-ext-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "teko",
+      "family": "Teko",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "teko/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "teko/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "teko/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "teko/latin-ext-600-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "roboto-condensed",
+      "family": "Roboto Condensed",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/latin-900-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/latin-ext-900-normal.woff2"
+        }
+      ]
+    }
+  ]
+}
