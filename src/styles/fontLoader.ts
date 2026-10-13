@@ -1,12 +1,37 @@
 // Registers bundled woff2 fonts (assets/fonts → served at /fonts) with the FontFace API.
 // Canvas (Konva) text only uses a font once it is loaded, so renderers await ensureFonts() first.
 import { findFont } from './index';
+import { db } from '@/storage/db';
 
 const loaded = new Map<string, Promise<void>>();
 const BASE = `${import.meta.env.BASE_URL}fonts`;
 
-/** CSS family name used everywhere in the scene graph; namespaced to avoid clashing with system fonts. */
-export const cssFamily = (fontId: string) => `cf-${fontId}`;
+/**
+ * Font ids: bundled `inter`, installed `system:Arial`, uploaded `custom:<assetId>`.
+ * Bundled/custom families are namespaced to avoid clashing with system fonts.
+ */
+export const cssFamily = (fontId: string) =>
+  fontId.startsWith('system:') ? fontId.slice(7) : fontId.startsWith('custom:') ? `cf-custom-${fontId.slice(7)}` : `cf-${fontId}`;
+
+const customLoaded = new Map<string, Promise<void>>();
+
+function loadCustom(fontId: string): Promise<void> {
+  let p = customLoaded.get(fontId);
+  if (!p) {
+    p = (async () => {
+      const rec = await db.assets.get(fontId.slice(7));
+      if (!rec) throw new Error(`Custom font missing: ${fontId}`);
+      const face = new FontFace(cssFamily(fontId), await rec.blob.arrayBuffer());
+      await face.load();
+      document.fonts.add(face);
+    })().catch((e) => {
+      customLoaded.delete(fontId);
+      console.warn(e);
+    });
+    customLoaded.set(fontId, p);
+  }
+  return p;
+}
 
 function loadFace(fontId: string, weight: number, style: 'normal' | 'italic'): Promise<void> {
   const key = `${fontId}:${weight}:${style}`;
@@ -44,6 +69,10 @@ function loadFace(fontId: string, weight: number, style: 'normal' | 'italic'): P
 export async function ensureFonts(fontIds: Iterable<string>): Promise<void> {
   const jobs: Promise<void>[] = [];
   for (const id of new Set(fontIds)) {
+    if (id.startsWith('custom:')) {
+      jobs.push(loadCustom(id));
+      continue;
+    }
     const def = findFont(id);
     if (!def) continue;
     def.weights.forEach((w) => jobs.push(loadFace(id, w, 'normal')));

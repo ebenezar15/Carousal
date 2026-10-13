@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { GeneratePage } from './GeneratePage';
 import { SettingsPage } from './SettingsPage';
-import { useProjects, useSettings } from './store';
-
-type Route = 'generate' | 'settings';
+import { EditorPage } from '@/editor/EditorPage';
+import { endGesture, useProjects, useRoute, useSettings } from './store';
 
 export function App() {
-  const [route, setRoute] = useState<Route>('generate');
+  const { route, go: setRoute } = useRoute();
+  const hasProject = useProjects((s) => Boolean(s.current));
   const { loaded, settings, load } = useSettings();
   const refresh = useProjects((s) => s.refresh);
   const [online, setOnline] = useState(typeof navigator === 'undefined' ? true : navigator.onLine);
@@ -18,7 +18,11 @@ export function App() {
     const off = () => setOnline(false);
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
+    // Safety net: a slider drag that ends outside its control still closes the undo gesture.
+    const up = (e: PointerEvent) => !(e.target instanceof HTMLInputElement && e.target.type === 'color') && endGesture();
+    window.addEventListener('pointerup', up);
     return () => {
+      window.removeEventListener('pointerup', up);
       window.removeEventListener('online', on);
       window.removeEventListener('offline', off);
     };
@@ -43,9 +47,9 @@ export function App() {
             CarouselForge
           </div>
           <nav className="flex gap-1" aria-label="Main">
-            {(['generate', 'settings'] as const).map((r) => (
-              <button key={r} className={`btn-ghost ${route === r ? 'bg-zinc-200/70 dark:bg-zinc-800' : ''}`} aria-current={route === r ? 'page' : undefined} onClick={() => setRoute(r)}>
-                {r === 'generate' ? 'Generate' : 'Settings'}
+            {(['generate', 'editor', 'settings'] as const).map((r) => (
+              <button key={r} className={`btn-ghost ${route === r ? 'bg-zinc-200/70 dark:bg-zinc-800' : ''}`} aria-current={route === r ? 'page' : undefined} onClick={() => setRoute(r)} disabled={r === 'editor' && !hasProject}>
+                {r === 'generate' ? 'Generate' : r === 'editor' ? 'Editor' : 'Settings'}
               </button>
             ))}
           </nav>
@@ -54,7 +58,11 @@ export function App() {
           </span>
         </div>
       </header>
-      <main className="mx-auto max-w-[1400px] px-4 py-6">{route === 'generate' ? <GeneratePage /> : <SettingsPage />}</main>
+      {route === 'editor' ? (
+        <EditorPage />
+      ) : (
+        <main className="mx-auto max-w-[1400px] px-4 py-6">{route === 'generate' ? <GeneratePage /> : <SettingsPage />}</main>
+      )}
     </div>
   );
 }

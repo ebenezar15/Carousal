@@ -101,6 +101,17 @@ Emoji are rendered with the operating system's emoji font. No emoji image set is
 | PDF.js | pdfjs-dist@6.4.299 | Apache-2.0 | PDF text extraction for content import (`src/engine/import/pdf.ts`). Library and worker are loaded on demand as separate chunks. https://github.com/mozilla/pdf.js |
 | Readability | @mozilla/readability@0.6.0 | Apache-2.0 | Article extraction for URL import (`src/engine/import/url.ts`). https://github.com/mozilla/readability |
 | docx | docx@9.10.0 (devDependency, tests only) | MIT | Generates .docx fixtures in `tests/unit/import.test.ts`. Not shipped. |
+| ONNX Runtime Web | onnxruntime-web@1.30.0 | MIT | Runs the background-removal model (`src/image/bgremove/worker.ts`) on the single-threaded wasm backend inside a Web Worker. The worker chunk and `ort-wasm-simd-threaded.wasm` (~14 MB) are emitted by Vite and precached by the PWA. Keep the Microsoft copyright notice (kept in the minified bundle header). https://github.com/microsoft/onnxruntime |
+
+## Models (bundled offline in `assets/models/`)
+
+Rule: model weights must be released under a license that allows bundling and commercial use. Not used: BRIA RMBG-1.4 / RMBG-2.0 (non-commercial weights license) and `@imgly/background-removal` (AGPL-3.0 or commercial license).
+
+| Model | File | Source package | sha256 | License | License file |
+|---|---|---|---|---|---|
+| U²-Netp (U-2-Net small, 320×320 salient-object segmentation) | assets/models/u2netp.onnx (4,574,861 bytes) | @planby-tech/rmbg-webgpu@0.2.1 (npm, `MIT AND Apache-2.0`), file `models/u2netp.onnx`; fetched by `scripts/fetch-bg-model.mjs` (`npm run models:fetch`) | 309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8 | Apache-2.0 | assets/models/u2netp.LICENSE.txt (+ upstream notice assets/models/u2netp.NOTICE.md) |
+
+Provenance: the package's THIRD_PARTY_NOTICES.md states the file is the rembg release artifact `https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx` (rembg is MIT), an ONNX export of the U²-Netp weights from https://github.com/xuebinqin/U-2-Net (Apache-2.0). Checks done on 2026-10-13: the file's md5 is `8e83ca70e441ab06c318d82300c84806`, which is the hash rembg pins for `u2netp.onnx`. A second, independent npm package (`@rmbg/model-u2netp@0.0.1`, which has no license field and was not used as the source) contains a byte-identical file. Loading it with onnxruntime-web gives one input `input.1` float32 [1,3,320,320] and seven outputs [1,1,320,320] (U²-Net's fused map d0 plus six side outputs), which matches the U²-Netp architecture. Preprocessing follows rembg: divide by the image maximum, then ImageNet mean (0.485, 0.456, 0.406) and std (0.229, 0.224, 0.225). Keep `u2netp.LICENSE.txt` and `u2netp.NOTICE.md` with distributed builds.
 
 ## Online-only services (never bundled)
 

@@ -32,7 +32,7 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
   for (const id of ids) {
     switch (id) {
       case 'thin-rule-top':
-        back.push(line('rule-top', [box.x, box.y - Math.round(28 * k), box.x + box.w, box.y - Math.round(28 * k)], mix(pal.text, pal.bg, 0.6), Math.max(1, 2 * k)));
+        back.push(line('rule-top', [box.x, box.y - Math.round(10 * k), box.x + box.w, box.y - Math.round(10 * k)], mix(pal.text, pal.bg, 0.6), Math.max(1, 2 * k)));
         break;
       case 'corner-index':
         if (s.role !== 'hook') back.push(label(ctx, 'corner-index', String(index + 1).padStart(2, '0'), box.x, H - margin.bottom - Math.round(330 * k), box.w, { size: Math.round(300 * k), color: mix(pal.text, pal.bg, 0.92), weight: ctx.headline.weight, font: ctx.fonts.heading, align: 'right', lineHeight: 1 }));

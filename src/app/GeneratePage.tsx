@@ -9,7 +9,7 @@ import { newId } from '@/model/id';
 import type { CarouselTheme, Project } from '@/model/types';
 import { renderSlideToDataURL } from '@/export/render';
 import { providers } from './runtime';
-import { useDocument, useProjects, useSettings } from './store';
+import { useDocument, useProjects, useRoute, useSettings } from './store';
 import { InputPanel, type InputState } from './generate/InputPanel';
 import { VariationsGrid, type VariationPreview } from './generate/VariationsGrid';
 import { CarouselView } from './generate/CarouselView';
@@ -187,6 +187,7 @@ export function GeneratePage() {
           <>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h1 className="text-lg font-semibold">{current.name}</h1>
+              <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => useRoute.getState().go('editor')}>Open in editor →</button>
               <span className="text-xs text-zinc-500" data-testid="generated-by">
                 {carousel.slides.length} slides · {getPreset(carousel.presetId).width}×{getPreset(carousel.presetId).height} · copy by {PROVIDER_LABEL[current.generatedBy ?? 'rules']}
               </span>

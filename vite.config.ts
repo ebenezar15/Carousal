@@ -30,8 +30,9 @@ export default defineConfig({
         icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
       },
       workbox: {
-        globPatterns: ['**/*.{js,mjs,css,html,svg,woff2,json}'],
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        // wasm = onnxruntime-web runtime (~14 MB), onnx = background-removal model (src/image/bgremove).
+        globPatterns: ['**/*.{js,mjs,css,html,svg,woff2,json,wasm,onnx}'],
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
       },
     }),
   ],

@@ -126,6 +126,8 @@ export function SettingsPage() {
         )}
       </section>
 
+      <StockKeys />
+
       <section className="card space-y-3 p-5">
         <h2 className="font-semibold">Appearance</h2>
         <div className="flex gap-2">
@@ -137,5 +139,34 @@ export function SettingsPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+function StockKeys() {
+  const [state, setState] = useState<Record<string, boolean>>({});
+  const [values, setValues] = useState<Record<string, string>>({});
+  const keys = [
+    { name: 'unsplash_access_key', label: 'Unsplash access key', help: 'Free at unsplash.com/developers. Photos are credited to the photographer automatically.' },
+    { name: 'pexels_api_key', label: 'Pexels API key', help: 'Free at pexels.com/api.' },
+  ];
+  useEffect(() => {
+    void Promise.all(keys.map(async (k) => [k.name, Boolean(await getSecret(k.name))] as const)).then((r) => setState(Object.fromEntries(r)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <section className="card space-y-3 p-5">
+      <h2 className="font-semibold">Stock photos (online)</h2>
+      {keys.map((k) => (
+        <div key={k.name}>
+          <label className="label" htmlFor={k.name}>{k.label} {state[k.name] && <span className="ml-1 text-emerald-600">● saved</span>}</label>
+          <div className="flex gap-2">
+            <input id={k.name} type="password" autoComplete="off" className="field" value={values[k.name] ?? ''} onChange={(e) => setValues({ ...values, [k.name]: e.target.value })} />
+            <button className="btn-primary" disabled={!values[k.name]?.trim()} onClick={async () => { await setSecret(k.name, values[k.name]!.trim(), true); setValues({ ...values, [k.name]: '' }); setState({ ...state, [k.name]: true }); }}>Save</button>
+            {state[k.name] && <button className="btn-ghost" onClick={async () => { await deleteSecret(k.name); setState({ ...state, [k.name]: false }); }}>Remove</button>}
+          </div>
+          <p className="mt-1 text-xs text-zinc-500">{k.help}</p>
+        </div>
+      ))}
+    </section>
   );
 }

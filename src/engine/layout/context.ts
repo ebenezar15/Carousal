@@ -43,7 +43,7 @@ export interface Ctx {
 export function makeCtx(plan: CarouselPlan, presetId: string, theme: CarouselTheme): Ctx {
   const preset = getPreset(presetId);
   const style = getStyle(theme.styleId);
-  const pal = getPalette(theme.paletteId).colors;
+  const pal = theme.customPalette ?? getPalette(theme.paletteId).colors;
   const mod = theme.modifiers ?? {};
   const W = preset.width;
   const H = preset.height;

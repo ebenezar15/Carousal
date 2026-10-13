@@ -3,7 +3,7 @@ import type { Carousel } from '@/model/types';
 import type { MoreDirection } from '@/engine';
 import { getPreset } from '@/styles';
 import { SlideStage } from '@/editor/SlideStage';
-import { renderSlideToDataURL } from '@/export/render';
+import { renderSlide } from '@/export/render';
 
 export interface SlideActions {
   newLayout(i: number): void;
@@ -39,11 +39,11 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onTogg
   const [options, setOptions] = useState<{ index: number; items: string[] | 'loading' | string } | null>(null);
   const panoramic = carousel.slides[0]?.background.span !== undefined;
 
-  const download = (i: number) => {
+  const download = async (i: number) => {
     const slide = carousel.slides[i];
     if (!slide) return;
     const a = document.createElement('a');
-    a.href = renderSlideToDataURL(slide, preset.width, preset.height);
+    a.href = await renderSlide(slide, preset.width, preset.height);
     a.download = `${slug(name)}_${String(i + 1).padStart(2, '0')}.png`;
     a.click();
   };
@@ -87,7 +87,7 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onTogg
                   {i + 1} · {slide.role}
                   {slide.notes && <span className="ml-1 text-amber-600" title={slide.notes}>⚠ too long</span>}
                 </span>
-                <button className="hover:text-brand-600" onClick={() => download(i)} aria-label={`Download slide ${i + 1} as PNG`}>PNG ↓</button>
+                <button className="hover:text-brand-600" onClick={() => void download(i)} aria-label={`Download slide ${i + 1} as PNG`}>PNG ↓</button>
               </div>
               <div className="flex flex-wrap gap-1">
                 <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 dark:border-zinc-700" onClick={() => actions.newLayout(i)} disabled={busy} aria-label={`New layout for slide ${i + 1}`}>↻ Layout</button>

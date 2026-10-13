@@ -9,18 +9,22 @@ export interface TemplateRecord {
   presetId: string;
   createdAt: number;
   carousel: Carousel;
+  /** Plan the template was made from (lets "start from template" keep editable engine slides). */
+  plan?: unknown;
   thumbnail?: string;
 }
 
 export interface BrandKit {
   id: string;
   name: string;
-  logoAssetId?: string;
-  colors: string[];
-  headingFont?: string;
-  bodyFont?: string;
+  /** `asset:<id>` of the logo image. */
+  logoSrc?: string;
+  colors: { primary: string; accent: string; background: string; text: string };
+  headingFont: string;
+  bodyFont: string;
   handle?: string;
-  watermark?: boolean;
+  watermark: boolean;
+  watermarkPosition: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
 }
 
 export interface AssetRecord {

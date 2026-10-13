@@ -49,9 +49,9 @@ test('generates, rewrites a slide and suggests headlines with Claude (mocked API
   await page.goto('/');
   await page.getByRole('button', { name: 'Settings' }).click();
   await page.getByText('Claude (online)').click();
-  await page.getByRole('textbox', { name: 'API key' }).fill('sk-ant-test-key');
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
-  await expect(page.getByText('● saved')).toBeVisible();
+  await page.getByRole('textbox', { name: 'API key', exact: true }).fill('sk-ant-test-key');
+  await page.getByRole('button', { name: 'Save', exact: true }).first().click();
+  await expect(page.getByText('● saved').first()).toBeVisible();
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
 
   await page.getByLabel('Your content').fill('Shipping in small batches reduces risk and speeds up feedback.');

@@ -1,6 +1,7 @@
 // The layout engine: plan + design (style, palette, fonts, modifiers) + platform preset → scene graph.
 import { newId } from '@/model/id';
-import type { Carousel, CarouselTheme, Slide } from '@/model/types';
+import type { Carousel, CarouselTheme, Slide, SlideElement } from '@/model/types';
+import { label } from './primitives';
 import type { CarouselPlan, SlidePlan } from '../schema';
 import { buildBackground } from './backgrounds';
 import { chrome } from './chrome';
@@ -76,13 +77,13 @@ export function buildSlide(ctx: Ctx, s: SlidePlan, index: number, requested: str
     role: s.role,
     layoutId,
     background: buildBackground(ctx, index),
-    elements: [...deco.back, ...result.elements, ...deco.front, ...chrome(ctx, index)],
+    elements: [...deco.back, ...result.elements, ...deco.front, ...chrome(ctx, index), ...watermark(ctx)],
     notes: best!.spill > 0 ? 'Text exceeds the safe area at the minimum readable size — shorten it.' : undefined,
   };
 }
 
 export function buildCarousel(input: BuildInput): Carousel {
-  const ctx = makeCtx(input.plan, input.presetId, input.theme);
+  const ctx = Object.assign(makeCtx(input.plan, input.presetId, input.theme), { watermark: input.theme.watermark });
   const layouts = chooseLayouts(ctx, input.theme.layoutOverrides);
   return {
     id: newId('car_'),
@@ -94,7 +95,34 @@ export function buildCarousel(input: BuildInput): Carousel {
 
 /** Rebuilds a single slide (e.g. after "new layout" or rewriting its copy) with the carousel's design. */
 export function rebuildSlide(plan: CarouselPlan, presetId: string, theme: CarouselTheme, index: number): Slide {
-  const ctx = makeCtx(plan, presetId, theme);
+  const ctx = Object.assign(makeCtx(plan, presetId, theme), { watermark: theme.watermark });
   const layouts = chooseLayouts(ctx, theme.layoutOverrides);
   return buildSlide(ctx, plan.slides[index]!, index, layouts[index]!);
+}
+
+/** Brand watermark (logo and/or handle) in a corner of every slide. */
+function watermark(ctx: Ctx): SlideElement[] {
+  const wm = ctx.style && (ctx as Ctx & { watermark?: CarouselTheme['watermark'] }).watermark;
+  if (!wm || (!wm.text && !wm.logoSrc)) return [];
+  const { k, W, H } = ctx;
+  const pad = Math.round(28 * k);
+  const size = Math.round(56 * k);
+  const right = wm.position.endsWith('right');
+  const bottom = wm.position.startsWith('bottom');
+  const y = bottom ? H - pad - size : pad;
+  const out: SlideElement[] = [];
+  let x = right ? W - pad : pad;
+  if (wm.logoSrc) {
+    x = right ? x - size : x;
+    out.push({ id: newId('el_'), kind: 'image', slot: 'watermark', name: 'Watermark logo', src: wm.logoSrc, fit: 'contain', x, y, width: size, height: size, rotation: 0, opacity: wm.opacity });
+    x = right ? x - Math.round(12 * k) : x + size + Math.round(12 * k);
+  }
+  if (wm.text) {
+    const w = Math.round(W * 0.4);
+    const t = label(ctx, 'watermark', wm.text, right ? x - w : x, 0, w, { size: Math.round(26 * k), color: ctx.pal.mutedText, align: right ? 'right' : 'left', weight: ctx.headline.weight });
+    t.y = Math.round(y + size / 2 - t.height / 2);
+    t.opacity = wm.opacity;
+    out.push(t);
+  }
+  return out;
 }

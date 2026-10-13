@@ -4,7 +4,7 @@
 const KEYCHAIN_SERVICE: &str = "com.carouselforge.app";
 
 /// Only these secret names may be read or written from the frontend.
-const ALLOWED_SECRETS: &[&str] = &["anthropic_api_key"];
+const ALLOWED_SECRETS: &[&str] = &["anthropic_api_key", "unsplash_access_key", "pexels_api_key"];
 
 fn entry(name: &str) -> Result<keyring::Entry, String> {
   if !ALLOWED_SECRETS.contains(&name) {

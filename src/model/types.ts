@@ -3,7 +3,7 @@
 // by the editor, thumbnails and export.
 import type { SlideRole } from '@/styles/types';
 
-export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image' | 'group';
+export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image' | 'group' | 'chart' | 'table' | 'qr';
 
 export interface ElementBase {
   id: string;
@@ -31,6 +31,21 @@ export interface TextEmphasis {
 
 export interface Shadow { color: string; blur: number; offsetX: number; offsetY: number; opacity: number }
 
+/** Character-range style override inside one text box (rich text). Ranges index into `text`. */
+export interface TextSpan {
+  start: number;
+  end: number;
+  color?: string;
+  fontId?: string;
+  fontWeight?: number;
+  italic?: boolean;
+  underline?: boolean;
+  /** Marker/highlight color drawn behind the range. */
+  highlight?: string;
+}
+
+export interface LinearGradient { angle: number; stops: GradientStop[] }
+
 export interface TextElement extends ElementBase {
   kind: 'text';
   text: string;
@@ -49,6 +64,14 @@ export interface TextElement extends ElementBase {
   emphasis?: TextEmphasis;
   stroke?: { color: string; width: number };
   shadow?: Shadow;
+  underline?: boolean;
+  spans?: TextSpan[];
+  /** Each paragraph (\n-separated) becomes a list item with a hanging indent. */
+  listStyle?: 'none' | 'bullet' | 'number';
+  /** Arc text: -100 (frown) … 100 (smile); single line only. */
+  curve?: number;
+  /** Gradient fill across the text box (overrides `fill`). */
+  fillGradient?: LinearGradient;
 }
 
 export interface ShapeElement extends ElementBase {
@@ -81,19 +104,80 @@ export interface PathElement extends ElementBase {
   strokeWidth?: number;
 }
 
-export interface ImageElement extends ElementBase {
-  kind: 'image';
-  /** Key into the Dexie assets table, or a data/http URL. */
-  src: string;
-  fit: 'cover' | 'contain' | 'fill';
+export interface ImageFilters {
+  brightness?: number; // -1 … 1
+  contrast?: number; // -100 … 100
+  saturation?: number; // -2 … 10 (Konva HSL)
+  blur?: number; // px
+  grayscale?: boolean;
+  /** Maps shadows→first color, highlights→second color. */
+  duotone?: [string, string];
 }
 
+export type ImageMask = 'none' | 'circle' | 'rounded' | 'blob' | 'arch' | 'hexagon' | 'star';
+
+export interface ImageElement extends ElementBase {
+  kind: 'image';
+  /** `asset:<id>` (Dexie assets table), a data: URL, or an http(s) URL. Empty = placeholder. */
+  src: string;
+  fit: 'cover' | 'contain' | 'fill';
+  /** Cover-crop controls: zoom ≥ 1 and focal point 0..1 within the source image. */
+  crop?: { zoom: number; focusX: number; focusY: number };
+  mask?: ImageMask;
+  cornerRadius?: number;
+  filters?: ImageFilters;
+  stroke?: string;
+  strokeWidth?: number;
+  /** AI image placeholder: the prompt to generate/find an image for this spot. */
+  prompt?: string;
+  /** Attribution for stock photos (shown in the properties panel; exported with project files). */
+  credit?: { author: string; url: string; source: 'unsplash' | 'pexels' };
+}
+
+export interface ChartSeries { name: string; values: number[]; color?: string }
+
+export interface ChartElement extends ElementBase {
+  kind: 'chart';
+  chartType: 'bar' | 'line' | 'pie' | 'donut';
+  labels: string[];
+  series: ChartSeries[];
+  colors: string[];
+  textColor: string;
+  gridColor: string;
+  fontId: string;
+  fontSize: number;
+  showValues: boolean;
+  showLegend: boolean;
+}
+
+export interface TableElement extends ElementBase {
+  kind: 'table';
+  rows: string[][];
+  header: boolean;
+  fontId: string;
+  fontSize: number;
+  textColor: string;
+  headerFill: string;
+  headerTextColor: string;
+  stripeFill?: string;
+  borderColor: string;
+  align: 'left' | 'center';
+}
+
+export interface QRElement extends ElementBase {
+  kind: 'qr';
+  data: string;
+  fg: string;
+  bg: string;
+}
+
+/** Children coordinates are relative to the group's x/y. */
 export interface GroupElement extends ElementBase {
   kind: 'group';
   children: SlideElement[];
 }
 
-export type SlideElement = TextElement | ShapeElement | LineElement | PathElement | ImageElement | GroupElement;
+export type SlideElement = TextElement | ShapeElement | LineElement | PathElement | ImageElement | GroupElement | ChartElement | TableElement | QRElement;
 
 export interface GradientStop { offset: number; color: string }
 
@@ -125,6 +209,7 @@ export type Background = BackgroundExtras &
     | { type: 'linear'; angle: number; stops: GradientStop[] }
     | { type: 'radial'; cx: number; cy: number; radius: number; stops: GradientStop[] }
     | { type: 'mesh'; base: string; points: MeshPoint[] }
+    | { type: 'image'; src: string; color: string; overlay?: { color: string; opacity: number }; filters?: ImageFilters }
   );
 
 export interface Slide {
@@ -135,6 +220,8 @@ export interface Slide {
   background: Background;
   elements: SlideElement[];
   notes?: string;
+  /** Created or heavily edited by hand: theme rebuilds keep it as-is instead of re-laying it out. */
+  manual?: boolean;
 }
 
 /** Design-level tweaks applied on top of a style system ("make it more bold/minimal/…"). */
@@ -164,6 +251,11 @@ export interface CarouselTheme {
   handle?: string;
   /** Human label for the variation, e.g. "Bold Gradient · Sunset". */
   label?: string;
+  /** Brand-kit colors mapped onto palette roles; overrides `paletteId`'s colors. */
+  customPalette?: import('@/styles/types').PaletteColors;
+  brandKitId?: string;
+  /** Small logo/handle mark on every slide. */
+  watermark?: { text?: string; logoSrc?: string; position: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right'; opacity: number };
 }
 
 export interface Carousel {
