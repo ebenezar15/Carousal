@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'cf-inter', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #eef0ff;
+  --color-brand-100: #dfe2ff;
+  --color-brand-500: #5b5bf0;
+  --color-brand-600: #4848d6;
+  --color-brand-700: #3a3ab0;
+}
+
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+}
+
+@utility field {
+  @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 dark:border-zinc-700 dark:bg-zinc-900;
+}
+@utility label {
+  @apply mb-1 block text-xs font-medium tracking-wide text-zinc-600 dark:text-zinc-400;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-brand-500 text-white hover:bg-brand-600;
+}
+@utility btn-ghost {
+  @apply btn text-zinc-700 hover:bg-zinc-200/70 dark:text-zinc-300 dark:hover:bg-zinc-800;
+}
+@utility card {
+  @apply rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900;
+}
