@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "canvas": {
+    "instagram": { "width": 1080, "height": 1350, "maxSlides": 20, "gridCropRatio": "3:4", "gridCropSidePx": 34 },
+    "linkedin": { "width": 1080, "height": 1350, "altSizes": [[1080, 1080]], "softMaxSlides": 15 }
+  },
+  "roles": {
+    "hook": {
+      "purpose": "Stop the scroll with a specific promise and open a loop that only swiping resolves; doubles as grid thumbnail.",
+      "maxWords": 15, "headlineMaxWords": 12, "bodyMaxWords": 8, "maxBullets": 0, "maxBodyLines": 2,
+      "layoutHints": ["headline-dominant", "headline 2.5-3x body size", "center headline horizontally for grid crop", "optional small subline qualifying audience or payoff", "swipe cue required", "high contrast", "partial-bleed element on right edge"]
+    },
+    "intro": {
+      "purpose": "Name the problem, stakes or context so the reader feels addressed; must also work as an entry point if re-served from slide 2.",
+      "maxWords": 35, "headlineMaxWords": 10, "bodyMaxWords": 28, "maxBullets": 3, "maxBodyLines": 4,
+      "layoutHints": ["restate topic briefly", "end on a setup that the next slide pays off", "avoid filler like 'let's dive in'"]
+    },
+    "body": {
+      "purpose": "Deliver one point: short headline plus 1-3 supporting sentences.",
+      "maxWords": 45, "headlineMaxWords": 8, "bodyMaxWords": 35, "maxBullets": 0, "maxBodyLines": 5,
+      "layoutHints": ["left-aligned body", "headline at fixed baseline", "optional icon or illustration", "one emphasized term max 3 words"]
+    },
+    "list": {
+      "purpose": "Several parallel items that belong together, scannable at a glance.",
+      "maxWords": 45, "headlineMaxWords": 8, "bodyMaxWords": 36, "maxBullets": 5, "maxWordsPerBullet": 8, "maxBodyLines": 5,
+      "layoutHints": ["parallel grammar across bullets", "front-load key word", "numbered or icon bullets", "left-aligned", "even vertical rhythm"]
+    },
+    "stat": {
+      "purpose": "One striking number with plain-language meaning and a source; works as a pattern interrupt.",
+      "maxWords": 25, "headlineMaxWords": 6, "bodyMaxWords": 18, "maxBullets": 0, "maxBodyLines": 3,
+      "layoutHints": ["number is largest element 160-260px", "centered composition allowed", "source line in caption size", "accent color on number"]
+    },
+    "quote": {
+      "purpose": "A short memorable line (insight or customer voice) with attribution; adds variety and shareability.",
+      "maxWords": 30, "headlineMaxWords": 0, "bodyMaxWords": 25, "maxBullets": 0, "maxBodyLines": 4,
+      "layoutHints": ["large quote text 56-80px", "oversized quotation mark motif", "attribution in caption size", "centered or left aligned"]
+    },
+    "comparison": {
+      "purpose": "Make contrast instantly visible: before/after, wrong/right, myth/fact, old/new.",
+      "maxWords": 40, "headlineMaxWords": 8, "bodyMaxWords": 32, "maxBullets": 4, "maxBulletsPerSide": 4, "maxBodyLines": 4,
+      "layoutHints": ["two columns or top/bottom split", "label each side", "pair color with icon (x / check), never color alone", "mirror structure on both sides"]
+    },
+    "step": {
+      "purpose": "One numbered action in a sequence; the number anchors the slide and builds momentum.",
+      "maxWords": 35, "headlineMaxWords": 8, "bodyMaxWords": 25, "maxBullets": 3, "maxBodyLines": 4,
+      "layoutHints": ["large step number in fixed position", "imperative verb first in headline", "show 'n of total' progress", "same layout for every step"]
+    },
+    "summary": {
+      "purpose": "Recap all takeaways on one screenshot-worthy slide; the most save-worthy slide.",
+      "maxWords": 50, "headlineMaxWords": 6, "bodyMaxWords": 42, "maxBullets": 6, "maxWordsPerBullet": 7, "maxBodyLines": 6,
+      "layoutHints": ["checklist or numbered recap", "mirror wording used in body slides", "slightly smaller body allowed but >= minBodyPx"]
+    },
+    "cta": {
+      "purpose": "Ask for exactly one next action tied to the value delivered.",
+      "maxWords": 25, "headlineMaxWords": 8, "bodyMaxWords": 15, "maxBullets": 0, "maxBodyLines": 2,
+      "layoutHints": ["single primary action", "benefit-framed copy", "handle/name shown small", "no swipe cue (end of deck)", "optional secondary ask at lower visual weight"]
+    }
+  },
+  "sequence": {
+    "first": "hook",
+    "second": "intro",
+    "penultimate": "summary",
+    "last": "cta",
+    "middleRoles": ["body", "list", "stat", "quote", "comparison", "step"],
+    "patternInterruptEvery": 3,
+    "maxConsecutiveSameLayout": 3
+  },
+  "hookTemplates": [
+    { "id": "question", "pattern": "Why does {common effort} still {bad result}?", "example": "Why does posting daily still get you zero leads?" },
+    { "id": "bold-claim", "pattern": "{Strong statement about topic}.", "example": "Your onboarding email is losing you half your trials." },
+    { "id": "number-promise", "pattern": "{n} {things} that {outcome}", "example": "7 spreadsheet formulas that save an hour a week" },
+    { "id": "contrarian", "pattern": "Stop {common advice}. {Alternative} instead.", "example": "Stop chasing followers. Build a reply habit instead." },
+    { "id": "before-after", "pattern": "From {bad state} to {good state} in {timeframe}", "example": "From 3 sales calls to 12 a week: what changed" },
+    { "id": "curiosity-gap", "pattern": "The {adjective} {thing} most {audience} overlook", "example": "The one pricing page element most founders forget" },
+    { "id": "how-to", "pattern": "How to {outcome} without {pain}", "example": "How to write a cold email without sounding like a robot" },
+    { "id": "mistakes", "pattern": "{n} {topic} mistakes {audience} keep making", "example": "5 resume mistakes career-switchers keep making" },
+    { "id": "audience-callout", "pattern": "If you {situation}, read this", "example": "If your team ships late every sprint, read this" },
+    { "id": "framework", "pattern": "The {n}-step {method} for {outcome}", "example": "The 4-step method for writing headlines that get read" }
+  ],
+  "hookRules": ["be specific (number, outcome, audience or timeframe)", "4-12 word headline", "answer lives inside the deck, not on the cover", "deck must deliver the promise", "include a swipe cue"],
+  "ctaTemplates": [
+    { "id": "save", "bestFor": ["checklist", "framework", "how-to"], "pattern": "Save this for your next {task}.", "example": "Save this for your next product launch." },
+    { "id": "share", "bestFor": ["relatable", "team-useful"], "pattern": "Send this to a {role} who needs it.", "example": "Send this to a designer who needs it." },
+    { "id": "follow", "bestFor": ["series", "niche-expertise"], "pattern": "Follow for a new {topic} breakdown every {cadence}.", "example": "Follow for a new pricing breakdown every Tuesday." },
+    { "id": "comment", "bestFor": ["opinion", "contrarian", "self-assessment"], "pattern": "Which of these do you {verb}? Drop the number below.", "example": "Which of these do you do? Drop the number below." },
+    { "id": "comment-keyword", "bestFor": ["lead-magnet"], "pattern": "Comment '{KEYWORD}' and I'll send you the {resource}.", "example": "Comment 'GUIDE' and I'll send you the full template." },
+    { "id": "link", "bestFor": ["offer", "long-form"], "pattern": "Full {resource} at the link in {location}.", "example": "Full guide at the link in bio." },
+    { "id": "try", "bestFor": ["habit", "skill"], "pattern": "Try {first step} today, then tell me how it went.", "example": "Try step 1 today, then tell me how it went." }
+  ],
+  "ctaRules": ["one primary action", "frame with a benefit", "match CTA type to content type", "secondary ask allowed at lower visual weight"],
+  "slideCount": { "min": 3, "max": 20, "sweetSpot": [7, 10], "linkedinSoftMax": 15, "avoidRange": [4, 5] },
+  "density": { "maxWordsAnySlide": 50, "maxBulletsAnySlide": 6, "maxParagraphLines": 3, "maxSentenceWords": 20, "readingGrade": 8 },
+  "typography": {
+    "minBodyPx@1080": 36,
+    "recommendedBodyPx@1080": [40, 48],
+    "minHeadlinePx@1080": 64,
+    "hookHeadlinePx@1080": [88, 140],
+    "statNumberPx@1080": [160, 260],
+    "minCaptionPx@1080": 26,
+    "scaleRatios": { "hook": 1.618, "stat": 1.5, "body": 1.333, "hookToBody": 2.75, "headlineToBody": 1.8 },
+    "lineHeight": { "headline": 1.1, "body": 1.4, "headlineRange": [1.05, 1.2], "bodyRange": [1.35, 1.5] },
+    "maxCharsPerLine": 40,
+    "maxCharsPerHeadlineLine": 20,
+    "maxTypefaces": 2,
+    "minWeightBelow48px": 400,
+    "alignment": { "body": "left", "list": "left", "centeredAllowed": ["hook", "stat", "quote", "cta"], "justify": false },
+    "maxEmphasizedWordsPerSlide": 3,
+    "headlineCase": "sentence",
+    "renderScaleOnPhone": 0.36
+  },
+  "layout": {
+    "marginPct": 8,
+    "safeInsetPx": 96,
+    "bottomClearancePx": 120,
+    "chromeStripPx": 90,
+    "gridCropSidePx": 34,
+    "seamTextClearancePx": 96,
+    "consistentGrid": true
+  },
+  "contrast": {
+    "bodyMin": 4.5,
+    "largeTextMin": 3,
+    "nonTextMin": 3,
+    "largeTextThresholdPx@1080": { "regular": 67, "bold": 52 },
+    "checkAgainst": "worst-case background region behind text",
+    "fallback": ["scrim", "solid text plate", "darken/lighten overlay"],
+    "colorNotSoleCarrier": true
+  },
+  "swipeCues": [
+    { "id": "arrow", "where": "right edge, hook (optionally all but last)", "note": "small, consistent position" },
+    { "id": "partial-bleed", "where": "right edge crossing into next slide", "note": "strongest implicit cue; decorative only" },
+    { "id": "progress-dots", "where": "chrome strip", "note": "or thin progress bar" },
+    { "id": "numbering", "where": "chrome strip", "format": "{i}/{n}" },
+    { "id": "swipe-text", "where": "hook only", "example": "Swipe →" },
+    { "id": "cliffhanger-copy", "where": "end of body slides", "note": "setup paid off on next slide" }
+  ],
+  "swipeCueRules": { "maxCuesPerSlide": 2, "hookRequiresCue": true, "lastSlideCue": false },
+  "continuity": [
+    { "id": "panoramic-background", "rule": "one N*1080px wide canvas sliced per slide; only decorative elements cross seams; each slide must read alone" },
+    { "id": "recurring-motif", "rule": "one graphic device repeated in a consistent position or role" },
+    { "id": "consistent-grid", "rule": "identical margins, columns and headline baseline across slides" },
+    { "id": "color-coding", "rule": "1 background, 1 text, 1-2 accents; each accent has one meaning" },
+    { "id": "fixed-chrome", "rule": "page number, handle and progress indicator in fixed positions" },
+    { "id": "controlled-variety", "rule": "vary layout per role within the system; no more than 3 consecutive identical layouts" }
+  ],
+  "accessibility": { "altTextPerSlide": true, "altTextIncludesSlideText": true, "avoidBusyTextureBehindText": true },
+  "antiPatterns": [
+    "vague or generic hook",
+    "logo-only or title-only cover",
+    "more than 50 words on a slide",
+    "paragraph longer than 3 lines",
+    "body text below 36px at 1080 width",
+    "thin font weight at small sizes",
+    "text over photo without scrim",
+    "contrast below 4.5:1 for normal text",
+    "more than 2 typefaces",
+    "multiple emphasis colors on one slide",
+    "headline position jumping between slides",
+    "text crossing slide seams",
+    "critical content within safe inset of edges",
+    "no swipe cue on hook",
+    "stacking many swipe cues on every slide",
+    "hook promise not delivered",
+    "multiple competing CTAs or no CTA",
+    "filler second slide ('let's dive in')",
+    "all slides identical layout",
+    "inconsistent style per slide",
+    "color as sole carrier of meaning",
+    "statistic without a source",
+    "centered or justified multi-line body text",
+    "ALL CAPS paragraphs"
+  ]
+}

@@ -1,0 +1,1081 @@
+{
+  "version": 1,
+  "notes": "Original palettes. Contrast: text & mutedText vs bg >= 4.5 (WCAG AA body), primary vs bg >= 3 (large text/graphics). 'surface' is a card/panel color; text must also pass on it. Glass-style surfaces are rendered translucent over bg.",
+  "palettes": [
+    {
+      "id": "paper-ink",
+      "name": "Paper & Ink",
+      "moods": [
+        "minimal",
+        "editorial"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F7F4EE",
+        "surface": "#FFFFFF",
+        "text": "#161616",
+        "mutedText": "#5A5650",
+        "primary": "#161616",
+        "accent": "#D2442C",
+        "highlight": "#FFE27A"
+      },
+      "contrast": {
+        "textOnBg": 16.48,
+        "mutedOnBg": 6.64,
+        "primaryOnBg": 16.48
+      }
+    },
+    {
+      "id": "swiss-red",
+      "name": "Swiss Red",
+      "moods": [
+        "minimal",
+        "bold"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFFFFF",
+        "surface": "#F2F2F2",
+        "text": "#111111",
+        "mutedText": "#555555",
+        "primary": "#E3000F",
+        "accent": "#111111",
+        "highlight": "#FFD400"
+      },
+      "contrast": {
+        "textOnBg": 18.88,
+        "mutedOnBg": 7.46,
+        "primaryOnBg": 4.91
+      }
+    },
+    {
+      "id": "mono-graphite",
+      "name": "Mono Graphite",
+      "moods": [
+        "minimal",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#121212",
+        "surface": "#1E1E1E",
+        "text": "#F2F2F2",
+        "mutedText": "#A8A8A8",
+        "primary": "#FFFFFF",
+        "accent": "#9E9E9E",
+        "highlight": "#3A3A3A"
+      },
+      "contrast": {
+        "textOnBg": 16.73,
+        "mutedOnBg": 7.88,
+        "primaryOnBg": 18.73
+      }
+    },
+    {
+      "id": "midnight-electric",
+      "name": "Midnight Electric",
+      "moods": [
+        "tech",
+        "dark",
+        "bold"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0B1020",
+        "surface": "#151B33",
+        "text": "#EEF1FF",
+        "mutedText": "#A3ACCF",
+        "primary": "#5B8CFF",
+        "accent": "#22D3EE",
+        "highlight": "#2B3A80"
+      },
+      "contrast": {
+        "textOnBg": 16.82,
+        "mutedOnBg": 8.44,
+        "primaryOnBg": 5.99
+      }
+    },
+    {
+      "id": "terminal-green",
+      "name": "Terminal Green",
+      "moods": [
+        "tech",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0A0F0A",
+        "surface": "#111A12",
+        "text": "#D7F5D9",
+        "mutedText": "#86A98A",
+        "primary": "#39FF88",
+        "accent": "#A6FF4D",
+        "highlight": "#14361E"
+      },
+      "contrast": {
+        "textOnBg": 16.54,
+        "mutedOnBg": 7.42,
+        "primaryOnBg": 14.58
+      }
+    },
+    {
+      "id": "cyber-violet",
+      "name": "Cyber Violet",
+      "moods": [
+        "tech",
+        "dark",
+        "bold"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#120B24",
+        "surface": "#1E1438",
+        "text": "#F3EEFF",
+        "mutedText": "#B1A3D6",
+        "primary": "#B57BFF",
+        "accent": "#FF4FD8",
+        "highlight": "#3A2470"
+      },
+      "contrast": {
+        "textOnBg": 16.82,
+        "mutedOnBg": 8.26,
+        "primaryOnBg": 6.59
+      }
+    },
+    {
+      "id": "sunset-gradient",
+      "name": "Sunset Gradient",
+      "moods": [
+        "bold",
+        "colorful"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#2B0F3A",
+        "surface": "#3D1650",
+        "text": "#FFF4EC",
+        "mutedText": "#E2C2D6",
+        "primary": "#FF7A59",
+        "accent": "#FFC145",
+        "highlight": "#5C1F6E"
+      },
+      "contrast": {
+        "textOnBg": 15.75,
+        "mutedOnBg": 10.49,
+        "primaryOnBg": 6.64
+      }
+    },
+    {
+      "id": "ocean-depth",
+      "name": "Ocean Depth",
+      "moods": [
+        "professional",
+        "calm",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#062A3A",
+        "surface": "#0B3B50",
+        "text": "#EAF7FB",
+        "mutedText": "#9FC6D3",
+        "primary": "#3CC6E8",
+        "accent": "#FFB648",
+        "highlight": "#0F4D66"
+      },
+      "contrast": {
+        "textOnBg": 13.71,
+        "mutedOnBg": 8.21,
+        "primaryOnBg": 7.45
+      }
+    },
+    {
+      "id": "corporate-navy",
+      "name": "Corporate Navy",
+      "moods": [
+        "professional"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFFFFF",
+        "surface": "#F3F6FA",
+        "text": "#0E1F3A",
+        "mutedText": "#4F5D73",
+        "primary": "#1B4DB1",
+        "accent": "#0FA3A3",
+        "highlight": "#DCE8FF"
+      },
+      "contrast": {
+        "textOnBg": 16.46,
+        "mutedOnBg": 6.68,
+        "primaryOnBg": 7.66
+      }
+    },
+    {
+      "id": "corporate-slate",
+      "name": "Corporate Slate",
+      "moods": [
+        "professional",
+        "minimal"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F5F7FA",
+        "surface": "#FFFFFF",
+        "text": "#1F2933",
+        "mutedText": "#52606D",
+        "primary": "#334E68",
+        "accent": "#F0B429",
+        "highlight": "#FCEFC7"
+      },
+      "contrast": {
+        "textOnBg": 13.75,
+        "mutedOnBg": 6.02,
+        "primaryOnBg": 8.05
+      }
+    },
+    {
+      "id": "forest-trust",
+      "name": "Forest Trust",
+      "moods": [
+        "professional",
+        "calm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F4F7F2",
+        "surface": "#FFFFFF",
+        "text": "#17301F",
+        "mutedText": "#4D6355",
+        "primary": "#1F6F43",
+        "accent": "#C98A2E",
+        "highlight": "#DDEEDB"
+      },
+      "contrast": {
+        "textOnBg": 13.14,
+        "mutedOnBg": 6.01,
+        "primaryOnBg": 5.69
+      }
+    },
+    {
+      "id": "pastel-peach",
+      "name": "Pastel Peach",
+      "moods": [
+        "pastel",
+        "soft",
+        "playful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFF1EA",
+        "surface": "#FFFFFF",
+        "text": "#3A2A2A",
+        "mutedText": "#6E5A57",
+        "primary": "#C2553A",
+        "accent": "#7A6BD1",
+        "highlight": "#FFD8C7"
+      },
+      "contrast": {
+        "textOnBg": 12.32,
+        "mutedOnBg": 5.83,
+        "primaryOnBg": 4.09
+      }
+    },
+    {
+      "id": "pastel-lilac",
+      "name": "Pastel Lilac",
+      "moods": [
+        "pastel",
+        "soft"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F3EEFF",
+        "surface": "#FFFFFF",
+        "text": "#2C2440",
+        "mutedText": "#5F5677",
+        "primary": "#6C4FD6",
+        "accent": "#D95F8E",
+        "highlight": "#E2D8FF"
+      },
+      "contrast": {
+        "textOnBg": 12.9,
+        "mutedOnBg": 5.99,
+        "primaryOnBg": 4.96
+      }
+    },
+    {
+      "id": "pastel-mint",
+      "name": "Pastel Mint",
+      "moods": [
+        "pastel",
+        "soft",
+        "calm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#E9F8F1",
+        "surface": "#FFFFFF",
+        "text": "#163A2E",
+        "mutedText": "#4B6B60",
+        "primary": "#14806A",
+        "accent": "#E07A5F",
+        "highlight": "#C9F0DF"
+      },
+      "contrast": {
+        "textOnBg": 11.41,
+        "mutedOnBg": 5.37,
+        "primaryOnBg": 4.43
+      }
+    },
+    {
+      "id": "pastel-sky",
+      "name": "Pastel Sky",
+      "moods": [
+        "pastel",
+        "soft"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#EAF4FF",
+        "surface": "#FFFFFF",
+        "text": "#15304D",
+        "mutedText": "#4E6680",
+        "primary": "#2364AA",
+        "accent": "#F28C28",
+        "highlight": "#CFE4FF"
+      },
+      "contrast": {
+        "textOnBg": 12.09,
+        "mutedOnBg": 5.34,
+        "primaryOnBg": 5.43
+      }
+    },
+    {
+      "id": "butter-cream",
+      "name": "Butter Cream",
+      "moods": [
+        "pastel",
+        "warm",
+        "playful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFF8DC",
+        "surface": "#FFFDF2",
+        "text": "#2E2A1E",
+        "mutedText": "#665E47",
+        "primary": "#B5651D",
+        "accent": "#2F6F8F",
+        "highlight": "#FFE98A"
+      },
+      "contrast": {
+        "textOnBg": 13.45,
+        "mutedOnBg": 6.05,
+        "primaryOnBg": 4.07
+      }
+    },
+    {
+      "id": "neo-pop-yellow",
+      "name": "Neo-Pop Yellow",
+      "moods": [
+        "bold",
+        "playful",
+        "colorful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFE600",
+        "surface": "#FFFFFF",
+        "text": "#111111",
+        "mutedText": "#3D3A00",
+        "primary": "#111111",
+        "accent": "#FF3EA5",
+        "highlight": "#FFFFFF"
+      },
+      "contrast": {
+        "textOnBg": 14.9,
+        "mutedOnBg": 9.19,
+        "primaryOnBg": 14.9
+      }
+    },
+    {
+      "id": "neo-pop-pink",
+      "name": "Neo-Pop Pink",
+      "moods": [
+        "bold",
+        "playful",
+        "colorful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FF4FA3",
+        "surface": "#FFE1F0",
+        "text": "#120012",
+        "mutedText": "#3B0A2A",
+        "primary": "#120012",
+        "accent": "#FFE600",
+        "highlight": "#FFFFFF"
+      },
+      "contrast": {
+        "textOnBg": 6.67,
+        "mutedOnBg": 5.46,
+        "primaryOnBg": 6.67
+      }
+    },
+    {
+      "id": "neo-pop-blue",
+      "name": "Neo-Pop Blue",
+      "moods": [
+        "bold",
+        "playful",
+        "colorful"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#2F5BFF",
+        "surface": "#1A3FD0",
+        "text": "#FFFFFF",
+        "mutedText": "#F4F6FF",
+        "primary": "#FFE600",
+        "accent": "#FF6B9E",
+        "highlight": "#0D2BAA"
+      },
+      "contrast": {
+        "textOnBg": 5.17,
+        "mutedOnBg": 4.79,
+        "primaryOnBg": 4.08
+      }
+    },
+    {
+      "id": "brutal-concrete",
+      "name": "Brutal Concrete",
+      "moods": [
+        "brutalist",
+        "bold"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#D9D9D3",
+        "surface": "#FFFFFF",
+        "text": "#000000",
+        "mutedText": "#333333",
+        "primary": "#000000",
+        "accent": "#FF3B00",
+        "highlight": "#FFFF00"
+      },
+      "contrast": {
+        "textOnBg": 14.82,
+        "mutedOnBg": 8.91,
+        "primaryOnBg": 14.82
+      }
+    },
+    {
+      "id": "brutal-acid",
+      "name": "Brutal Acid",
+      "moods": [
+        "brutalist",
+        "bold",
+        "colorful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#C6FF00",
+        "surface": "#FFFFFF",
+        "text": "#000000",
+        "mutedText": "#2B3300",
+        "primary": "#000000",
+        "accent": "#5B2BFF",
+        "highlight": "#FFFFFF"
+      },
+      "contrast": {
+        "textOnBg": 17.71,
+        "mutedOnBg": 11.23,
+        "primaryOnBg": 17.71
+      }
+    },
+    {
+      "id": "retro-print",
+      "name": "Retro Print",
+      "moods": [
+        "retro",
+        "warm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F2E8D5",
+        "surface": "#FAF4E8",
+        "text": "#2B2118",
+        "mutedText": "#5E5040",
+        "primary": "#C8402A",
+        "accent": "#1E5F74",
+        "highlight": "#F2C14E"
+      },
+      "contrast": {
+        "textOnBg": 12.96,
+        "mutedOnBg": 6.41,
+        "primaryOnBg": 4.09
+      }
+    },
+    {
+      "id": "retro-diner",
+      "name": "Retro Diner",
+      "moods": [
+        "retro",
+        "playful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FDF0E0",
+        "surface": "#FFFFFF",
+        "text": "#2A1B14",
+        "mutedText": "#614A3D",
+        "primary": "#D7263D",
+        "accent": "#1B998B",
+        "highlight": "#FFD166"
+      },
+      "contrast": {
+        "textOnBg": 14.79,
+        "mutedOnBg": 7.33,
+        "primaryOnBg": 4.42
+      }
+    },
+    {
+      "id": "seventies-sun",
+      "name": "Seventies Sun",
+      "moods": [
+        "retro",
+        "warm",
+        "colorful"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#3B2314",
+        "surface": "#4E3020",
+        "text": "#FFF2DF",
+        "mutedText": "#E1C6A6",
+        "primary": "#F49D37",
+        "accent": "#E85D2A",
+        "highlight": "#6B4128"
+      },
+      "contrast": {
+        "textOnBg": 13.24,
+        "mutedOnBg": 8.93,
+        "primaryOnBg": 6.77
+      }
+    },
+    {
+      "id": "editorial-cream",
+      "name": "Editorial Cream",
+      "moods": [
+        "editorial",
+        "luxury"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F5F0E6",
+        "surface": "#FBF8F2",
+        "text": "#1C1A17",
+        "mutedText": "#5B554C",
+        "primary": "#1C1A17",
+        "accent": "#8A2B2B",
+        "highlight": "#E8DCC4"
+      },
+      "contrast": {
+        "textOnBg": 15.29,
+        "mutedOnBg": 6.49,
+        "primaryOnBg": 15.29
+      }
+    },
+    {
+      "id": "editorial-noir",
+      "name": "Editorial Noir",
+      "moods": [
+        "editorial",
+        "dark",
+        "luxury"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#111111",
+        "surface": "#1B1B1B",
+        "text": "#F4EFE6",
+        "mutedText": "#B5AEA3",
+        "primary": "#F4EFE6",
+        "accent": "#C9A86A",
+        "highlight": "#2E2A22"
+      },
+      "contrast": {
+        "textOnBg": 16.49,
+        "mutedOnBg": 8.59,
+        "primaryOnBg": 16.49
+      }
+    },
+    {
+      "id": "luxury-gold",
+      "name": "Luxury Gold",
+      "moods": [
+        "luxury",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0E0D0B",
+        "surface": "#1A1814",
+        "text": "#F3EBDD",
+        "mutedText": "#B9AE99",
+        "primary": "#D4AF6A",
+        "accent": "#E8D3A2",
+        "highlight": "#3A3122"
+      },
+      "contrast": {
+        "textOnBg": 16.41,
+        "mutedOnBg": 8.86,
+        "primaryOnBg": 9.38
+      }
+    },
+    {
+      "id": "luxury-emerald",
+      "name": "Luxury Emerald",
+      "moods": [
+        "luxury",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#062E25",
+        "surface": "#0B3D31",
+        "text": "#F1EADB",
+        "mutedText": "#B7C2B3",
+        "primary": "#D9B36C",
+        "accent": "#F1EADB",
+        "highlight": "#145A48"
+      },
+      "contrast": {
+        "textOnBg": 12.3,
+        "mutedOnBg": 7.99,
+        "primaryOnBg": 7.45
+      }
+    },
+    {
+      "id": "blush-luxe",
+      "name": "Blush Luxe",
+      "moods": [
+        "luxury",
+        "soft"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F6E9E4",
+        "surface": "#FFF7F4",
+        "text": "#2E1F1C",
+        "mutedText": "#6A5550",
+        "primary": "#8E4B4B",
+        "accent": "#B08D57",
+        "highlight": "#EED3CB"
+      },
+      "contrast": {
+        "textOnBg": 13.31,
+        "mutedOnBg": 5.84,
+        "primaryOnBg": 5.43
+      }
+    },
+    {
+      "id": "glass-aurora",
+      "name": "Glass Aurora",
+      "moods": [
+        "glass",
+        "colorful",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0F1230",
+        "surface": "#262A5C",
+        "text": "#FFFFFF",
+        "mutedText": "#C9CCF2",
+        "primary": "#7DF9FF",
+        "accent": "#FF8BD1",
+        "highlight": "#3C3F8F"
+      },
+      "contrast": {
+        "textOnBg": 18.27,
+        "mutedOnBg": 11.66,
+        "primaryOnBg": 14.67
+      }
+    },
+    {
+      "id": "glass-frost",
+      "name": "Glass Frost",
+      "moods": [
+        "glass",
+        "soft"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#DDE7F5",
+        "surface": "#FFFFFF",
+        "text": "#162238",
+        "mutedText": "#4D5B73",
+        "primary": "#3A5BD9",
+        "accent": "#E36397",
+        "highlight": "#C4D4F0"
+      },
+      "contrast": {
+        "textOnBg": 12.74,
+        "mutedOnBg": 5.5,
+        "primaryOnBg": 4.57
+      }
+    },
+    {
+      "id": "gradient-candy",
+      "name": "Gradient Candy",
+      "moods": [
+        "bold",
+        "colorful",
+        "playful"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#B8243A",
+        "surface": "#8F1C30",
+        "text": "#FFFFFF",
+        "mutedText": "#FFE6E8",
+        "primary": "#FFFFFF",
+        "accent": "#FFC371",
+        "highlight": "#FF5F6D"
+      },
+      "contrast": {
+        "textOnBg": 6.27,
+        "mutedOnBg": 5.29,
+        "primaryOnBg": 6.27
+      }
+    },
+    {
+      "id": "gradient-lagoon",
+      "name": "Gradient Lagoon",
+      "moods": [
+        "bold",
+        "colorful"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0F5E9C",
+        "surface": "#0A4878",
+        "text": "#FFFFFF",
+        "mutedText": "#D6ECFA",
+        "primary": "#7CF5D9",
+        "accent": "#FFD166",
+        "highlight": "#0A3D66"
+      },
+      "contrast": {
+        "textOnBg": 6.77,
+        "mutedOnBg": 5.56,
+        "primaryOnBg": 5.13
+      }
+    },
+    {
+      "id": "data-clean",
+      "name": "Data Clean",
+      "moods": [
+        "data",
+        "professional"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFFFFF",
+        "surface": "#F4F6F8",
+        "text": "#1A2230",
+        "mutedText": "#566173",
+        "primary": "#2563EB",
+        "accent": "#F97316",
+        "highlight": "#DBEAFE"
+      },
+      "contrast": {
+        "textOnBg": 15.96,
+        "mutedOnBg": 6.26,
+        "primaryOnBg": 5.17
+      }
+    },
+    {
+      "id": "data-dark",
+      "name": "Data Dark",
+      "moods": [
+        "data",
+        "dark",
+        "tech"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#0F172A",
+        "surface": "#1E293B",
+        "text": "#F1F5F9",
+        "mutedText": "#94A3B8",
+        "primary": "#38BDF8",
+        "accent": "#F472B6",
+        "highlight": "#1E3A5F"
+      },
+      "contrast": {
+        "textOnBg": 16.3,
+        "mutedOnBg": 6.96,
+        "primaryOnBg": 8.33
+      }
+    },
+    {
+      "id": "notes-paper",
+      "name": "Notes Paper",
+      "moods": [
+        "handdrawn",
+        "playful",
+        "warm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FBF7EC",
+        "surface": "#FFFFFF",
+        "text": "#22252B",
+        "mutedText": "#575A61",
+        "primary": "#1F4E9A",
+        "accent": "#E4572E",
+        "highlight": "#FFF07A"
+      },
+      "contrast": {
+        "textOnBg": 14.35,
+        "mutedOnBg": 6.45,
+        "primaryOnBg": 7.5
+      }
+    },
+    {
+      "id": "kraft-paper",
+      "name": "Kraft Paper",
+      "moods": [
+        "handdrawn",
+        "warm",
+        "retro"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#D9C3A0",
+        "surface": "#EBDCC2",
+        "text": "#231A10",
+        "mutedText": "#4A3A26",
+        "primary": "#231A10",
+        "accent": "#9B2C1F",
+        "highlight": "#F4E6C8"
+      },
+      "contrast": {
+        "textOnBg": 10,
+        "mutedOnBg": 6.37,
+        "primaryOnBg": 10
+      }
+    },
+    {
+      "id": "tweet-light",
+      "name": "Tweet Light",
+      "moods": [
+        "social",
+        "minimal"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFFFFF",
+        "surface": "#F7F9F9",
+        "text": "#0F1419",
+        "mutedText": "#536471",
+        "primary": "#1D7FC4",
+        "accent": "#F91880",
+        "highlight": "#E8F5FD"
+      },
+      "contrast": {
+        "textOnBg": 18.51,
+        "mutedOnBg": 6.12,
+        "primaryOnBg": 4.3
+      }
+    },
+    {
+      "id": "tweet-dim",
+      "name": "Tweet Dim",
+      "moods": [
+        "social",
+        "dark"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#15202B",
+        "surface": "#1E2732",
+        "text": "#F7F9F9",
+        "mutedText": "#8B98A5",
+        "primary": "#1D9BF0",
+        "accent": "#F91880",
+        "highlight": "#22303C"
+      },
+      "contrast": {
+        "textOnBg": 15.61,
+        "mutedOnBg": 5.6,
+        "primaryOnBg": 5.5
+      }
+    },
+    {
+      "id": "quote-charcoal",
+      "name": "Quote Charcoal",
+      "moods": [
+        "quote",
+        "dark",
+        "minimal"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#23262B",
+        "surface": "#2E3238",
+        "text": "#F5F2EA",
+        "mutedText": "#B3AFA6",
+        "primary": "#F2C14E",
+        "accent": "#F5F2EA",
+        "highlight": "#3B4048"
+      },
+      "contrast": {
+        "textOnBg": 13.57,
+        "mutedOnBg": 6.94,
+        "primaryOnBg": 9.04
+      }
+    },
+    {
+      "id": "tutorial-teal",
+      "name": "Tutorial Teal",
+      "moods": [
+        "educational",
+        "professional"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#F0FAF9",
+        "surface": "#FFFFFF",
+        "text": "#10302E",
+        "mutedText": "#4A6664",
+        "primary": "#0E7C73",
+        "accent": "#F26B38",
+        "highlight": "#C8EEEA"
+      },
+      "contrast": {
+        "textOnBg": 13.3,
+        "mutedOnBg": 5.85,
+        "primaryOnBg": 4.76
+      }
+    },
+    {
+      "id": "tutorial-orange",
+      "name": "Tutorial Orange",
+      "moods": [
+        "educational",
+        "bold"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFF5EB",
+        "surface": "#FFFFFF",
+        "text": "#2A1708",
+        "mutedText": "#69503D",
+        "primary": "#C2410C",
+        "accent": "#1D4ED8",
+        "highlight": "#FFDDBF"
+      },
+      "contrast": {
+        "textOnBg": 15.93,
+        "mutedOnBg": 6.93,
+        "primaryOnBg": 4.81
+      }
+    },
+    {
+      "id": "earth-clay",
+      "name": "Earth Clay",
+      "moods": [
+        "warm",
+        "calm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#EFE4D6",
+        "surface": "#F8F1E7",
+        "text": "#2D211A",
+        "mutedText": "#64544A",
+        "primary": "#A0522D",
+        "accent": "#4E6E58",
+        "highlight": "#E2CBB0"
+      },
+      "contrast": {
+        "textOnBg": 12.45,
+        "mutedOnBg": 5.75,
+        "primaryOnBg": 4.48
+      }
+    },
+    {
+      "id": "berry-night",
+      "name": "Berry Night",
+      "moods": [
+        "dark",
+        "bold"
+      ],
+      "scheme": "dark",
+      "colors": {
+        "bg": "#1F0A1E",
+        "surface": "#2E1230",
+        "text": "#FCEFF7",
+        "mutedText": "#C8A9C2",
+        "primary": "#FF5DA2",
+        "accent": "#7CE0D3",
+        "highlight": "#4A1B4C"
+      },
+      "contrast": {
+        "textOnBg": 16.81,
+        "mutedOnBg": 8.84,
+        "primaryOnBg": 6.55
+      }
+    },
+    {
+      "id": "citrus-fresh",
+      "name": "Citrus Fresh",
+      "moods": [
+        "colorful",
+        "playful"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#FFFFFF",
+        "surface": "#FFF8E1",
+        "text": "#1E2A12",
+        "mutedText": "#4F5B42",
+        "primary": "#3B7A1A",
+        "accent": "#E89B00",
+        "highlight": "#E9FFB0"
+      },
+      "contrast": {
+        "textOnBg": 15.05,
+        "mutedOnBg": 7.22,
+        "primaryOnBg": 5.27
+      }
+    },
+    {
+      "id": "nordic-fog",
+      "name": "Nordic Fog",
+      "moods": [
+        "minimal",
+        "calm"
+      ],
+      "scheme": "light",
+      "colors": {
+        "bg": "#ECEFF1",
+        "surface": "#F7F9FA",
+        "text": "#22303A",
+        "mutedText": "#56636C",
+        "primary": "#3B5A70",
+        "accent": "#B5654A",
+        "highlight": "#D7DFE4"
+      },
+      "contrast": {
+        "textOnBg": 11.72,
+        "mutedOnBg": 5.35,
+        "primaryOnBg": 6.31
+      }
+    }
+  ]
+}
