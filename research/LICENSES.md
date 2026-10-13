@@ -84,14 +84,23 @@ Source: [Fontsource](https://fontsource.org) npm packages, which redistribute th
 | Teko | display-condensed | @fontsource/teko@5.3.0 | OFL-1.1 | assets/fonts/teko/LICENSE |
 | Roboto Condensed | display-condensed | @fontsource/roboto-condensed@5.3.0 | OFL-1.1 | assets/fonts/roboto-condensed/LICENSE |
 
-## Icons (planned for Phase 3, bundled offline)
+## Icons (bundled offline)
 
 | Library | Package | License | Notes |
 |---|---|---|---|
-| Lucide | lucide-static / lucide-react (1.x) | ISC | Keep the license notice in distributed builds. https://lucide.dev/license |
-| Tabler Icons | @tabler/icons (3.x) | MIT | Keep the license notice in distributed builds. https://github.com/tabler/tabler-icons/blob/main/LICENSE |
+| Lucide | lucide-static@1.56.0 (devDependency; build input only) | ISC (some icons derived from Feather, MIT) | Bundled: 1879 icons converted to SVG path data by `npm run icons:build` (scripts/build-icons.mjs) into `src/styles/generated/lucide-icons.json`, lazy-loaded as its own chunk by `src/styles/icons.ts`. Full license text (ISC + Feather MIT notice) copied to `src/styles/generated/LUCIDE_LICENSE.txt`; keep it in distributed builds. https://lucide.dev/license |
+| Tabler Icons | @tabler/icons (3.x) | MIT | Not bundled yet (possible second set). Keep the license notice in distributed builds if added. https://github.com/tabler/tabler-icons/blob/main/LICENSE |
 
 Emoji are rendered with the operating system's emoji font. No emoji image set is bundled.
+
+## Runtime libraries (npm, bundled)
+
+| Library | Package | License | Notes |
+|---|---|---|---|
+| Mammoth | mammoth@1.13.0 | BSD-2-Clause | .docx → HTML for content import (`src/engine/import/docx.ts`). Loaded on demand as its own chunk. Keep the copyright notice in distributed builds. https://github.com/mwilliamson/mammoth.js |
+| PDF.js | pdfjs-dist@6.4.299 | Apache-2.0 | PDF text extraction for content import (`src/engine/import/pdf.ts`). Library and worker are loaded on demand as separate chunks. https://github.com/mozilla/pdf.js |
+| Readability | @mozilla/readability@0.6.0 | Apache-2.0 | Article extraction for URL import (`src/engine/import/url.ts`). https://github.com/mozilla/readability |
+| docx | docx@9.10.0 (devDependency, tests only) | MIT | Generates .docx fixtures in `tests/unit/import.test.ts`. Not shipped. |
 
 ## Online-only services (never bundled)
 

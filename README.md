@@ -2,7 +2,7 @@
 
 Turn raw content (notes, a blog post, bullet points) into polished social media carousels, then edit and export them. Runs as a web app/PWA and as a desktop app (Tauri), and works offline.
 
-> Status: **Phase 1 (architecture) complete.** You can paste text, pick a platform and style, generate slides with Claude, Ollama or the built-in rules, and download PNGs at exact platform sizes. The full layout engine, multiple design variations, the editor and multi-format export come in Phases 2–4.
+> Status: **Phase 2 (generation engine) complete.** Paste text, upload .txt/.md/.docx/.pdf or import a URL. You get 3–6 distinct designs of the same content side by side, can regenerate the copy, a slide's layout, emphasis or headline, and can "make it more" bold, minimal, colorful or professional. Each slide downloads as a PNG at the exact platform size. The full editor (Phase 3) and multi-format export (Phase 4) are next.
 
 ## Quick start (web)
 
@@ -45,6 +45,7 @@ Every provider's output is checked against one Zod schema (`src/engine/schema.ts
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
 | `npm run validate:research` | Checks the research data (`/research`) and the bundled fonts |
 | `npm run fonts:fetch` | Downloads the bundled OFL/Apache fonts again from `@fontsource` |
+| `npm run icons:build` | Rebuilds the offline Lucide icon set (`src/styles/generated/lucide-icons.json`) |
 
 ## Project layout
 
@@ -52,7 +53,9 @@ Every provider's output is checked against one Zod schema (`src/engine/schema.ts
 research/        Phase 0 data: platform presets, design patterns, fonts, palettes, style systems, licenses
 assets/          Static files served by the app (bundled fonts, icon)
 src/styles/      Typed access to the research data, font loader, color math
-src/engine/      AI providers, prompt, schema, repair loop, rules splitter, layout engine
+src/engine/      AI providers, prompt, schema, repair loop, rules splitter, variations, regeneration
+src/engine/import/  .txt/.md/.docx/.pdf and URL import → markdown-ish text
+src/engine/layout/  layout engine: 24 layouts, backgrounds, decorations, slide numbers and swipe cues, fit-checking
 src/model/       Document model (plain-JSON scene graph)
 src/storage/     IndexedDB (Dexie): projects, templates, brand kits, assets, settings
 src/secrets/     API key storage (OS keychain on desktop)

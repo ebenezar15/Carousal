@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Main window permissions: core APIs and HTTP limited to the Claude API and local servers (Ollama).",
+  "description": "Main window permissions: core APIs and HTTP to the Claude API, local servers (Ollama) and any https URL (content import).",
   "windows": [
     "main"
   ],
@@ -18,6 +18,9 @@
         },
         {
           "url": "http://127.0.0.1:*/*"
+        },
+        {
+          "url": "https://*/*"
         }
       ]
     }

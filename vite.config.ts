@@ -30,7 +30,7 @@ export default defineConfig({
         icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,woff2,json}'],
+        globPatterns: ['**/*.{js,mjs,css,html,svg,woff2,json}'],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
       },
     }),

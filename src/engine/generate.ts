@@ -1,7 +1,8 @@
 // Single entry point for turning content into a CarouselPlan. Picks a provider, validates the JSON
 // with Zod, asks the model to repair invalid output, and always falls back to the rules splitter,
 // so generation never hard-fails.
-import { CarouselPlanSchema, planJsonSchema, type CarouselPlan } from './schema';
+import { z } from 'zod';
+import { CarouselPlanSchema, type CarouselPlan } from './schema';
 import { buildSystemPrompt, buildUserMessage } from './prompt';
 import { normalizePlan } from './normalize';
 import { planFromText } from './rules';
@@ -43,21 +44,36 @@ export function parsePlan(text: string): ParseOutcome {
   return { ok: true, plan: result.data };
 }
 
-/** Runs one provider with the validate → repair loop. Throws if the provider fails or never yields valid JSON. */
-export async function runProvider(
+/** Validates model text against any Zod schema (shared by plans, slide rewrites, headline options). */
+export function parseWith<T>(schema: z.ZodType<T>, text: string): { ok: true; value: T } | { ok: false; error: string } {
+  let data: unknown;
+  try {
+    data = extractJson(text);
+  } catch (e) {
+    return { ok: false, error: `Invalid JSON: ${(e as Error).message}` };
+  }
+  const r = schema.safeParse(data);
+  if (r.success) return { ok: true, value: r.data };
+  return { ok: false, error: r.error.issues.slice(0, 12).map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`).join('\n') };
+}
+
+/** One provider call with the validate → repair loop, for any schema. */
+export async function completeJson<T>(
   provider: AIProvider,
-  content: string,
-  opts: GenerateOptions,
+  system: string,
+  first: ChatMessage,
+  schema: z.ZodType<T>,
+  validate: (text: string) => { ok: true; value: T } | { ok: false; error: string } = (t) => parseWith(schema, t),
   signal?: AbortSignal,
-): Promise<{ plan: CarouselPlan; attempts: number }> {
-  const system = buildSystemPrompt();
-  const jsonSchema = planJsonSchema();
-  const messages: ChatMessage[] = [buildUserMessage(content, opts)];
+): Promise<{ value: T; attempts: number }> {
+  const jsonSchema = z.toJSONSchema(schema) as Record<string, unknown>;
+  delete jsonSchema.$schema;
+  const messages: ChatMessage[] = [first];
   let lastError = '';
   for (let attempt = 1; attempt <= MAX_REPAIRS + 1; attempt++) {
     const text = await provider.complete({ system, messages, jsonSchema, signal });
-    const parsed = parsePlan(text);
-    if (parsed.ok) return { plan: normalizePlan(parsed.plan, opts), attempts: attempt };
+    const parsed = validate(text);
+    if (parsed.ok) return { value: parsed.value, attempts: attempt };
     lastError = parsed.error;
     messages.push(
       { role: 'assistant', content: text },
@@ -68,6 +84,29 @@ export async function runProvider(
     );
   }
   throw new Error(`Output still invalid after ${MAX_REPAIRS} repair attempts: ${lastError}`);
+}
+
+/** Runs one provider for a whole plan. Throws if the provider fails or never yields valid JSON. */
+export async function runProvider(
+  provider: AIProvider,
+  content: string,
+  opts: GenerateOptions,
+  signal?: AbortSignal,
+): Promise<{ plan: CarouselPlan; attempts: number }> {
+  const validate = (t: string) => {
+    const r = parsePlan(t);
+    return r.ok ? ({ ok: true, value: r.plan } as const) : r;
+  };
+  const { value, attempts } = await completeJson(provider, buildSystemPrompt(), buildUserMessage(content, opts), CarouselPlanSchema, validate, signal);
+  return { plan: normalizePlan(value, opts), attempts };
+}
+
+/** First available provider for a preference (rules excluded), or null. */
+export async function pickProvider(preference: ProviderPreference, providers: AIProvider[]): Promise<AIProvider | null> {
+  if (preference === 'rules') return null;
+  const candidates = preference === 'auto' ? providers : providers.filter((p) => p.id === preference);
+  for (const p of candidates) if (await p.isAvailable()) return p;
+  return null;
 }
 
 export async function generatePlan(
