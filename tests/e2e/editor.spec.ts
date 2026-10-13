@@ -209,8 +209,12 @@ test('find & replace, template save/apply, brand kit, exact export size', async 
   await expect.poll(async () => page.evaluate(() => (window as unknown as { __cf: { doc: { getState(): { carousel: { theme: { styleId: string } } } } } }).__cf.doc.getState().carousel.theme.styleId)).toBe('dark-tech');
 
   // Export current slide at exact size.
+  await page.getByRole('button', { name: 'Export…' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Export' });
+  await dialog.getByRole('tab', { name: 'Separate images' }).click();
+  await dialog.getByText('Current slide only').click();
   const dl = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export slide PNG' }).click();
+  await dialog.getByRole('button', { name: 'Export', exact: true }).click();
   const b = readFileSync(await (await dl).path());
   expect({ w: b.readUInt32BE(16), h: b.readUInt32BE(20) }).toEqual({ w: 1080, h: 1350 });
 });

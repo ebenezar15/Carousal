@@ -23,6 +23,10 @@
           "url": "https://*/*"
         }
       ]
-    }
+    },
+    "dialog:default",
+    "dialog:allow-save",
+    "fs:default",
+    "fs:allow-write-file"
   ]
 }

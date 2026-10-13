@@ -102,6 +102,15 @@ Emoji are rendered with the operating system's emoji font. No emoji image set is
 | Readability | @mozilla/readability@0.6.0 | Apache-2.0 | Article extraction for URL import (`src/engine/import/url.ts`). https://github.com/mozilla/readability |
 | docx | docx@9.10.0 (devDependency, tests only) | MIT | Generates .docx fixtures in `tests/unit/import.test.ts`. Not shipped. |
 | ONNX Runtime Web | onnxruntime-web@1.30.0 | MIT | Runs the background-removal model (`src/image/bgremove/worker.ts`) on the single-threaded wasm backend inside a Web Worker. The worker chunk and `ort-wasm-simd-threaded.wasm` (~14 MB) are emitted by Vite and precached by the PWA. Keep the Microsoft copyright notice (kept in the minified bundle header). https://github.com/microsoft/onnxruntime |
+| fflate | fflate@0.8.3 | MIT | ZIP export and `.carousel` project files. https://github.com/101arrowz/fflate |
+| pdf-lib | pdf-lib@1.17.1 | MIT | Multi-page PDF export (LinkedIn documents). https://github.com/Hopding/pdf-lib |
+| gifenc | gifenc@1.0.3 | MIT | Animated GIF slideshow export. https://github.com/mattdesl/gifenc |
+| Mediabunny | mediabunny@1.61.4 | MPL-2.0 | MP4/WebM muxing for slideshow video (WebCodecs). File-level copyleft: bundled unmodified; if its source files are ever modified, those files must be published under MPL-2.0. https://github.com/Vanilagy/mediabunny |
+| qrcode-generator | qrcode-generator@2.0.4 | MIT | QR code elements. https://github.com/kazuhikoarase/qrcode-generator |
+| unicode-emoji-json | unicode-emoji-json@0.9.0 | MIT | Emoji names/groups for the emoji picker (glyphs are drawn by the system emoji font). https://github.com/muan/unicode-emoji-json |
+| Konva / react-konva | konva, react-konva | MIT | Canvas rendering and editing. |
+| Anthropic SDK | @anthropic-ai/sdk | MIT | Claude API client (user-supplied key). |
+| Tauri plugins | @tauri-apps/plugin-http, -dialog, -fs (+ Rust crates) | MIT OR Apache-2.0 | Desktop HTTP without CORS, native save dialog, file writes. |
 
 ## Models (bundled offline in `assets/models/`)
 

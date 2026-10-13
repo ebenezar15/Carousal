@@ -2,7 +2,7 @@
 
 Turn raw content (notes, a blog post, bullet points) into polished social media carousels, then edit and export them. Runs as a web app/PWA and as a desktop app (Tauri), and works offline.
 
-> Status: **Phase 2 (generation engine) complete.** Paste text, upload .txt/.md/.docx/.pdf or import a URL. You get 3–6 distinct designs of the same content side by side, can regenerate the copy, a slide's layout, emphasis or headline, and can "make it more" bold, minimal, colorful or professional. Each slide downloads as a PNG at the exact platform size. The full editor (Phase 3) and multi-format export (Phase 4) are next.
+> Status: **Phase 4 (export) complete.** Generate carousels from text, files or URLs with Claude, Ollama or offline rules. Edit everything in a full canvas editor, then export PNG/JPG/WebP (1×/2×), ZIP, LinkedIn PDF, MP4/GIF slideshows, or a portable `.carousel` project file. Phase 5 (polish: accessibility checks, captions, onboarding) is next.
 
 ## Quick start (web)
 
@@ -35,6 +35,18 @@ Pick one in **Settings**. **Auto** tries them in this order: Claude → Ollama �
 | **Built-in rules** | Nothing | A deterministic splitter that turns headings, paragraphs, lists, numbers and quotes into slides. It is used automatically whenever no AI is available. |
 
 Every provider's output is checked against one Zod schema (`src/engine/schema.ts`). If it's invalid, the model is asked to fix it (up to 2 retries); if it's still invalid, the app falls back to the rules.
+
+## Export
+
+| Output | Notes |
+|---|---|
+| PNG / JPG / WebP | Per slide at 1× or 2×, with a JPG/WebP quality slider. Files are named `project_01.png`, `project_02.png`, … WebP needs a browser that can encode it (Chromium yes; Safari may not). |
+| ZIP | All slides plus `caption.txt` (the caption and hashtags). |
+| PDF | One page per slide; the page size equals the preset size in points (e.g. 1080×1350). Includes an invisible text layer so it stays searchable. Use this for LinkedIn document posts. |
+| Video / GIF | Slideshow with slide, fade, zoom or cut transitions. MP4/H.264 needs WebCodecs with H.264 (Chrome, Edge, Safari); other browsers get WebM. GIFs are 540px wide. |
+| `.carousel` | A ZIP with `project.json` and every embedded image and uploaded font. Open it with Generate → *Open project file*. |
+
+After each export the dialog decodes the files it wrote and checks them against the preset: exact pixel size, and file size against the platform's limit.
 
 ## Scripts
 

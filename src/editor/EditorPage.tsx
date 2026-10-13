@@ -3,6 +3,7 @@ import { useStore } from 'zustand';
 import { useDocument, useProjects, useRoute } from '@/app/store';
 import { getPreset } from '@/styles';
 import { renderSlide } from '@/export/render';
+import { ExportDialog } from '@/export/ExportDialog';
 import { EditorCanvas } from './EditorCanvas';
 import { Inspector } from './Inspector';
 import { SlideStrip } from './SlideStrip';
@@ -56,6 +57,8 @@ export function EditorPage() {
   const canUndo = useStore(useDocument.temporal, (t) => t.pastStates.length > 0);
   const canRedo = useStore(useDocument.temporal, (t) => t.futureStates.length > 0);
   const saved = useAutosave();
+  const plan = useDocument((s) => s.plan);
+  const [exporting, setExporting] = useState(false);
   useShortcuts();
 
   useEffect(() => {
@@ -79,14 +82,6 @@ export function EditorPage() {
     for (const f of files) A.addElement(await imageElement(await storeImage(f, f.name), preset, { name: f.name }));
   };
 
-  const exportSlide = async () => {
-    const slide = carousel.slides[ed.slideIndex];
-    if (!slide) return;
-    const a = document.createElement('a');
-    a.href = await renderSlide(slide, preset.width, preset.height);
-    a.download = `${current.name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').slice(0, 40)}_${String(ed.slideIndex + 1).padStart(2, '0')}.png`;
-    a.click();
-  };
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col" data-testid="editor">
@@ -113,8 +108,9 @@ export function EditorPage() {
           </button>
         ))}
         <span className="ml-auto text-[11px] text-zinc-400">{preset.label} · {preset.width}×{preset.height}</span>
-        <button className="btn-ghost border border-zinc-300 px-2.5 py-1 text-xs dark:border-zinc-700" onClick={() => void exportSlide()}>Export slide PNG</button>
+        <button className="btn-primary px-3 py-1 text-xs" onClick={() => setExporting(true)}>Export…</button>
       </div>
+      {exporting && <ExportDialog project={current} carousel={carousel} plan={plan} initialSlide={ed.slideIndex} onClose={() => setExporting(false)} />}
       <div className="flex min-h-0 flex-1">
         <aside className="flex w-72 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
           <div className="flex border-b border-zinc-200 dark:border-zinc-800" role="tablist" aria-label="Editor panels">

@@ -8,6 +8,8 @@ import { DEFAULT_PRESET_ID, getPreset } from '@/styles';
 import { newId } from '@/model/id';
 import type { CarouselTheme, Project } from '@/model/types';
 import { renderSlideToDataURL } from '@/export/render';
+import { ExportDialog } from '@/export/ExportDialog';
+import { importProjectFile, PROJECT_EXT } from '@/export/projectFile';
 import { providers } from './runtime';
 import { useDocument, useProjects, useRoute, useSettings } from './store';
 import { InputPanel, type InputState } from './generate/InputPanel';
@@ -28,6 +30,8 @@ export function GeneratePage() {
   const [previewState, setPreviewState] = useState<{ key: string; items: VariationPreview[] }>({ key: '', items: [] });
   const [aiAvailable, setAiAvailable] = useState(false);
   const [showJson, setShowJson] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const openFile = useRef<HTMLInputElement>(null);
   const abort = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -161,6 +165,28 @@ export function GeneratePage() {
         <p className="px-1 text-xs text-zinc-500">
           AI: <strong>{settings.provider === 'auto' ? 'Auto (Claude → Ollama → rules)' : PROVIDER_LABEL[settings.provider]}</strong> · change in Settings
         </p>
+        <div className="px-1">
+          <button className="text-xs font-medium text-brand-600 hover:underline" onClick={() => openFile.current?.click()}>Open project file (.{PROJECT_EXT})…</button>
+          <input
+            ref={openFile}
+            type="file"
+            accept={`.${PROJECT_EXT},application/zip`}
+            className="hidden"
+            aria-label="Open project file"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              e.target.value = '';
+              if (!f) return;
+              try {
+                const p = await importProjectFile(f);
+                openProject(await save(p));
+                setNotice(`Opened “${p.name}”.`);
+              } catch (err) {
+                setNotice((err as Error).message);
+              }
+            }}
+          />
+        </div>
         {projects.length > 0 && (
           <div className="card p-4">
             <h2 className="label">Recent projects</h2>
@@ -187,7 +213,10 @@ export function GeneratePage() {
           <>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h1 className="text-lg font-semibold">{current.name}</h1>
-              <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => useRoute.getState().go('editor')}>Open in editor →</button>
+              <div className="flex gap-2">
+                <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setExporting(true)}>Export…</button>
+                <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => useRoute.getState().go('editor')}>Open in editor →</button>
+              </div>
               <span className="text-xs text-zinc-500" data-testid="generated-by">
                 {carousel.slides.length} slides · {getPreset(carousel.presetId).width}×{getPreset(carousel.presetId).height} · copy by {PROVIDER_LABEL[current.generatedBy ?? 'rules']}
               </span>
@@ -203,6 +232,7 @@ export function GeneratePage() {
               actions={slideActions}
             />
             <VariationsGrid previews={previews} selected={selectedIndex} onPick={pickDesign} onNewDesigns={newDesigns} busy={busy} />
+            {exporting && <ExportDialog project={current} carousel={carousel} plan={plan} onClose={() => setExporting(false)} />}
             <button className="text-xs text-zinc-500 hover:underline" onClick={() => setShowJson((v) => !v)}>{showJson ? 'Hide' : 'Show'} generated plan (JSON)</button>
             {showJson && <pre className="card max-h-96 overflow-auto p-4 text-xs" data-testid="plan-json">{JSON.stringify(plan, null, 2)}</pre>}
           </>
