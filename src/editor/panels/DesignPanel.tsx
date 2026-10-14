@@ -14,6 +14,7 @@ import { IMAGE_ACCEPT, storeImage } from '../assets';
 import { FontPicker } from './TextProps';
 import { ColorField, IconButton, Row, Section, Select, Slider, Toggle } from './fields';
 import { PATTERN_OPTIONS, TEXTURE_OPTIONS } from './bgOptions';
+import { CONTINUOUS_OPTIONS } from '@/app/generate/CarouselView';
 import type { DesignModifiers } from '@/model/types';
 
 const themeFonts = (t: CarouselTheme) => [t.headingFont, t.bodyFont, ...(getStyle(t.styleId).fonts.accent ? [getStyle(t.styleId).fonts.accent!] : [])];
@@ -103,6 +104,12 @@ function BackgroundSection({ theme }: { theme: CarouselTheme }) {
         <Select label="Pattern" value={m.pattern ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ...PATTERN_OPTIONS]} onChange={(v) => set({ pattern: v === 'style' ? undefined : (v as DesignModifiers['pattern']) })} />
       </Row>
       {m.texture && m.texture !== 'none' && <Slider label="Texture strength" value={m.textureAmount ?? 0.5} min={0.05} max={1} step={0.05} onChange={(v) => set({ textureAmount: v })} />}
+      <Select
+        label="Continuous slides"
+        value={m.panoramic === false ? 'off' : m.continuous ?? (m.panoramic ? 'flow' : 'style')}
+        options={[['style', 'Style default'], ...CONTINUOUS_OPTIONS]}
+        onChange={(v) => set(v === 'style' ? { panoramic: undefined, continuous: undefined } : v === 'off' ? { panoramic: false, continuous: undefined } : { panoramic: true, continuous: v as DesignModifiers['continuous'] })}
+      />
       <Select label="Decorations" value={m.decoration ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ['minimal', 'Minimal'], ['normal', 'Normal'], ['rich', 'Rich']]} onChange={(v) => set({ decoration: v === 'style' ? undefined : (v as DesignModifiers['decoration']) })} />
     </Section>
   );

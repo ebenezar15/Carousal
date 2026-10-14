@@ -138,6 +138,22 @@ export function SlideProps() {
           checked={spanning}
           onChange={(on) => setSlides((s, i) => ({ ...s, background: { ...bg, span: on ? { index: i, count: carousel.slides.length } : undefined } as Background }))}
         />
+        <label className="block cursor-pointer rounded-md border border-dashed border-zinc-300 p-2 text-center text-xs hover:border-brand-500 dark:border-zinc-700">
+          Panoramic photo across all slides…
+          <input
+            type="file"
+            accept={IMAGE_ACCEPT}
+            className="hidden"
+            aria-label="Panoramic photo"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              e.target.value = '';
+              if (!f) return;
+              const src = await storeImage(f, f.name);
+              setSlides((s, i) => ({ ...s, background: { type: 'image', src, color: baseColor(bg), overlay: { color: '#000000', opacity: 0.2 }, span: { index: i, count: carousel.slides.length } } }));
+            }}
+          />
+        </label>
         <IconButton label="Apply this background to all slides" onClick={() => setSlides((s, i) => ({ ...s, background: { ...bg, span: bg.span ? { index: i, count: carousel.slides.length } : undefined } as Background }))}>Apply background to all slides</IconButton>
       </Section>
     </>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Carousel } from '@/model/types';
+import type { Carousel, ContinuousStyle } from '@/model/types';
 import type { MoreDirection } from '@/engine';
 import { getPreset } from '@/styles';
 import { LazyThumb } from '@/editor/SlideStrip';
@@ -19,10 +19,14 @@ interface Props {
   busy: boolean;
   aiAvailable: boolean;
   onMore(dir: MoreDirection): void;
-  onTogglePanoramic(): void;
+  onContinuous(style: 'off' | ContinuousStyle): void;
   onRegenerateCopy(): void;
   actions: SlideActions;
 }
+
+export const CONTINUOUS_OPTIONS: ['off' | ContinuousStyle, string][] = [
+  ['off', 'Off'], ['flow', 'Seamless flow'], ['ribbon', 'Ribbon'], ['path', 'Journey path'], ['blocks', 'Split shapes'], ['word', 'Giant word'],
+];
 
 const MORE: { dir: MoreDirection; label: string }[] = [
   { dir: 'bold', label: 'Bolder' },
@@ -35,7 +39,7 @@ const MORE: { dir: MoreDirection; label: string }[] = [
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '').slice(0, 40) || 'carousel';
 
-export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onTogglePanoramic, onRegenerateCopy, actions }: Props) {
+export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onContinuous, onRegenerateCopy, actions }: Props) {
   const preset = getPreset(carousel.presetId);
   const displayWidth = preset.width > preset.height ? 380 : 290;
   const [options, setOptions] = useState<{ index: number; items: string[] | 'loading' | string } | null>(null);
@@ -69,8 +73,10 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onTogg
           </button>
         ))}
         <label className="ml-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-          <input type="checkbox" checked={panoramic} onChange={onTogglePanoramic} disabled={busy} />
-          Seamless background
+          Continuous slides
+          <select aria-label="Continuous slides" className="rounded border border-zinc-300 bg-white px-1 py-0.5 text-xs dark:border-zinc-700 dark:bg-zinc-900" value={panoramic ? carousel.theme.modifiers?.continuous ?? 'flow' : 'off'} onChange={(e) => onContinuous(e.target.value as 'off' | ContinuousStyle)} disabled={busy}>
+            {CONTINUOUS_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
         </label>
         <button className="btn-ghost ml-auto px-2.5 py-1 text-xs" onClick={onRegenerateCopy} disabled={busy} title="Generate the copy again with the same settings and design">
           ↻ Regenerate copy

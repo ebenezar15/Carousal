@@ -6,7 +6,7 @@ import {
 import { layoutCarousel } from '@/engine/layout';
 import { DEFAULT_PRESET_ID, getPreset } from '@/styles';
 import { newId } from '@/model/id';
-import type { CarouselTheme, Project } from '@/model/types';
+import type { CarouselTheme, Project, ContinuousStyle } from '@/model/types';
 import { renderSlideToDataURL } from '@/export/render';
 const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ default: m.ExportDialog })));
 const TranslateDialog = lazy(() => import('./TranslateDialog').then((m) => ({ default: m.TranslateDialog })));
@@ -124,10 +124,9 @@ export function GeneratePage() {
     await commit(p, pl, variations[0]!.theme, { variations: variations.map((v) => v.theme), variationSeed: seed });
   });
   const more = (dir: MoreDirection) => act(async (p, pl) => { await commit(p, pl, makeItMore(p.carousel.theme, dir)); });
-  const togglePanoramic = () =>
+  const setContinuous = (style: 'off' | ContinuousStyle) =>
     act(async (p, pl) => {
-    const isOn = p.carousel.slides[0]?.background.span !== undefined;
-    await commit(p, pl, { ...p.carousel.theme, modifiers: { ...p.carousel.theme.modifiers, panoramic: !isOn } });
+    await commit(p, pl, { ...p.carousel.theme, modifiers: { ...p.carousel.theme.modifiers, panoramic: style !== 'off', continuous: style === 'off' ? undefined : style } });
   });
   const regenerateCopy = () =>
     act(async (p) => {
@@ -233,7 +232,7 @@ export function GeneratePage() {
               busy={busy}
               aiAvailable={aiAvailable}
               onMore={more}
-              onTogglePanoramic={togglePanoramic}
+              onContinuous={setContinuous}
               onRegenerateCopy={regenerateCopy}
               actions={slideActions}
             />

@@ -5,7 +5,8 @@ import { mix } from '@/styles/color';
 import type { SlidePlan } from '../schema';
 import type { Ctx } from './context';
 import { isPanoramic } from './backgrounds';
-import { ellipse, label, line, path, rect } from './primitives';
+import { ellipse, label, line, path, rect, textEl } from './primitives';
+import { measure } from './textLayout';
 import { SHAPES, starburst, wave } from './shapes';
 
 export interface Decor { back: SlideElement[]; front: SlideElement[] }
@@ -180,18 +181,67 @@ function safeAccent(ctx: Ctx) {
 function panoramicSlice(ctx: Ctx, index: number): SlideElement[] {
   const { W, H, k, pal, total, margin } = ctx;
   const out: SlideElement[] = [];
-  const seamShape = ctx.style.layout.decorations.includes('bleed-shape') || ctx.style.layout.swipeCue.style === 'bleed-shape';
-  // Circles centered on every seam: right half shows on slide i, left half on slide i+1.
-  for (let seam = 1; seam < total; seam++) {
-    if (seam !== index && seam !== index + 1) continue;
-    const r = (seamShape ? 0.2 : 0.14) * W;
-    const cy = seam % 2 ? H * 0.22 : H * 0.8;
-    const cxGlobal = seam * W;
-    const cx = cxGlobal - index * W;
-    out.push(ellipse('seam-shape', cx, cy, r, r, mix(pal.primary, pal.bg, ctx.dark ? 0.55 : 0.7), { opacity: 0.6 }));
+  const kind = ctx.mod.continuous ?? 'flow';
+  const faint = (c: string, t: number) => mix(c, pal.bg, ctx.dark ? t - 0.15 : t);
+  // Everything below is drawn in panorama coordinates (total × W wide) and shifted by -index × W,
+  // so each slide shows its window of one continuous drawing and shapes line up at every seam.
+  const shift = -index * W;
+  if (kind === 'flow') {
+    const seamShape = ctx.style.layout.decorations.includes('bleed-shape') || ctx.style.layout.swipeCue.style === 'bleed-shape';
+    // Circles centered on every seam: right half shows on slide i, left half on slide i+1.
+    for (let seam = 1; seam < total; seam++) {
+      if (seam !== index && seam !== index + 1) continue;
+      const r = (seamShape ? 0.2 : 0.14) * W;
+      const cy = seam % 2 ? H * 0.22 : H * 0.8;
+      out.push(ellipse('seam-shape', seam * W + shift, cy, r, r, faint(pal.primary, 0.7), { opacity: 0.6 }));
+    }
+    const wv = wave(W * total, 14 * k, W * 0.6);
+    out.push(path('panorama-line', wv.d, wv.viewBox, shift, H - margin.bottom * 0.55 - 14 * k, W * total, 28 * k, { stroke: mix(pal.primary, pal.bg, 0.35), strokeWidth: Math.round(4 * k), opacity: 0.8 }));
+  } else if (kind === 'ribbon') {
+    // A wide band that weaves from top to bottom across the whole carousel.
+    const pts: string[] = [];
+    const band = H * 0.11;
+    const yAt = (x: number) => H * (0.5 + 0.32 * Math.sin((x / (W * 1.6)) * Math.PI));
+    const step = W / 8;
+    for (let x = 0; x <= W * total; x += step) pts.push(`${x.toFixed(1)} ${(yAt(x) - band / 2).toFixed(1)}`);
+    const back: string[] = [];
+    for (let x = W * total; x >= 0; x -= step) back.push(`${x.toFixed(1)} ${(yAt(x) + band / 2).toFixed(1)}`);
+    const d = `M${pts.join(' L')} L${back.join(' L')} Z`;
+    out.push(path('panorama-ribbon', [d], [W * total, H], shift, 0, W * total, H, { fill: faint(pal.primary, 0.78), opacity: 0.55 }));
+  } else if (kind === 'path') {
+    // A dashed journey route with one stop per slide (good for steps, timelines, stories).
+    const yAt = (i: number) => H * (i % 2 ? 0.86 : 0.8);
+    const xs = Array.from({ length: total }, (_, i) => i * W + W * 0.5);
+    const points = [0, yAt(0), ...xs.flatMap((x, i) => [x, yAt(i)]), W * total, yAt(total - 1)].map((v, i) => (i % 2 === 0 ? v + shift : v));
+    out.push(line('panorama-route', points, faint(pal.primary, 0.45), Math.max(2, Math.round(5 * k)), { dash: [18 * k, 14 * k] }));
+    xs.forEach((x, i) => {
+      if (Math.abs(i - index) > 1) return;
+      const r = 16 * k;
+      out.push(ellipse('route-stop', x + shift, yAt(i), r, r, i === index ? pal.accent : faint(pal.accent, 0.5)));
+    });
+  } else if (kind === 'blocks') {
+    // Big shapes cut in half by each seam, alternating colors and positions.
+    for (let seam = 1; seam < total; seam++) {
+      if (seam !== index && seam !== index + 1) continue;
+      const top = seam % 2 === 1;
+      const size = W * 0.36;
+      const color = faint(seam % 3 === 0 ? pal.accent : seam % 3 === 1 ? pal.primary : pal.highlight, 0.72);
+      const x = seam * W + shift - size / 2;
+      const y = top ? -size * 0.35 : H - size * 0.65;
+      out.push(seam % 2 ? rect('seam-block', x, y, size, size, color, { opacity: 0.7, cornerRadius: size * 0.18, rotation: 0 }) : ellipse('seam-block', x + size / 2, y + size / 2, size / 2, size / 2, color, { opacity: 0.7 }));
+    }
+  } else {
+    // The carousel's title as one giant outlined word running across every slide.
+    const word = (ctx.plan.title || ctx.plan.slides[0]?.headline || '').toUpperCase();
+    // Size the word so it runs across (almost) the whole carousel, capped by the slide height.
+    const at100 = measure(word, { fontId: ctx.fonts.heading, size: 100, weight: 800, italic: false, letterSpacing: 0 });
+    const size = Math.round(Math.min(H * 0.8, Math.max(H * 0.3, ((W * total * 0.9) / Math.max(1, at100)) * 100)));
+    out.push({
+      ...textEl({ slot: 'panorama-word', text: word, font: ctx.fonts.heading, weight: 800, max: size, min: size, lineHeight: 1, color: 'transparent' }, Math.round(shift + W * total * 0.05), Math.round(H * 0.5 - size * 0.55), Math.round(W * total), Math.round(size * 1.1), size, 0, 'left'),
+      stroke: { color: faint(pal.text, 0.8), width: Math.max(2, Math.round(3 * k)) },
+      autoFit: false,
+      opacity: 0.6,
+    } as TextElement);
   }
-  // One continuous wave line across the whole panorama, inside the bottom margin.
-  const wv = wave(W * total, 14 * k, W * 0.6);
-  out.push(path('panorama-line', wv.d, wv.viewBox, -index * W, H - margin.bottom * 0.55 - 14 * k, W * total, 28 * k, { stroke: mix(pal.primary, pal.bg, 0.35), strokeWidth: Math.round(4 * k), opacity: 0.8 }));
   return out;
 }

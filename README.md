@@ -4,6 +4,12 @@ Turn raw content — notes, a blog post, a document, a URL or bullet points — 
 
 - **Generate:** paste text, upload `.txt/.md/.docx/.pdf`, or import a URL. The slides are written by Claude (online), a free model (OpenRouter, Groq, Gemini, or LM Studio/llama.cpp on your computer), a local Ollama model (offline, downloadable from inside the app), or built-in rules (no AI). You get 3–6 designs side by side, each with its own style system, layout logic and font pairing.
 - **Edit:** a canvas editor with layers, snapping, rulers, grouping, unlimited undo, rich text, fonts (bundled, installed, uploaded), shapes, icons, emoji, charts, tables, QR codes, images with crop/mask/filters and offline background removal, gradient/mesh/image/pattern backgrounds, brand kits, find & replace and templates.
+- **Design extras:**
+  - 12 procedural textures, 13 patterns, and plain backgrounds.
+  - 33 graphics: doodles, sparkles, bursts, stickers.
+  - Text effects: neon, outline, 3D, retro, glitch, echo, sticker, highlighter.
+  - Continuous slides, with graphics and photos that flow across seams.
+  - Animations: entrances, typewriter, word-by-word, loops.
 - **Translate:** turn a finished carousel into Tamil, Hindi, Arabic, Japanese or 30+ other languages with the exact same design. Fonts, colors, effects and emphasized words carry over, and matching fonts for each script are bundled offline. You review every line before the copy is created.
 - **Check:** contrast is measured on the actual pixels behind each text box. The checker also flags text too small for phones, platform safe zones, missing alt text and slide limits.
 - **Publish:** PNG/JPG/WebP (1×/2×), ZIP, LinkedIn PDF, MP4/GIF slideshows, a caption with hashtags and per-slide alt text, and portable `.carousel` project files.
@@ -76,6 +82,38 @@ Troubleshooting:
 - *No models installed* means you still need to run `ollama pull …`.
 - Small models occasionally produce invalid JSON. The app sends the errors back to the model (up to 2 repair attempts), then falls back to the rules.
 
+## Backgrounds, graphics, text effects and animation
+
+**Backgrounds.** Set these for all slides in **Design → Background**, or for one slide in the slide panel.
+- **Plain:** one flat color with no decoration.
+- **Textures:** paper, kraft, crumpled paper, linen, canvas, watercolor, concrete, stucco, grunge, terrazzo, brushed metal and riso grain. They're generated in the app, so they work offline, and read on light and dark designs.
+- **Patterns:** dots, grid, lines, halftone, diagonal, perspective grid, waves, zigzag, stripes, checker, crosses, rings and triangles.
+- **Quick buttons:** **Plain** and **Textured** also sit next to *Bolder / More minimal* on the Generate page.
+
+**Continuous slides.** Choose a style on the Generate page or in Design → Background. The drawing is laid out across the whole carousel, so it lines up at every seam when swiping.
+- **Seamless flow:** shapes and a wave line across the seams.
+- **Ribbon:** a wide band weaving through every slide.
+- **Journey path:** a dashed route with one stop per slide.
+- **Split shapes:** shapes cut in half at each seam.
+- **Giant word:** the title written huge across the slides.
+- **Your own elements:** any element that crosses a slide edge gets **Continue on next slide** (or previous slide).
+- **Photo:** the slide panel's **Panoramic photo across all slides** spreads one image over every slide.
+
+**Graphics and text graphics** (Insert tab).
+- **Graphics:** 33 original vector graphics in palette colors:
+  - doodles: arrows, underlines, circles, squiggles, checks;
+  - sparkles and bursts: sparkles, starbursts, seals, rays, confetti;
+  - shapes and frames: brush strokes, highlighter, wave divider, arch, ribbon, speech bubble, thought bubble;
+  - stickers: heart, lightning, crown, washi tape, pin, quote mark.
+- **Text graphics:** ready-made styled text: giant background word, big number, neon/outline/3D/retro/glitch/echo titles, sticker label and arc text.
+- **Text effects:** any text box can take neon glow, outline, sticker, retro offset, 3D extrude, long shadow, glitch, echo stack, gradient or highlighter, and every value stays editable.
+
+**Animation.** Pick a style for a slide or all slides from the slide panel's *Animation* section:
+- **Styles:** subtle, lively, typewriter headlines or kinetic word-by-word.
+- **Per element:** select an element to choose its entrance (fade, slide, zoom, pop, drop, spin, wipe/draw-on), word animation (typewriter, word-by-word fade/rise/pop/slide, highlight sweep), loop (float, pulse, wiggle, spin, blink), delay and duration.
+- **Preview:** **▶ Preview** plays the slide, or all slides.
+- **Export:** in *Export → Video / GIF*, each slide plays its animation before its hold. **One animated clip per slide (ZIP)** gives a separate video per slide, for video carousels.
+
 ## Translating a carousel
 
 Open a carousel and click **Translate…** (on the Generate page or in the editor toolbar).
@@ -90,11 +128,13 @@ Open a carousel and click **Translate…** (on the Generate page or in the edito
 
 What carries over: every element, position, color, effect and font. Emphasized words stay emphasized because they travel with the translation as tags. Text that grows is shrunk to fit its box (down to 55%) before a box grows. Right-to-left languages mirror text alignment. Theme changes on the copy keep the translated text, because the plan is translated too.
 
-Fonts: each design keeps its own font for Latin letters, digits and brand names. Other scripts get a bundled OFL font of the same kind:
-- sans → Noto Sans Tamil;
-- serif → Noto Serif Tamil;
+Fonts: each design keeps its own font for Latin letters, digits and brand names. Other scripts get a bundled OFL font of the same kind. For Tamil, only fonts that render today's reformed script are used:
+- sans → Catamaran;
+- serif and elegant designs → Arima;
 - display → Baloo Thambi 2;
 - handwriting → Kavivanar.
+
+Mukta Malar, Hind Madurai, Meera Inimai, Pavanam and Coiny are also available. Pick one font for all Tamil text in **Settings → Fonts for other languages**; all nine also appear in the editor's font list under *Tamil*. Noto Sans/Serif Tamil, Anek Tamil and Tiro Tamil aren't used, because browsers draw them with pre-1978 ligatures.
 
 The same pattern covers Devanagari, Bengali, Telugu, Kannada, Malayalam, Gujarati, Gurmukhi, Odia, Sinhala, Arabic, Hebrew, Thai, Cyrillic, Greek and Vietnamese (`research/script-fonts.json`). Cyrillic, Greek and Vietnamese also use the design font's own glyphs when it has them. Chinese, Japanese and Korean use the system's fonts. Thai and CJK lines break at word boundaries, and long words shrink the text instead of being split.
 

@@ -30,7 +30,7 @@ const STYLE_TEXTURES: Record<string, TextureKind> = { 'paper-grain': 'paper', 'r
 
 /** Strengths that keep text contrast intact on light and dark palettes (checked by the real-pixel audit). */
 export const DEFAULT_TEXTURE_AMOUNT: Partial<Record<TextureKind, number>> = {
-  paper: 0.4, kraft: 0.4, crumpled: 0.25, linen: 0.5, canvas: 0.5, watercolor: 0.3, concrete: 0.4, stucco: 0.35, grunge: 0.4, terrazzo: 0.55, brushed: 0.3, riso: 0.4,
+  paper: 0.35, kraft: 0.4, crumpled: 0.25, linen: 0.5, canvas: 0.5, watercolor: 0.3, concrete: 0.4, stucco: 0.35, grunge: 0.4, terrazzo: 0.55, brushed: 0.3, riso: 0.4,
 };
 
 export function isPanoramic(ctx: Ctx): boolean {

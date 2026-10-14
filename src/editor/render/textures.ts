@@ -90,8 +90,10 @@ function paint(kind: TextureKind): (ctx: CanvasRenderingContext2D) => void {
   const grain = rng(7);
   switch (kind) {
     case 'paper': {
-      const fibers = fbm(5, 8, 11);
-      return pixels((_x, _y, u, v) => 0.5 + (fibers(u, v) - 0.5) * 0.35 + (grain() - 0.5) * 0.12);
+      // Fine tooth plus faint fibres (no cloudy blotches).
+      const fibers = fbm(3, 64, 11);
+      const tooth = fbm(2, 128, 12);
+      return pixels((_x, _y, u, v) => 0.5 + (fibers(u, v * 0.25) - 0.5) * 0.22 + (tooth(u, v) - 0.5) * 0.18 + (grain() - 0.5) * 0.16);
     }
     case 'kraft': {
       const f = fbm(4, 6, 21);

@@ -294,7 +294,11 @@ export interface DesignModifiers {
   /** Override the style's background pattern ('none' removes it). */
   pattern?: PatternKind | 'none';
   panoramic?: boolean;
+  /** What flows across slide seams when panoramic (continuous) mode is on. */
+  continuous?: ContinuousStyle;
 }
+
+export type ContinuousStyle = 'flow' | 'ribbon' | 'path' | 'blocks' | 'word';
 
 export interface CarouselTheme {
   styleId: string;

@@ -119,3 +119,10 @@ export function gotoSlide(delta: number) {
   const n = doc().carousel?.slides.length ?? 1;
   ed().setSlide(Math.max(0, Math.min(n - 1, ed().slideIndex + delta)));
 }
+
+/** Copies the selected element onto the next/previous slide, offset by one slide width (continuous designs). */
+export function continueSelection(direction: 'next' | 'prev') {
+  const { slideIndex, selection } = ed();
+  const width = getPreset(doc().carousel!.presetId).width;
+  doc().apply((d) => selection.reduce((acc, id) => ops.continueAcross(acc, slideIndex, id, direction, width), d));
+}
