@@ -3,7 +3,26 @@ import { Group, Rect, Text, TextPath } from 'react-konva';
 import type { LinearGradient, TextElement } from '@/model/types';
 import { fontStack, useFontsVersion } from '@/styles/fontLoader';
 import { nearestWeight } from '@/styles';
-import { applyCase, layoutElement, trackingFor, type TextLayout } from '@/engine/layout/textLayout';
+import { applyCase, layoutElement, measure, trackingFor, type TextLayout } from '@/engine/layout/textLayout';
+import { easeOutCubic } from '../animation';
+import type { TextAnimation } from '@/model/types';
+
+/** Words appear one after another, each over ~3 word-slots so they overlap smoothly. */
+function wordProgress(i: number, n: number, p: number): number {
+  if (n <= 1) return p;
+  const span = 3 / (n + 2);
+  const start = i / (n + 2);
+  return Math.max(0, Math.min(1, (p - start) / span));
+}
+
+function wordTransform(kind: TextAnimation, e: number, lp: number, size: number) {
+  switch (kind) {
+    case 'word-rise': return { dx: 0, dy: (1 - e) * size * 0.5, scale: 1, opacity: Math.min(1, lp * 2) };
+    case 'word-pop': return { dx: 0, dy: 0, scale: 0.4 + 0.6 * (1 + 2.70158 * (lp - 1) ** 3 + 1.70158 * (lp - 1) ** 2), opacity: Math.min(1, lp * 3) };
+    case 'word-slide': return { dx: (1 - e) * size * 0.8, dy: 0, scale: 1, opacity: Math.min(1, lp * 2) };
+    default: return { dx: 0, dy: 0, scale: 1, opacity: e };
+  }
+}
 
 const shadowProps = (s?: TextElement['shadow']) =>
   s ? { shadowColor: s.color, shadowBlur: s.blur, shadowOffsetX: s.offsetX, shadowOffsetY: s.offsetY, shadowOpacity: s.opacity } : {};
@@ -30,9 +49,24 @@ export function RichText({ el }: { el: TextElement }) {
   const em = el.emphasis;
   const pad = el.fontSize * 0.08;
   const grad = el.fillGradient ? gradientPoints(el.fillGradient, el.width, Math.max(el.height, layout.height)) : null;
+  // Text animation frame (from the animation timeline); finished animations draw normally.
+  const anim = el.pose?.text && el.pose.text.progress < 1 && el.pose.text.kind !== 'none' ? el.pose.text : null;
+  // Where each run starts in reading order (characters and words), for typewriter and word timing.
+  const starts: { chars: number; words: number }[][] = [];
+  let totalChars = 0;
+  let wordCount = 0;
+  for (const line of layout.lines) {
+    starts.push(line.runs.map((r) => {
+      const at = { chars: totalChars, words: wordCount };
+      totalChars += r.text.length;
+      wordCount += r.text.match(/\S+/g)?.length ?? 0;
+      return at;
+    }));
+  }
+  const charsShown = anim ? Math.floor(totalChars * anim.progress) : 0;
   return (
     <Group y={offsetY}>
-      <EffectLayers el={el} layout={layout} />
+      {(!anim || anim.progress > 0.999) && <EffectLayers el={el} layout={layout} />}
       {layout.lines.map((line, li) => {
         const lx = el.align === 'center' ? (el.width - line.width - line.indent) / 2 : el.align === 'right' ? el.width - line.width - line.indent : 0;
         return (
@@ -50,31 +84,69 @@ export function RichText({ el }: { el: TextElement }) {
                   ? { fillLinearGradientStartPoint: { x: grad.start.x - x, y: grad.start.y - y }, fillLinearGradientEndPoint: { x: grad.end.x - x, y: grad.end.y - y }, fillLinearGradientColorStops: grad.stops, fillPriority: 'linear-gradient' as const }
                   : {};
               const underline = run.style.underline || (isEm && em!.style === 'underline');
+              const textProps = {
+                fontFamily: fontStack(run.style.fontId),
+                fontSize: el.fontSize,
+                fontStyle: `${run.style.italic ? 'italic ' : ''}${weight}`,
+                lineHeight: el.lineHeight,
+                height: lh,
+                verticalAlign: 'middle' as const,
+                fill,
+                ...gradProps,
+                stroke: el.stroke?.color,
+                strokeWidth: el.stroke?.width,
+                fillAfterStrokeEnabled: true,
+                ...shadowProps(el.shadow),
+                wrap: 'none' as const,
+              };
+              // Animation frame: how much of this run shows (typewriter), how far decorations sweep, or per-word poses.
+              let shown = run.text;
+              let sweep = 1;
+              let words: ReactNode = null;
+              if (anim) {
+                const at = starts[li]![ri]!;
+                if (anim.kind === 'typewriter') {
+                  shown = run.text.slice(0, Math.max(0, charsShown - at.chars));
+                  sweep = shown.length === run.text.length ? 1 : 0;
+                } else if (anim.kind === 'highlight-sweep') {
+                  sweep = anim.progress;
+                } else {
+                  const spec = { fontId: run.style.fontId, size: el.fontSize, weight, italic: run.style.italic, letterSpacing: el.letterSpacing };
+                  const parts = [...run.text.matchAll(/\S+/g)];
+                  sweep = wordProgress(at.words, wordCount, anim.progress) > 0 ? 1 : 0;
+                  words = parts.map((m, wi) => {
+                    const lp = wordProgress(at.words + wi, wordCount, anim.progress);
+                    if (lp <= 0) return null;
+                    const e = easeOutCubic(lp);
+                    const wx = x + (m.index ? measure(run.text.slice(0, m.index), spec) : 0);
+                    const ww = measure(m[0], spec);
+                    const t = wordTransform(anim.kind, e, lp, el.fontSize);
+                    return (
+                      <Text
+                        key={m.index}
+                        {...textProps}
+                        text={m[0]}
+                        x={wx + ww / 2 + t.dx}
+                        y={y + lh / 2 + t.dy}
+                        offsetX={ww / 2}
+                        offsetY={lh / 2}
+                        scaleX={t.scale}
+                        scaleY={t.scale}
+                        opacity={t.opacity}
+                        letterSpacing={trackingFor(m[0], el.letterSpacing)}
+                      />
+                    );
+                  });
+                }
+              }
+              const decoW = (w: number) => w * sweep;
               return (
                 <Fragment key={ri}>
-                  {run.style.highlight && <Rect x={x - pad} y={y + lh * 0.12} width={run.width + pad * 2} height={lh * 0.8} fill={run.style.highlight} cornerRadius={pad} />}
-                  {isEm && em!.style === 'highlight' && <Rect x={x - pad} y={y + lh * 0.12} width={run.width + pad * 2} height={lh * 0.8} fill={em!.color} cornerRadius={pad} />}
-                  {isEm && em!.style === 'box' && <Rect x={x - pad * 1.5} y={y + lh * 0.04} width={run.width + pad * 3} height={lh * 0.94} fill={em!.color} />}
-                  {underline && <Rect x={x} y={y + lh * 0.84} width={run.width} height={Math.max(2, el.fontSize * (isEm ? 0.09 : 0.06))} fill={isEm && em!.style === 'underline' ? em!.color : fill} />}
-                  <Text
-                    x={x}
-                    y={y}
-                    text={run.text}
-                    fontFamily={fontStack(run.style.fontId)}
-                    fontSize={el.fontSize}
-                    fontStyle={`${run.style.italic ? 'italic ' : ''}${weight}`}
-                    letterSpacing={trackingFor(run.text, el.letterSpacing)}
-                    lineHeight={el.lineHeight}
-                    height={lh}
-                    verticalAlign="middle"
-                    fill={fill}
-                    {...gradProps}
-                    stroke={el.stroke?.color}
-                    strokeWidth={el.stroke?.width}
-                    fillAfterStrokeEnabled
-                    {...shadowProps(el.shadow)}
-                    wrap="none"
-                  />
+                  {sweep > 0 && run.style.highlight && <Rect x={x - pad} y={y + lh * 0.12} width={decoW(run.width + pad * 2)} height={lh * 0.8} fill={run.style.highlight} cornerRadius={pad} />}
+                  {sweep > 0 && isEm && em!.style === 'highlight' && <Rect x={x - pad} y={y + lh * 0.12} width={decoW(run.width + pad * 2)} height={lh * 0.8} fill={em!.color} cornerRadius={pad} />}
+                  {sweep > 0 && isEm && em!.style === 'box' && <Rect x={x - pad * 1.5} y={y + lh * 0.04} width={decoW(run.width + pad * 3)} height={lh * 0.94} fill={em!.color} />}
+                  {sweep > 0 && underline && <Rect x={x} y={y + lh * 0.84} width={decoW(run.width)} height={Math.max(2, el.fontSize * (isEm ? 0.09 : 0.06))} fill={isEm && em!.style === 'underline' ? em!.color : fill} />}
+                  {words ?? (shown && <Text {...textProps} x={x} y={y} text={shown} letterSpacing={trackingFor(run.text, el.letterSpacing)} />)}
                 </Fragment>
               );
             })}

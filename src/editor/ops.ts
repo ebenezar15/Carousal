@@ -298,7 +298,18 @@ export function applyTheme(doc: Doc, theme: CarouselTheme, presetId = doc.carous
     if (!old) return s;
     if (old.manual) return old;
     const userEls = old.elements.filter((e) => !e.slot);
-    return { ...s, id: old.id, elements: [...s.elements, ...userEls] };
+    // Animations set on generated elements carry over to the rebuilt element in the same slot.
+    const animBySlot = new Map<string, NonNullable<SlideElement['anim']>[]>();
+    old.elements.forEach((e) => e.slot && e.anim && animBySlot.set(e.slot, [...(animBySlot.get(e.slot) ?? []), e.anim]));
+    const seen = new Map<string, number>();
+    const rebuiltEls = s.elements.map((e) => {
+      if (!e.slot || !animBySlot.has(e.slot)) return e;
+      const n = seen.get(e.slot) ?? 0;
+      seen.set(e.slot, n + 1);
+      const list = animBySlot.get(e.slot)!;
+      return { ...e, anim: list[Math.min(n, list.length - 1)] };
+    });
+    return { ...s, id: old.id, elements: [...rebuiltEls, ...userEls] };
   });
   return { ...doc, carousel: { ...rebuilt, id: doc.carousel.id, slides } };
 }

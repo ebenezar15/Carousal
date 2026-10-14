@@ -1,7 +1,7 @@
 // Text measurement + line breaking used by BOTH the layout engine and the Konva renderer, so what
 // the engine measures is exactly what gets drawn. Supports per-word emphasis, character-range rich
 // text spans (font/weight/italic/color/underline/highlight), and bulleted/numbered lists.
-import { fontStack } from '@/styles/fontLoader';
+import { fontStack, useFontsVersion } from '@/styles/fontLoader';
 import { isRtlText } from '@/styles/scriptFonts';
 import { nearestWeight } from '@/styles';
 import type { TextElement, TextEmphasis, TextSpan } from '@/model/types';
@@ -321,8 +321,23 @@ export function fitFontSize(
   return { size: Math.floor(min), layout, fits: false };
 }
 
-/** Layout of a text element exactly as the renderer draws it. */
+const layoutCache = new Map<string, TextLayout>();
+
+/** Layout of a text element exactly as the renderer draws it (memoized: animation frames reuse it). */
 export function layoutElement(el: TextElement, overrides: Partial<Pick<TextElement, 'fontSize' | 'width'>> = {}): TextLayout {
+  const key = JSON.stringify([
+    useFontsVersion.getState().v, el.text, el.textCase, el.fontId, overrides.fontSize ?? el.fontSize, el.fontWeight, el.italic, el.letterSpacing,
+    overrides.width ?? el.width, el.lineHeight, el.emphasis?.words, el.emphasis?.style, el.spans, el.listStyle, el.underline,
+  ]);
+  const hit = layoutCache.get(key);
+  if (hit) return hit;
+  const layout = computeLayout(el, overrides);
+  if (layoutCache.size > 1000) layoutCache.delete(layoutCache.keys().next().value!);
+  layoutCache.set(key, layout);
+  return layout;
+}
+
+function computeLayout(el: TextElement, overrides: Partial<Pick<TextElement, 'fontSize' | 'width'>>): TextLayout {
   return layoutText(
     applyCase(el.text, el.textCase),
     { fontId: el.fontId, size: overrides.fontSize ?? el.fontSize, weight: el.fontWeight, italic: el.italic, letterSpacing: el.letterSpacing },

@@ -5,6 +5,34 @@ import type { SlideRole } from '@/styles/types';
 
 export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image' | 'group' | 'chart' | 'table' | 'qr';
 
+export type EnterAnimation = 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom' | 'pop' | 'rotate' | 'wipe' | 'drop';
+/** Word/letter animations for text (typewriter, word by word…). */
+export type TextAnimation = 'none' | 'typewriter' | 'word-fade' | 'word-rise' | 'word-pop' | 'word-slide' | 'highlight-sweep';
+export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink';
+
+/** How an element animates in video/GIF exports and the animation preview (seconds). */
+export interface ElementAnimation {
+  enter: EnterAnimation;
+  /** Start time on the slide's timeline. */
+  delay: number;
+  duration: number;
+  text?: TextAnimation;
+  loop?: LoopAnimation;
+}
+
+/** Render-only pose computed for one animation frame (never saved). */
+export interface Pose {
+  dx: number;
+  dy: number;
+  scale: number;
+  rotate: number;
+  opacity: number;
+  /** 0..1 horizontal reveal (wipe). */
+  clip?: number;
+  /** Text animation in progress: kind and 0..1 progress. */
+  text?: { kind: TextAnimation; progress: number };
+}
+
 export interface ElementBase {
   id: string;
   kind: ElementKind;
@@ -19,6 +47,9 @@ export interface ElementBase {
   hidden?: boolean;
   /** Semantic slot the layout engine filled, e.g. 'headline' or 'slide-number'. Lets "swap theme" re-flow content. */
   slot?: string;
+  anim?: ElementAnimation;
+  /** Set only on frames produced by the animation timeline (see editor/animation.ts). */
+  pose?: Pose;
 }
 
 export interface TextEmphasis {
