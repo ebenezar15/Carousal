@@ -27,6 +27,9 @@ export default defineConfig({
     },
   },
   server: { port: 5173, strictPort: true },
+  // The dev dependency scan does not follow `new Worker(...)`, so onnxruntime (background-removal worker)
+  // would be discovered on first use, re-optimized, and every open page reloaded mid-session.
+  optimizeDeps: { include: ['onnxruntime-web/wasm'] },
   envPrefix: ['VITE_', 'TAURI_ENV_'],
   plugins: [
     react(),
