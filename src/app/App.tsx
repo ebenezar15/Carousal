@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { GeneratePage } from './GeneratePage';
-import { SettingsPage } from './SettingsPage';
-import { EditorPage } from '@/editor/EditorPage';
+
+// Heavy screens load on demand (keeps the first paint fast).
+const EditorPage = lazy(() => import('@/editor/EditorPage').then((m) => ({ default: m.EditorPage })));
+const SettingsPage = lazy(() => import('./SettingsPage').then((m) => ({ default: m.SettingsPage })));
+const Loading = () => <div className="p-10 text-center text-sm text-zinc-500">Loading…</div>;
 import { endGesture, useProjects, useRoute, useSettings } from './store';
 
 export function App() {
@@ -41,28 +44,30 @@ export function App() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
-        <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-6 px-4">
-          <div className="flex items-center gap-2 font-semibold">
+        <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-3 px-3 sm:gap-6 sm:px-4">
+          <div className="flex shrink-0 items-center gap-2 font-semibold">
             <img src="/icon.svg" alt="" className="h-7 w-7" />
-            CarouselForge
+            <span className="hidden sm:inline">CarouselForge</span>
           </div>
-          <nav className="flex gap-1" aria-label="Main">
+          <nav className="flex min-w-0 gap-1 overflow-x-auto" aria-label="Main">
             {(['generate', 'editor', 'settings'] as const).map((r) => (
               <button key={r} className={`btn-ghost ${route === r ? 'bg-zinc-200/70 dark:bg-zinc-800' : ''}`} aria-current={route === r ? 'page' : undefined} onClick={() => setRoute(r)} disabled={r === 'editor' && !hasProject}>
                 {r === 'generate' ? 'Generate' : r === 'editor' ? 'Editor' : 'Settings'}
               </button>
             ))}
           </nav>
-          <span className={`ml-auto rounded-full px-2.5 py-0.5 text-xs ${online ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>
+          <span className={`ml-auto hidden shrink-0 rounded-full px-2.5 py-0.5 text-xs sm:inline ${online ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>
             {online ? 'Online' : 'Offline'}
           </span>
         </div>
       </header>
-      {route === 'editor' ? (
-        <EditorPage />
-      ) : (
-        <main className="mx-auto max-w-[1400px] px-4 py-6">{route === 'generate' ? <GeneratePage /> : <SettingsPage />}</main>
-      )}
+      <Suspense fallback={<Loading />}>
+        {route === 'editor' ? (
+          <EditorPage />
+        ) : (
+          <main className="mx-auto max-w-[1400px] px-4 py-6">{route === 'generate' ? <GeneratePage /> : <SettingsPage />}</main>
+        )}
+      </Suspense>
     </div>
   );
 }

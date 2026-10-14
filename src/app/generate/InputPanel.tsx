@@ -4,6 +4,7 @@ import { ACCEPTED_FILE_TYPES, ImportError, importFile, importUrl } from '@/engin
 import { presets } from '@/styles';
 import { SAMPLE_CONTENT } from '../sample';
 
+
 const TONES: Tone[] = ['professional', 'playful', 'bold', 'educational'];
 export const LANGUAGES: [string, string][] = [
   ['auto', 'Same as content'], ['en', 'English'], ['es', 'Spanish'], ['fr', 'French'], ['de', 'German'], ['pt', 'Portuguese'], ['it', 'Italian'],

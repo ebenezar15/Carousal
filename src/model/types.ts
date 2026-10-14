@@ -282,4 +282,8 @@ export interface Project {
   carousel: Carousel;
   /** Small PNG data URL used in the project list. */
   thumbnail?: string;
+  /** Per-slide alt text (accessibility), written by the caption generator or by hand. */
+  altText?: string[];
+  /** Platform the caption was written for. */
+  captionPlatform?: string;
 }

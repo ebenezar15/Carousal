@@ -7,7 +7,7 @@ import { useEditor } from './store';
 import * as A from './actions';
 
 /** Renders a thumbnail only while it is on screen (virtualized strip for long carousels). */
-function LazyThumb({ slide, w, h, width }: { slide: Slide; w: number; h: number; width: number }) {
+export function LazyThumb({ slide, w, h, width }: { slide: Slide; w: number; h: number; width: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {

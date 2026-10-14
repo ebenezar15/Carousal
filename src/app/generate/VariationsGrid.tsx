@@ -1,6 +1,6 @@
 import type { Carousel } from '@/model/types';
 import { getPreset } from '@/styles';
-import { SlideStage } from '@/editor/SlideStage';
+import { LazyThumb } from '@/editor/SlideStrip';
 
 export interface VariationPreview { label: string; carousel: Carousel }
 
@@ -35,7 +35,7 @@ export function VariationsGrid({ previews, selected, onPick, onNewDesigns, busy 
             <button className="flex w-full gap-2 overflow-hidden text-left" onClick={() => onPick(i)} aria-label={`Use design ${v.label}`}>
               {v.carousel.slides.slice(0, 4).map((s) => (
                 <div key={s.id} className="shrink-0 overflow-hidden rounded ring-1 ring-black/5 dark:ring-white/10">
-                  <SlideStage slide={s} width={preset.width} height={preset.height} displayWidth={thumbW} />
+                  <LazyThumb slide={s} w={preset.width} h={preset.height} width={thumbW} />
                 </div>
               ))}
               {v.carousel.slides.length > 4 && <div className="flex shrink-0 items-center px-1 text-xs text-zinc-500">+{v.carousel.slides.length - 4}</div>}

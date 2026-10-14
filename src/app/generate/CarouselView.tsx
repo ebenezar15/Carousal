@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Carousel } from '@/model/types';
 import type { MoreDirection } from '@/engine';
 import { getPreset } from '@/styles';
-import { SlideStage } from '@/editor/SlideStage';
+import { LazyThumb } from '@/editor/SlideStrip';
 import { renderSlide } from '@/export/render';
 
 export interface SlideActions {
@@ -79,7 +79,7 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onTogg
         {carousel.slides.map((slide, i) => (
           <figure key={slide.id} className="shrink-0" style={{ width: displayWidth }} data-testid="slide" data-role={slide.role} data-layout={slide.layoutId}>
             <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 dark:ring-white/10">
-              <SlideStage slide={slide} width={preset.width} height={preset.height} displayWidth={displayWidth} />
+              <LazyThumb slide={slide} w={preset.width} h={preset.height} width={displayWidth} />
             </div>
             <figcaption className="mt-2 space-y-1.5 text-xs text-zinc-500">
               <div className="flex items-center justify-between">

@@ -25,8 +25,11 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
 
   // Default motif for left-aligned styles without their own: short accent bar above the headline.
   const ownMotif = ids.some((d) => ['thin-rule-top', 'kicker-label', 'small-caps-kicker', 'code-tag', 'terminal-prompt', 'brand-bar', 'window-chrome', 'avatar-row'].includes(d));
-  if (!ownMotif && headline && ctx.align === 'left' && !['hook-split', 'quote-big-marks', 'compare-split', 'hook-tweet'].includes(layoutId)) {
-    front.push(rect('accent-bar', headline.x, headline.y - Math.round(44 * k), Math.round(88 * k), Math.round(10 * k), pal.primary, { cornerRadius: 5 * k }));
+  const stepTracker = ids.includes('step-tracker') && s.role === 'step' && ctx.plan.slides.filter((x) => x.role === 'step').length > 1;
+  if (!ownMotif && !stepTracker && headline && ctx.align === 'left' && !['hook-split', 'quote-big-marks', 'compare-split', 'hook-tweet'].includes(layoutId)) {
+    // Never above the content box, so it can't collide with a top slide number or swipe cue.
+    const barY = Math.max(headline.y - Math.round(44 * k), box.y - Math.round(18 * k));
+    front.push(rect('accent-bar', headline.x, barY, Math.round(88 * k), Math.round(10 * k), pal.primary, { cornerRadius: 5 * k }));
   }
 
   for (const id of ids) {
@@ -133,14 +136,16 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
         if (s.role === 'step' && steps > 1) {
           const idx = ctx.plan.slides.slice(0, index + 1).filter((x) => x.role === 'step').length - 1;
           const segW = Math.min(90 * k, (box.w - (steps - 1) * 12 * k) / steps);
-          for (let n = 0; n < steps; n++) back.push(rect('step-tracker', box.x + n * (segW + 12 * k), box.y - 44 * k, segW, 10 * k, n <= idx ? pal.primary : mix(pal.text, pal.bg, 0.85), { cornerRadius: 5 * k }));
+          // Just above the content box, below the chrome strip (never under the slide number).
+          for (let n = 0; n < steps; n++) back.push(rect('step-tracker', box.x + n * (segW + 12 * k), box.y - 18 * k, segW, 8 * k, n <= idx ? pal.primary : mix(pal.text, pal.bg, 0.85), { cornerRadius: 5 * k }));
         }
         break;
       }
       case 'horizon-sun': {
         if (s.role === 'hook' || s.role === 'cta') {
-          const r = W * 0.28;
-          const cy = H * 0.78;
+          // Mostly below the bottom edge: a horizon arc that stays clear of the text.
+          const r = W * 0.3;
+          const cy = H + r * 0.3;
           back.push(ellipse('sun', W / 2, cy, r, r, safeAccent(ctx), { opacity: 0.55 }));
           for (let n = 0; n < 5; n++) back.push(rect('sun-stripe', W / 2 - r, cy + n * r * 0.18 - r * 0.1, 2 * r, (4 + n * 3) * k, pal.bg));
         }

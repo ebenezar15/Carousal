@@ -1,7 +1,6 @@
 // Online provider: Anthropic Claude via the official SDK. The user supplies their own key (never
 // bundled). On desktop the SDK's requests go through Tauri's HTTP plugin; on the web the SDK runs in
 // browser mode, which Anthropic supports for user-supplied keys.
-import Anthropic from '@anthropic-ai/sdk';
 import { CLAUDE_KEY, getSecret } from '@/secrets';
 import { appFetch } from '../net';
 import type { AIProvider, CompletionRequest } from '../types';
@@ -30,6 +29,8 @@ export function createClaudeProvider(getModel: () => string): AIProvider {
     async complete(req: CompletionRequest) {
       const apiKey = await getSecret(CLAUDE_KEY);
       if (!apiKey) throw new Error('No Claude API key set. Add one in Settings.');
+      // Loaded on first use so the SDK isn't in the initial bundle (and never loads for offline users).
+      const { default: Anthropic } = await import('@anthropic-ai/sdk');
       const client = new Anthropic({
         apiKey,
         dangerouslyAllowBrowser: true,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import {
   cycleEmphasis, defaultOptions, generatePlan, headlineOptions, makeItMore, nextLayoutId, pickProvider, pickVariations, rewriteSlide, setHeadline,
   type CarouselPlan, type MoreDirection,
@@ -8,13 +8,15 @@ import { DEFAULT_PRESET_ID, getPreset } from '@/styles';
 import { newId } from '@/model/id';
 import type { CarouselTheme, Project } from '@/model/types';
 import { renderSlideToDataURL } from '@/export/render';
-import { ExportDialog } from '@/export/ExportDialog';
+const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ default: m.ExportDialog })));
 import { importProjectFile, PROJECT_EXT } from '@/export/projectFile';
 import { providers } from './runtime';
 import { useDocument, useProjects, useRoute, useSettings } from './store';
 import { InputPanel, type InputState } from './generate/InputPanel';
 import { VariationsGrid, type VariationPreview } from './generate/VariationsGrid';
 import { CarouselView } from './generate/CarouselView';
+import { CaptionPanel } from './CaptionPanel';
+import { SAMPLES } from './sample';
 
 const PROVIDER_LABEL: Record<string, string> = { claude: 'Claude', ollama: 'Ollama', rules: 'Built-in rules' };
 
@@ -43,7 +45,6 @@ export function GeneratePage() {
   }, [settings.provider, settings.claudeModel, settings.ollamaUrl]);
 
   const plan = current?.plan as CarouselPlan | undefined;
-  const genOpts = () => ({ ...input.opts, maxSlides: getPreset(input.presetId).maxSlides });
 
   /** Lays out a theme for the current plan, saves it as the project's carousel and refreshes the thumbnail. */
   async function commit(project: Project, nextPlan: CarouselPlan, theme: CarouselTheme, extra: Partial<Project> = {}) {
@@ -83,21 +84,23 @@ export function GeneratePage() {
     }
   };
 
-  async function onGenerate() {
-    if (!input.text.trim()) return;
+  async function onGenerate(override?: Partial<InputState>) {
+    const inp = { ...input, ...override };
+    if (override) setInput(inp);
+    if (!inp.text.trim()) return;
     abort.current?.abort();
     abort.current = new AbortController();
     setNotice(null);
     await run(async () => {
-      const result = await generatePlan(input.text, genOpts(), settings.provider, providers, abort.current!.signal);
-      const variations = pickVariations(result.plan, { count: input.variationCount, tone: input.opts.tone, seed: 0, handle: input.handle });
+      const result = await generatePlan(inp.text, { ...inp.opts, maxSlides: getPreset(inp.presetId).maxSlides }, settings.provider, providers, abort.current!.signal);
+      const variations = pickVariations(result.plan, { count: inp.variationCount, tone: inp.opts.tone, seed: 0, handle: inp.handle });
       const project: Project = {
         id: newId('prj_'), name: result.plan.title || 'Untitled carousel', createdAt: Date.now(), updatedAt: Date.now(),
-        sourceText: input.text, plan: result.plan, generatedBy: result.provider, variations: variations.map((v) => v.theme), variationSeed: 0,
-        settings: { presetId: input.presetId, tone: input.opts.tone, audience: input.opts.audience, language: input.opts.language, slideCount: input.opts.slideCount, variationCount: input.variationCount },
-        carousel: { id: '', presetId: input.presetId, theme: variations[0]!.theme, slides: [] },
+        sourceText: inp.text, plan: result.plan, generatedBy: result.provider, variations: variations.map((v) => v.theme), variationSeed: 0,
+        settings: { presetId: inp.presetId, tone: inp.opts.tone, audience: inp.opts.audience, language: inp.opts.language, slideCount: inp.opts.slideCount, variationCount: inp.variationCount },
+        carousel: { id: '', presetId: inp.presetId, theme: variations[0]!.theme, slides: [] },
       };
-      const langNote = result.provider === 'rules' && input.opts.language !== 'auto' ? ' The built-in rules keep the original language; translation needs Claude or Ollama.' : '';
+      const langNote = result.provider === 'rules' && inp.opts.language !== 'auto' ? ' The built-in rules keep the original language; translation needs Claude or Ollama.' : '';
       setNotice(result.notice ? result.notice + langNote : langNote.trim() || null);
       await commit(project, result.plan, variations[0]!.theme);
     });
@@ -161,7 +164,7 @@ export function GeneratePage() {
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
       <div className="space-y-4">
-        <InputPanel value={input} onChange={setInput} onGenerate={onGenerate} busy={busy} />
+        <InputPanel value={input} onChange={setInput} onGenerate={() => void onGenerate()} busy={busy} />
         <p className="px-1 text-xs text-zinc-500">
           AI: <strong>{settings.provider === 'auto' ? 'Auto (Claude → Ollama → rules)' : PROVIDER_LABEL[settings.provider]}</strong> · change in Settings
         </p>
@@ -203,7 +206,7 @@ export function GeneratePage() {
         )}
       </div>
 
-      <div className="min-w-0 space-y-6">
+      <div className={`min-w-0 space-y-6 ${current ? '' : 'order-first lg:order-none'}`}>
         {notice && (
           <div role="status" className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200">
             {notice}
@@ -232,17 +235,56 @@ export function GeneratePage() {
               actions={slideActions}
             />
             <VariationsGrid previews={previews} selected={selectedIndex} onPick={pickDesign} onNewDesigns={newDesigns} busy={busy} />
-            {exporting && <ExportDialog project={current} carousel={carousel} plan={plan} onClose={() => setExporting(false)} />}
+            <section className="card p-4" aria-label="Caption and hashtags">
+              <h2 className="mb-2 text-sm font-semibold">Caption, hashtags & alt text</h2>
+              <CaptionPanel compact />
+            </section>
+            {exporting && <Suspense fallback={null}><ExportDialog project={current} carousel={carousel} plan={plan} onClose={() => setExporting(false)} /></Suspense>}
             <button className="text-xs text-zinc-500 hover:underline" onClick={() => setShowJson((v) => !v)}>{showJson ? 'Hide' : 'Show'} generated plan (JSON)</button>
             {showJson && <pre className="card max-h-96 overflow-auto p-4 text-xs" data-testid="plan-json">{JSON.stringify(plan, null, 2)}</pre>}
           </>
         ) : (
-          <div className="card flex h-80 flex-col items-center justify-center gap-2 p-8 text-center text-zinc-500">
-            <p className="text-base font-medium text-zinc-700 dark:text-zinc-300">Paste content, upload a file or import a URL — then Generate</p>
-            <p className="text-sm">You'll get several distinct designs of the same content. Works offline: with no AI available, the built-in rules split your content into slides.</p>
-          </div>
+          <Welcome
+            busy={busy}
+            first={projects.length === 0}
+            onSample={(sm) => void onGenerate({ text: sm.text, presetId: sm.preset, opts: { ...input.opts, tone: sm.tone } })}
+          />
         )}
       </div>
+    </div>
+  );
+}
+
+/** First-run / empty state: what the app does, three steps, and one-click samples that work offline. */
+function Welcome({ busy, first, onSample }: { busy: boolean; first: boolean; onSample(s: (typeof SAMPLES)[number]): void }) {
+  return (
+    <div className="card p-8" data-testid="welcome">
+      <h1 className="text-2xl font-semibold tracking-tight">{first ? 'Welcome to CarouselForge' : 'Start a new carousel'}</h1>
+      <p className="mt-2 max-w-xl text-sm text-zinc-600 dark:text-zinc-400">
+        Turn notes, articles or bullet points into polished social carousels. You get several distinct designs, a full editor and exact-size exports for every platform — even offline.
+      </p>
+      <ol className="mt-6 grid gap-3 text-sm sm:grid-cols-3">
+        {[
+          ['1', 'Add content', 'Paste text, drop a .docx/.pdf, or import a URL.'],
+          ['2', 'Pick a design', 'Compare 3–6 designs side by side; tweak with “make it bolder”.'],
+          ['3', 'Edit & export', 'Fine-tune anything, check readability, export PNG, PDF or video.'],
+        ].map(([n, t, d]) => (
+          <li key={n} className="rounded-lg bg-zinc-100 p-3 dark:bg-zinc-800/60">
+            <span className="mb-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs font-semibold text-white">{n}</span>
+            <p className="font-medium">{t}</p>
+            <p className="text-xs text-zinc-500">{d}</p>
+          </li>
+        ))}
+      </ol>
+      <h2 className="mt-8 text-sm font-semibold">Try a sample — one click, no setup</h2>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {SAMPLES.map((s) => (
+          <button key={s.id} className="btn-ghost border border-zinc-300 dark:border-zinc-700" disabled={busy} onClick={() => onSample(s)}>
+            <span aria-hidden>{s.emoji}</span> {s.label}
+          </button>
+        ))}
+      </div>
+      <p className="mt-6 text-xs text-zinc-500">No AI key? No problem: the built-in rules work offline. Add Claude or a local Ollama model in Settings for smarter copy.</p>
     </div>
   );
 }

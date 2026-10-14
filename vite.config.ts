@@ -12,6 +12,20 @@ export default defineConfig({
   publicDir: 'assets',
   resolve: { alias: { '@': r('./src'), '@research': r('./research') } },
   clearScreen: false,
+  build: {
+    rolldownOptions: {
+      output: {
+        // Long-lived vendor chunks cache well across app updates.
+        advancedChunks: {
+          groups: [
+            { name: 'vendor-react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+            { name: 'vendor-konva', test: /node_modules[\\/](konva|react-konva|react-reconciler|its-fine)[\\/]/ },
+            { name: 'vendor-data', test: /node_modules[\\/](zod|dexie|dexie-react-hooks|zustand|zundo)[\\/]/ },
+          ],
+        },
+      },
+    },
+  },
   server: { port: 5173, strictPort: true },
   envPrefix: ['VITE_', 'TAURI_ENV_'],
   plugins: [

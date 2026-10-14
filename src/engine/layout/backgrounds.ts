@@ -62,7 +62,8 @@ export function buildBackground(ctx: Ctx, index: number): Background {
     bg.pattern = {
       kind: kindP,
       color: kindP === 'lines' ? safeTint(pal.bg, pal.primary, text, 0.6, 1) : text,
-      opacity: Math.min(0.2, Number(sb.patternOpacity ?? 0.1)) * (kindP === 'lines' ? 2.5 : 1),
+      // Kept faint enough that small text on top still clears 4.5:1 (verified by the real-pixel audit test).
+      opacity: kindP === 'perspective-grid' ? 0.08 : Math.min(0.2, Number(sb.patternOpacity ?? 0.1)) * (kindP === 'lines' ? 2.5 : 1),
       size: Math.round((kindP === 'lines' ? 64 : kindP === 'halftone' ? 22 : 40) * ctx.k),
     };
   }

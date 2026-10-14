@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import type { SlideElement } from '@/model/types';
 
-export type LeftTab = 'slides' | 'layers' | 'insert' | 'design' | 'templates';
+export type LeftTab = 'slides' | 'layers' | 'insert' | 'design' | 'templates' | 'check' | 'caption';
 
 interface EditorState {
   slideIndex: number;

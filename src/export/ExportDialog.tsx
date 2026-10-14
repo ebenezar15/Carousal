@@ -1,4 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { checkCarousel } from '@/editor/accessibility';
+import { canvasSampler } from '@/editor/sampler';
 import type { Carousel, Project } from '@/model/types';
 import { getPreset } from '@/styles';
 import type { CarouselPlan } from '@/engine/schema';
@@ -29,6 +31,16 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
   const [result, setResult] = useState<Result | null>(null);
   const abort = useRef<AbortController | null>(null);
   const webp = useMemo(() => webpEncodeSupported(), []);
+  const [a11y, setA11y] = useState<{ errors: number; warnings: number } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void checkCarousel(carousel, canvasSampler(carousel.presetId)).then((issues) => {
+      if (alive) setA11y({ errors: issues.filter((i) => i.severity === 'error').length, warnings: issues.filter((i) => i.severity === 'warning').length });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [carousel]);
 
   const slides = range === 'current' && initialSlide !== undefined ? [carousel.slides[initialSlide]!] : carousel.slides;
   const indices = range === 'current' && initialSlide !== undefined ? [initialSlide] : carousel.slides.map((_, i) => i);
@@ -53,7 +65,7 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
         }
         const saved: string[] = [];
         if (mode === 'zip') {
-          const extras = plan ? [{ name: 'caption.txt', blob: textFile(`${plan.caption}\n\n${plan.hashtags.join(' ')}\n`) }] : [];
+          const extras = plan ? [{ name: 'caption.txt', blob: textFile(`${plan.caption}\n\n${plan.hashtags.join(' ')}\n${project.altText?.length ? `\n--- Alt text ---\n${project.altText.map((a) => a).join('\n')}\n` : ''}`) }] : [];
           const zip = await zipFiles([...rows.map((r) => ({ name: r.name, blob: r.blob })), ...extras]);
           const zipName = `${slug(name)}.zip`;
           if ((await saveBlob(zip, zipName)) === 'saved') saved.push(`${zipName} (${formatBytes(zip.size)})`);
@@ -203,6 +215,16 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
               <p className="text-zinc-500">{preset.width}×{preset.height}px · up to {preset.maxSlides} slides{maxMB ? ` · ≤ ${maxMB} MB per file` : ''}</p>
               {preset.exportKind === 'pdf' && mode !== 'pdf' && <p className="mt-1 text-amber-700 dark:text-amber-400">This platform expects a PDF document.</p>}
               {carousel.slides.length > preset.maxSlides && <p className="mt-1 text-amber-700 dark:text-amber-400">You have {carousel.slides.length} slides; the limit is {preset.maxSlides}.</p>}
+            </div>
+            <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800" data-testid="export-a11y">
+              <p className="font-medium">Readability check</p>
+              {!a11y ? (
+                <p className="text-zinc-500">Checking…</p>
+              ) : a11y.errors + a11y.warnings === 0 ? (
+                <p className="text-emerald-700 dark:text-emerald-400">No contrast or size problems ✓</p>
+              ) : (
+                <p className="text-amber-700 dark:text-amber-400">{a11y.errors} errors, {a11y.warnings} warnings — open the editor’s Check tab to review and fix.</p>
+              )}
             </div>
             <button className="btn-primary w-full" onClick={() => void run()} disabled={Boolean(busy)}>{busy ?? 'Export'}</button>
             {busy && (
