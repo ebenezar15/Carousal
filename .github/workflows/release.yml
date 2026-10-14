@@ -49,4 +49,6 @@ jobs:
           releaseName: CarouselForge ${{ github.ref_type == 'tag' && github.ref_name || 'v__VERSION__' }}
           releaseBody: Installers for macOS (universal), Windows and Linux. Unsigned builds — see the README for first-launch notes.
           releaseDraft: true
+          # Tag the commit that was built (a manual run from a branch must not tag the default branch).
+          commitish: ${{ github.sha }}
           args: ${{ matrix.args }}
