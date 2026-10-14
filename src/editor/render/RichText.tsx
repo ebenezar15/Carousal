@@ -1,9 +1,9 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, type ReactNode } from 'react';
 import { Group, Rect, Text, TextPath } from 'react-konva';
 import type { LinearGradient, TextElement } from '@/model/types';
 import { fontStack, useFontsVersion } from '@/styles/fontLoader';
 import { nearestWeight } from '@/styles';
-import { applyCase, layoutElement, trackingFor } from '@/engine/layout/textLayout';
+import { applyCase, layoutElement, trackingFor, type TextLayout } from '@/engine/layout/textLayout';
 
 const shadowProps = (s?: TextElement['shadow']) =>
   s ? { shadowColor: s.color, shadowBlur: s.blur, shadowOffsetX: s.offsetX, shadowOffsetY: s.offsetY, shadowOpacity: s.opacity } : {};
@@ -32,6 +32,7 @@ export function RichText({ el }: { el: TextElement }) {
   const grad = el.fillGradient ? gradientPoints(el.fillGradient, el.width, Math.max(el.height, layout.height)) : null;
   return (
     <Group y={offsetY}>
+      <EffectLayers el={el} layout={layout} />
       {layout.lines.map((line, li) => {
         const lx = el.align === 'center' ? (el.width - line.width - line.indent) / 2 : el.align === 'right' ? el.width - line.width - line.indent : 0;
         return (
@@ -82,6 +83,56 @@ export function RichText({ el }: { el: TextElement }) {
       })}
     </Group>
   );
+}
+
+/** One flat copy of the text (no decorations), used for extrude, glitch and echo effects. */
+function TextCopy({ el, layout, dx, dy, fill, stroke, strokeWidth, opacity = 1 }: { el: TextElement; layout: TextLayout; dx: number; dy: number; fill: string; stroke?: string; strokeWidth?: number; opacity?: number }) {
+  return (
+    <Group x={dx} y={dy} opacity={opacity} listening={false}>
+      {layout.lines.map((line, li) => {
+        const lx = el.align === 'center' ? (el.width - line.width - line.indent) / 2 : el.align === 'right' ? el.width - line.width - line.indent : 0;
+        return line.runs.map((run, ri) => (
+          <Text
+            key={`${li}-${ri}`}
+            x={lx + run.x}
+            y={line.y}
+            text={run.text}
+            fontFamily={fontStack(run.style.fontId)}
+            fontSize={el.fontSize}
+            fontStyle={`${run.style.italic ? 'italic ' : ''}${run.style.weight}`}
+            letterSpacing={trackingFor(run.text, el.letterSpacing)}
+            height={layout.lineHeightPx}
+            verticalAlign="middle"
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={strokeWidth}
+            wrap="none"
+          />
+        ));
+      })}
+    </Group>
+  );
+}
+
+/** Extrude (3D / long shadow), glitch and echo copies, drawn behind the main text. */
+function EffectLayers({ el, layout }: { el: TextElement; layout: TextLayout }) {
+  const layers: ReactNode[] = [];
+  if (el.echo && el.echo.count > 0) {
+    const sw = Math.max(1, el.fontSize * 0.02);
+    for (let i = el.echo.count; i >= 1; i--) layers.push(<TextCopy key={`echo${i}`} el={el} layout={layout} dx={0} dy={el.echo.step * i} fill="transparent" stroke={el.echo.color} strokeWidth={sw} opacity={1 - i / (el.echo.count + 1)} />);
+  }
+  if (el.extrude && el.extrude.depth > 0) {
+    const rad = (el.extrude.angle * Math.PI) / 180;
+    const step = Math.max(1, el.fontSize / 60);
+    const n = Math.min(80, Math.round(el.extrude.depth / step));
+    for (let i = n; i >= 1; i--) layers.push(<TextCopy key={`ex${i}`} el={el} layout={layout} dx={Math.cos(rad) * step * i} dy={Math.sin(rad) * step * i} fill={el.extrude.color} />);
+  }
+  if (el.glitch) {
+    const o = el.glitch.offset;
+    layers.push(<TextCopy key="g1" el={el} layout={layout} dx={-o} dy={o * 0.3} fill={el.glitch.colors[0]} opacity={0.9} />);
+    layers.push(<TextCopy key="g2" el={el} layout={layout} dx={o} dy={-o * 0.3} fill={el.glitch.colors[1]} opacity={0.9} />);
+  }
+  return <>{layers}</>;
 }
 
 /** Text along a circular arc; curve > 0 smiles, < 0 frowns. Single line, no rich spans. */

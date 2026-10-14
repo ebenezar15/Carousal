@@ -52,8 +52,11 @@ export function duplicateSelection() {
   ed().select(copies.map((c) => c.id));
 }
 
-export function addElement(el: SlideElement) {
-  doc().apply((d) => ops.addElements(d, ed().slideIndex, [el]));
+export function addElement(el: SlideElement, opts: { behind?: boolean } = {}) {
+  doc().apply((d) => {
+    const next = ops.addElements(d, ed().slideIndex, [el]);
+    return opts.behind ? ops.reorder(next, ed().slideIndex, [el.id], 'back') : next;
+  });
   ed().select([el.id]);
 }
 

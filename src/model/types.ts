@@ -72,6 +72,12 @@ export interface TextElement extends ElementBase {
   curve?: number;
   /** Gradient fill across the text box (overrides `fill`). */
   fillGradient?: LinearGradient;
+  /** 3D extrusion / long shadow: `depth` stacked copies toward `angle` (degrees, 45 = down-right). */
+  extrude?: { depth: number; color: string; angle: number };
+  /** RGB-split glitch: two offset copies in contrasting colors behind the text. */
+  glitch?: { colors: [string, string]; offset: number };
+  /** Echo / stacked outline copies behind the text (`step` px apart vertically). */
+  echo?: { count: number; step: number; color: string };
 }
 
 export interface ShapeElement extends ElementBase {

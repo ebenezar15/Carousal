@@ -4,6 +4,9 @@ import { bundledChoices, customFonts, addCustomFont, FONT_ACCEPT, fontLabel, que
 import { ensureFonts } from '@/styles/fontLoader';
 import { refitText } from '@/engine/layout/textLayout';
 import { ColorField, NumberField, Row, Section, Segmented, Select, Slider, Toggle } from './fields';
+import { TEXT_EFFECTS, currentEffect } from '../textEffects';
+import { useDocument } from '@/app/store';
+import { getPalette } from '@/styles';
 
 export function FontPicker({ value, onChange }: { value: string; onChange(id: string): void }) {
   const [system, setSystem] = useState<string[] | null>(null);
@@ -67,8 +70,47 @@ export function FontPicker({ value, onChange }: { value: string; onChange(id: st
 export function TextProps({ el, set }: { el: TextElement; set(patch: Partial<TextElement>, refit?: boolean): void }) {
   const weights = weightsFor(el.fontId);
   const emWords = el.emphasis?.words.join(', ') ?? '';
+  const theme = useDocument((s) => s.carousel?.theme);
+  const pal = theme?.customPalette ?? getPalette(theme?.paletteId ?? 'paper-ink').colors;
+  const active = currentEffect(el);
   return (
     <>
+      <Section title="Text effect">
+        <div className="grid grid-cols-3 gap-1" role="group" aria-label="Text effects">
+          {TEXT_EFFECTS.map((fx) => (
+            <button
+              key={fx.id}
+              aria-pressed={active === fx.id}
+              className={`rounded-md border px-1.5 py-1 text-[11px] ${active === fx.id ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100' : 'border-zinc-200 hover:border-brand-500 dark:border-zinc-700'}`}
+              onClick={() => set(fx.apply(el, pal))}
+            >
+              {fx.label}
+            </button>
+          ))}
+        </div>
+        {el.extrude && (
+          <>
+            <Row>
+              <ColorField label="Depth color" value={el.extrude.color.slice(0, 7)} onChange={(c) => set({ extrude: { ...el.extrude!, color: c ?? '#000000' } })} />
+              <NumberField label="Depth" value={el.extrude.depth} min={1} max={2000} onChange={(v) => set({ extrude: { ...el.extrude!, depth: v } })} />
+            </Row>
+            <Slider label="Direction" value={el.extrude.angle} min={0} max={360} onChange={(v) => set({ extrude: { ...el.extrude!, angle: v } })} format={(v) => `${v}°`} />
+          </>
+        )}
+        {el.glitch && (
+          <Row>
+            <ColorField label="Glitch A" value={el.glitch.colors[0]} onChange={(c) => set({ glitch: { ...el.glitch!, colors: [c ?? '#FF2D6F', el.glitch!.colors[1]] } })} />
+            <ColorField label="Glitch B" value={el.glitch.colors[1]} onChange={(c) => set({ glitch: { ...el.glitch!, colors: [el.glitch!.colors[0], c ?? '#00E5FF'] } })} />
+          </Row>
+        )}
+        {el.glitch && <Slider label="Glitch offset" value={el.glitch.offset} min={1} max={60} onChange={(v) => set({ glitch: { ...el.glitch!, offset: v } })} />}
+        {el.echo && (
+          <Row>
+            <NumberField label="Copies" value={el.echo.count} min={1} max={12} onChange={(v) => set({ echo: { ...el.echo!, count: v } })} />
+            <NumberField label="Spacing" value={el.echo.step} min={-400} max={400} onChange={(v) => set({ echo: { ...el.echo!, step: v } })} />
+          </Row>
+        )}
+      </Section>
       <Section title="Text">
         <label className="block">
           <span className="mb-0.5 block text-[11px] text-zinc-500">Content</span>
