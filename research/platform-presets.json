@@ -1,0 +1,729 @@
+{
+  "version": 1,
+  "retrieved": "2026-10-13",
+  "notes": "safeZone values are px insets at the preset's own resolution. Official platforms rarely publish safe zones for feed carousels; any safeZone whose confidence is 'estimated' is a CarouselForge design default, not a platform rule. 'verified' = value read from an official help/developer page (via search-indexed excerpt, 2026-10-13). 'secondary' = reputable third-party 2025-2026 guides only.",
+  "presets": [
+    {
+      "id": "instagram-portrait-4x5",
+      "platform": "instagram",
+      "label": "Instagram carousel — Portrait 4:5",
+      "width": 1080,
+      "height": 1350,
+      "aspectRatio": "4:5",
+      "minSlides": 2,
+      "maxSlides": 20,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 60,
+        "right": 60,
+        "bottom": 80,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "Safest portrait default: the most widely supported portrait ratio, including via the Graph API (4:5 to 1.91:1). The app allows up to 20 items per carousel; the API limit is reportedly 10. All slides use the orientation set by the first slide. The '1/N' counter sits top-right and the tag/alt icons bottom-left, so the estimated insets keep text clear of them. The profile grid now shows a 3:4 crop, so slide 1 loses about 34px on each side in the grid; keep cover text inside x=34..1046. Instagram recompresses uploads, so export under about 5MB per slide even though the cap is around 30MB.",
+      "sources": [
+        {
+          "url": "https://help.instagram.com/269314186824048/",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.instagram.com/1631821640426723",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://www.techradar.com/computing/instagram/instagram-will-now-let-you-post-up-to-20-photos-or-videos-in-a-gallery-your-friends-should-be-thrilled",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://carouselli.com/blog/instagram-carousel-dimensions",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.inro.social/blog/instagram-post-size",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "instagram-portrait-3x4",
+      "platform": "instagram",
+      "label": "Instagram carousel — Tall 3:4",
+      "width": 1080,
+      "height": 1440,
+      "aspectRatio": "3:4",
+      "minSlides": 2,
+      "maxSlides": 20,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 60,
+        "right": 60,
+        "bottom": 80,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "Added in May 2025, announced by Adam Mosseri, for single photos and carousels. It matches the 3:4 profile-grid tile, so the cover is not cropped in the grid. Instagram's help page says photos keep full resolution between 1.91:1 and 3:4 (1080 x 566..1440). An older help page still says 4:5. Publishing through the Graph API or a scheduler may crop to 4:5 (1080x1350), so keep important content inside the central 1080x1350 band (y=45..1395) if you schedule via API.",
+      "sources": [
+        {
+          "url": "https://help.instagram.com/1631821640426723",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://petapixel.com/2025/05/29/instagram-finally-adds-support-for-34-aspect-ratio-photos",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.lindseygamble.com/blog/instagram-now-supports-34-aspect-ratio-for-photos-and-carousel-posts",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.inro.social/blog/instagram-post-size",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "instagram-square-1x1",
+      "platform": "instagram",
+      "label": "Instagram carousel — Square 1:1",
+      "width": 1080,
+      "height": 1080,
+      "aspectRatio": "1:1",
+      "minSlides": 2,
+      "maxSlides": 20,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 60,
+        "right": 60,
+        "bottom": 80,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Fully supported, but it takes up less feed height than 4:5 or 3:4. The 3:4 profile grid crops slide 1 by 135px on each side, so keep cover text inside x=135..945.",
+      "sources": [
+        {
+          "url": "https://help.instagram.com/269314186824048/",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.instagram.com/1631821640426723",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "instagram-story-9x16",
+      "platform": "instagram",
+      "label": "Instagram Story / Reels 9:16 (reference only)",
+      "width": 1080,
+      "height": 1920,
+      "aspectRatio": "9:16",
+      "minSlides": 1,
+      "maxSlides": 1,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 270,
+        "right": 65,
+        "bottom": 670,
+        "left": 65
+      },
+      "safeZoneConfidence": "verified",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Reference only. This is not a carousel format; each frame is posted as its own story. Safe zone uses Meta's Reels guidance (about 14% top, 35% bottom, 6% sides). For Stories only, Meta suggests about 14% (250px) top and bottom (20% / 340px bottom for video). maxFileSizeMB 30 follows the Meta ads image cap.",
+      "sources": [
+        {
+          "url": "https://www.facebook.com/business/help/980593475366490/",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://en-gb.facebook.com/business/help/188477725155524",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://www.facebook.com/business/ads-guide/update/image/instagram-reels",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "linkedin-document-portrait-4x5",
+      "platform": "linkedin",
+      "label": "LinkedIn document (PDF) carousel — Portrait 4:5",
+      "width": 1080,
+      "height": 1350,
+      "aspectRatio": "4:5",
+      "minSlides": 1,
+      "maxSlides": 300,
+      "fileFormats": [
+        "pdf"
+      ],
+      "maxFileSizeMB": 100,
+      "safeZone": {
+        "top": 50,
+        "right": 50,
+        "bottom": 70,
+        "left": 50
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "pdf",
+      "recommended": true,
+      "notes": "Most commonly recommended document size for mobile feeds. Official limits are 100MB and 300 pages; LinkedIn also accepts PPT, PPTX, DOC and DOCX, but CarouselForge exports PDF. All pages must be the same size, and the first page sets the viewer's aspect ratio. The document cannot be swapped after posting. Best practice is 5–12 pages. The estimated insets leave room for the viewer's page counter, arrows and full-screen button overlays.",
+      "sources": [
+        {
+          "url": "https://www.linkedin.com/help/linkedin/answer/97459",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://docs.emplifi.io/platform/latest/home/linkedin-publishing",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.oktopost.com/blog/linkedin-carousel-pdf-best-practices/",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.decktopus.com/blog/linkedin-carousel-size-dimensions",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "linkedin-document-square-1x1",
+      "platform": "linkedin",
+      "label": "LinkedIn document (PDF) carousel — Square 1:1",
+      "width": 1080,
+      "height": 1080,
+      "aspectRatio": "1:1",
+      "minSlides": 1,
+      "maxSlides": 300,
+      "fileFormats": [
+        "pdf"
+      ],
+      "maxFileSizeMB": 100,
+      "safeZone": {
+        "top": 50,
+        "right": 50,
+        "bottom": 70,
+        "left": 50
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "pdf",
+      "recommended": false,
+      "notes": "Good when you want to reuse the same slides on Instagram square. Same limits as the 4:5 document preset.",
+      "sources": [
+        {
+          "url": "https://www.linkedin.com/help/linkedin/answer/97459",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://moda.app/resources/sizes/linkedin-carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "linkedin-document-landscape-16x9",
+      "platform": "linkedin",
+      "label": "LinkedIn document (PDF) — Landscape 16:9",
+      "width": 1920,
+      "height": 1080,
+      "aspectRatio": "16:9",
+      "minSlides": 1,
+      "maxSlides": 300,
+      "fileFormats": [
+        "pdf"
+      ],
+      "maxFileSizeMB": 100,
+      "safeZone": {
+        "top": 50,
+        "right": 80,
+        "bottom": 70,
+        "left": 80
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "pdf",
+      "recommended": false,
+      "notes": "Supported, but it renders small in the mobile feed. Best for slide-deck style content that people will read on desktop.",
+      "sources": [
+        {
+          "url": "https://www.linkedin.com/help/linkedin/answer/97459",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://www.decktopus.com/blog/linkedin-carousel-size-dimensions",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "linkedin-multi-image-4x5",
+      "platform": "linkedin",
+      "label": "LinkedIn multi-image post — Portrait 4:5",
+      "width": 1080,
+      "height": 1350,
+      "aspectRatio": "4:5",
+      "minSlides": 2,
+      "maxSlides": 20,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 5,
+      "safeZone": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Not a swipe carousel: LinkedIn shows a collage, and viewers click to expand it. The help center allows up to 20 images. The first image's orientation sets the layout; images after the 5th are hidden until clicked. Feed renders at most 4:5. No official per-image file-size limit was found; 5MB is the conservative third-party figure (hard limit reportedly 36MP). Collage tiles crop the edges, so keep subjects centered.",
+      "sources": [
+        {
+          "url": "https://www.linkedin.com/help/linkedin/answer/a527229",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://contentin.io/blog/linkedin-post-specs/",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://postfa.st/sizes/linkedin/posts",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "tiktok-photo-9x16",
+      "platform": "tiktok",
+      "label": "TikTok photo mode carousel — 9:16",
+      "width": 1080,
+      "height": 1920,
+      "aspectRatio": "9:16",
+      "minSlides": 2,
+      "maxSlides": 35,
+      "fileFormats": [
+        "jpg",
+        "png",
+        "webp"
+      ],
+      "maxFileSizeMB": 20,
+      "safeZone": {
+        "top": 130,
+        "right": 140,
+        "bottom": 484,
+        "left": 44
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "Up to 35 photos (official Content Posting API). The API accepts JPEG and WebP up to 20MB each at a maximum of 1080p; the app also accepts PNG. Some guides claim a minimum of 4 photos; this is unconfirmed, so minSlides is 2 for a carousel. Safe-zone figures are commonly measured from TikTok's overlay templates (TikTok publishes no pixel table): top status bar, right action rail, and bottom caption, sound and CTA. 1:1 and 4:5 are accepted but letterboxed.",
+      "sources": [
+        {
+          "url": "https://developers.tiktok.com/docs/en/content-posting-api-reference-photo-post",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://developers.tiktok.com/docs/en/content-posting-api-media-transfer-guide",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://postfa.st/sizes/tiktok/carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://moda.app/resources/sizes/tiktok-carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://getkoro.app/blog/tiktok-safe-zone-guide",
+          "retrieved": "2026-10-13",
+          "confidence": "estimated"
+        },
+        {
+          "url": "https://www.ezugc.ai/blog/tiktok-safe-zones-guide",
+          "retrieved": "2026-10-13",
+          "confidence": "estimated"
+        }
+      ]
+    },
+    {
+      "id": "facebook-carousel-ad-1x1",
+      "platform": "facebook",
+      "label": "Facebook carousel ad — Square 1:1",
+      "width": 1080,
+      "height": 1080,
+      "aspectRatio": "1:1",
+      "minSlides": 2,
+      "maxSlides": 10,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 40,
+        "right": 40,
+        "bottom": 40,
+        "left": 40
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "Meta carousel ads allow 2–10 cards, JPG or PNG, up to 30MB per image. The Ads Guide says 'at least 1080x1080' (1:1 or 4:5); the Business Help Center recommends 1024x1024 (minimum 500x500). Headline and CTA appear below each card rather than on top, so only a small margin is needed. The same file works for Instagram feed carousel ads.",
+      "sources": [
+        {
+          "url": "https://www.facebook.com/business/help/1114358518575630",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://www.facebook.com/business/ads-guide/update/carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "facebook-carousel-ad-4x5",
+      "platform": "facebook",
+      "label": "Facebook carousel ad — Portrait 4:5",
+      "width": 1080,
+      "height": 1350,
+      "aspectRatio": "4:5",
+      "minSlides": 2,
+      "maxSlides": 10,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 40,
+        "right": 40,
+        "bottom": 40,
+        "left": 40
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Meta's Ads Guide lists 4:5 as an accepted feed carousel ratio (also the Instagram feed carousel ad ratio).",
+      "sources": [
+        {
+          "url": "https://www.facebook.com/business/ads-guide/update/carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://en-gb.facebook.com/business/ads-guide/update/carousel/instagram-feed/link-clicks",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "facebook-multi-photo-1x1",
+      "platform": "facebook",
+      "label": "Facebook organic multi-photo post — Square 1:1",
+      "width": 1080,
+      "height": 1080,
+      "aspectRatio": "1:1",
+      "minSlides": 2,
+      "maxSlides": 10,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 30,
+      "safeZone": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "An organic multi-photo post is a grid or collage, not a swipe carousel. Facebook tiles images into squares and wide rectangles and crops them, and shows '+N' over the last tile when there are more than 4–5 photos, so keep subjects centered. No official limit on photos per post was found (third parties claim far more than 10), so maxSlides is capped at 10 as a sensible carousel default. No official file-size limit was found; 30MB mirrors Meta's ad cap. Metricool's 2026 guide recommends 1080x1080 for multi-image posts.",
+      "sources": [
+        {
+          "url": "https://www.facebook.com/help/174641285926169",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://metricool.com/facebook-image-sizes/",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://socialk.it/en/sizes/facebook-post-size",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "x-multi-image-16x9",
+      "platform": "x",
+      "label": "X (Twitter) multi-image post — 16:9",
+      "width": 1200,
+      "height": 675,
+      "aspectRatio": "16:9",
+      "minSlides": 2,
+      "maxSlides": 4,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 5,
+      "safeZone": {
+        "top": 0,
+        "right": 300,
+        "bottom": 0,
+        "left": 300
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "X allows 1–4 photos per post, up to 5MB each (JPEG, PNG; GIF up to 15MB on web). Single images between 2:1 and 3:4 now display in full. Multi-image posts crop each tile in the grid: with 4 images each tile is about 16:9; with 2 images each tile is about 8:9 side by side, which crops roughly 300px from each side of a 1200x675 image (visible width about 600px). The side insets keep text visible in the 2-up layout; for 3–4 image posts, insets of 0 are fine. 'Carousel' here means a grid, not a swipe.",
+      "sources": [
+        {
+          "url": "https://help.x.com/en/using-x/posting-gifs-and-pictures",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.x.com/en/using-x/how-to-post",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://developer.x.com/en/docs/x-api/v1/media/upload-media/uploading-media/media-best-practices",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://influencermarketinghub.com/twitter-image-size/",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        },
+        {
+          "url": "https://www.heyorca.com/blog/x-twitter-media-specs-best-practices-2026",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "x-multi-image-1x1",
+      "platform": "x",
+      "label": "X (Twitter) multi-image post — Square 1:1",
+      "width": 1080,
+      "height": 1080,
+      "aspectRatio": "1:1",
+      "minSlides": 2,
+      "maxSlides": 4,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 5,
+      "safeZone": {
+        "top": 236,
+        "right": 60,
+        "bottom": 236,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "A crop-tolerant compromise: square slides survive both the 2-up (about 8:9, about 60px cropped per side) and 4-up (about 16:9, about 236px cropped top and bottom) grid crops when content stays in the central 960x608 box.",
+      "sources": [
+        {
+          "url": "https://help.x.com/en/using-x/posting-gifs-and-pictures",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://posteverywhere.ai/blog/x-twitter-aspect-ratios",
+          "retrieved": "2026-10-13",
+          "confidence": "secondary"
+        }
+      ]
+    },
+    {
+      "id": "pinterest-carousel-2x3",
+      "platform": "pinterest",
+      "label": "Pinterest carousel Pin — Vertical 2:3",
+      "width": 1000,
+      "height": 1500,
+      "aspectRatio": "2:3",
+      "minSlides": 2,
+      "maxSlides": 5,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 20,
+      "safeZone": {
+        "top": 60,
+        "right": 60,
+        "bottom": 100,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": true,
+      "notes": "Organic carousels accept 2–5 static images, either all 1:1 or all 2:3, and can only be created on desktop. Ad carousels allow PNG or JPEG up to 20MB per image. Sales/catalog carousels differ (2–10 items, 10MB). Pinterest recommends 1000x1500. Feed overlays include the Save button (top-right on hover), the '...' menu, and carousel dots (bottom); Pins render about 236px wide in the mobile two-column feed, so use large type.",
+      "sources": [
+        {
+          "url": "https://help.pinterest.com/en/business/article/create-a-carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.pinterest.com/en/business/article/pinterest-product-specs",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.pinterest.com/en/article/review-pin-specs",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://business.pinterest.com/creative-best-practices/",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "pinterest-carousel-1x1",
+      "platform": "pinterest",
+      "label": "Pinterest carousel Pin — Square 1:1",
+      "width": 1000,
+      "height": 1000,
+      "aspectRatio": "1:1",
+      "minSlides": 2,
+      "maxSlides": 5,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 20,
+      "safeZone": {
+        "top": 60,
+        "right": 60,
+        "bottom": 100,
+        "left": 60
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Square option for Pinterest carousels; takes up less feed height than 2:3.",
+      "sources": [
+        {
+          "url": "https://help.pinterest.com/en/business/article/create-a-carousel",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://help.pinterest.com/en/business/article/pinterest-product-specs",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    },
+    {
+      "id": "threads-carousel-4x5",
+      "platform": "threads",
+      "label": "Threads carousel — Portrait 4:5",
+      "width": 1080,
+      "height": 1350,
+      "aspectRatio": "4:5",
+      "minSlides": 2,
+      "maxSlides": 20,
+      "fileFormats": [
+        "jpg",
+        "png"
+      ],
+      "maxFileSizeMB": 8,
+      "safeZone": {
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      },
+      "safeZoneConfidence": "estimated",
+      "exportKind": "images",
+      "recommended": false,
+      "notes": "Optional preset. Threads carousels hold 2–20 items. The Threads API accepts JPEG or PNG up to 8MB, width 320–1440 (rescaled outside that range), with an aspect-ratio limit of 10:1. Threads displays media inline in a horizontally scrolling row, so slides are shown at a small size; 4:5 reuses Instagram assets. No official recommended size, so 1080x1350 is chosen for Instagram parity.",
+      "sources": [
+        {
+          "url": "https://developers.facebook.com/docs/threads/posts/",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        },
+        {
+          "url": "https://www.threads.com/@threads/post/DAELxBhOoWc",
+          "retrieved": "2026-10-13",
+          "confidence": "verified"
+        }
+      ]
+    }
+  ]
+}

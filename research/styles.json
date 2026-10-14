@@ -44,12 +44,12 @@
         "mono-graphite"
       ],
       "fonts": {
-        "heading": "inter-tight",
+        "heading": "archivo",
         "body": "inter"
       },
       "altFonts": [
         {
-          "heading": "archivo",
+          "heading": "figtree",
           "body": "inter"
         },
         {
@@ -280,12 +280,12 @@
         "neo-pop-yellow"
       ],
       "fonts": {
-        "heading": "archivo-black",
+        "heading": "anton",
         "body": "space-mono"
       },
       "altFonts": [
         {
-          "heading": "anton",
+          "heading": "archivo",
           "body": "ibm-plex-mono"
         },
         {
@@ -521,7 +521,7 @@
       "altFonts": [
         {
           "heading": "montserrat",
-          "body": "open-sans"
+          "body": "work-sans"
         },
         {
           "heading": "ibm-plex-sans",
@@ -753,7 +753,7 @@
         "kraft-paper"
       ],
       "fonts": {
-        "heading": "alfa-slab-one",
+        "heading": "league-gothic",
         "body": "work-sans"
       },
       "altFonts": [
@@ -762,7 +762,7 @@
           "body": "karla"
         },
         {
-          "heading": "abril-fatface",
+          "heading": "fjalla-one",
           "body": "work-sans"
         }
       ],
@@ -842,7 +842,7 @@
           "body": "karla"
         },
         {
-          "heading": "gochi-hand",
+          "heading": "indie-flower",
           "body": "nunito"
         }
       ],
@@ -919,11 +919,11 @@
       "altFonts": [
         {
           "heading": "barlow-condensed",
-          "body": "barlow"
+          "body": "work-sans"
         },
         {
           "heading": "roboto-condensed",
-          "body": "roboto"
+          "body": "inter"
         }
       ],
       "background": {
@@ -996,11 +996,11 @@
       "altFonts": [
         {
           "heading": "cormorant-garamond",
-          "body": "lato"
+          "body": "figtree"
         },
         {
           "heading": "libre-baskerville",
-          "body": "source-sans-3"
+          "body": "public-sans"
         }
       ],
       "background": {
@@ -1070,8 +1070,8 @@
       },
       "altFonts": [
         {
-          "heading": "roboto",
-          "body": "roboto"
+          "heading": "figtree",
+          "body": "figtree"
         },
         {
           "heading": "public-sans",
@@ -1144,8 +1144,8 @@
       },
       "altFonts": [
         {
-          "heading": "atkinson-hyperlegible",
-          "body": "atkinson-hyperlegible"
+          "heading": "figtree",
+          "body": "figtree"
         },
         {
           "heading": "outfit",
@@ -1221,11 +1221,11 @@
       "altFonts": [
         {
           "heading": "cinzel",
-          "body": "lato"
+          "body": "mulish"
         },
         {
           "heading": "playfair-display",
-          "body": "raleway"
+          "body": "mulish"
         }
       ],
       "background": {

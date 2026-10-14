@@ -1,0 +1,2389 @@
+{
+  "version": 1,
+  "source": "fontsource (npm), Google Fonts",
+  "groups": [
+    {
+      "id": "bold-modern",
+      "label": "Bold / Modern",
+      "description": "Confident geometric and grotesque sans faces with heavy weights; punchy hooks, stats and calls to action."
+    },
+    {
+      "id": "editorial-serif",
+      "label": "Editorial Serif",
+      "description": "Magazine and book serifs for thoughtful long-form slides, quotes and storytelling."
+    },
+    {
+      "id": "playful",
+      "label": "Playful",
+      "description": "Rounded, bouncy and friendly faces for casual, fun or kid-friendly content."
+    },
+    {
+      "id": "minimal",
+      "label": "Minimal",
+      "description": "Neutral, highly legible sans faces that stay out of the way; clean layouts and body copy."
+    },
+    {
+      "id": "tech",
+      "label": "Tech",
+      "description": "Grotesks, monospace and sci-fi faces for developer, SaaS, data and futuristic content."
+    },
+    {
+      "id": "luxury",
+      "label": "Luxury",
+      "description": "High-contrast serifs and refined thin sans for fashion, beauty, real estate and premium brands."
+    },
+    {
+      "id": "handwritten",
+      "label": "Handwritten",
+      "description": "Scripts and marker hands for personal notes, annotations and accents. Use sparingly, headings only."
+    },
+    {
+      "id": "display-condensed",
+      "label": "Display / Condensed",
+      "description": "Tall, narrow, all-caps-friendly faces that fit big words in tight space; headlines and numbers."
+    }
+  ],
+  "fonts": [
+    {
+      "id": "montserrat",
+      "family": "Montserrat",
+      "fontsource": "montserrat",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Geometric workhorse; 800 for hooks, 400 holds up as body."
+    },
+    {
+      "id": "poppins",
+      "family": "Poppins",
+      "fontsource": "poppins",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "playful",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Friendly geometric; very popular on social carousels."
+    },
+    {
+      "id": "archivo",
+      "family": "Archivo",
+      "fontsource": "archivo",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "tech",
+        "display-condensed"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Grotesque with a width axis in the variable build; 900 is very punchy."
+    },
+    {
+      "id": "plus-jakarta-sans",
+      "family": "Plus Jakarta Sans",
+      "fontsource": "plus-jakarta-sans",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Modern startup sans; crisp at small sizes."
+    },
+    {
+      "id": "outfit",
+      "family": "Outfit",
+      "fontsource": "outfit",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "minimal",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Clean geometric with soft rounded feel."
+    },
+    {
+      "id": "sora",
+      "family": "Sora",
+      "fontsource": "sora",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Wide, techy geometric; good for numbers and stats."
+    },
+    {
+      "id": "syne",
+      "family": "Syne",
+      "fontsource": "syne",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Quirky art-gallery sans; 800 is extended and dramatic. Headings only."
+    },
+    {
+      "id": "lexend",
+      "family": "Lexend",
+      "fontsource": "lexend",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Designed for reading fluency; wide and very legible."
+    },
+    {
+      "id": "unbounded",
+      "family": "Unbounded",
+      "fontsource": "unbounded",
+      "category": "sans-serif",
+      "group": "bold-modern",
+      "moods": [
+        "bold-modern",
+        "tech",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Wide, rounded display sans; heavy weights for statement slides."
+    },
+    {
+      "id": "playfair-display",
+      "family": "Playfair Display",
+      "fontsource": "playfair-display",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "High-contrast transitional display serif; italic great for pull quotes."
+    },
+    {
+      "id": "lora",
+      "family": "Lora",
+      "fontsource": "lora",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Calligraphic contemporary serif; excellent body text."
+    },
+    {
+      "id": "merriweather",
+      "family": "Merriweather",
+      "fontsource": "merriweather",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Sturdy screen serif; readable at small sizes."
+    },
+    {
+      "id": "source-serif-4",
+      "family": "Source Serif 4",
+      "fontsource": "source-serif-4",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Optical-size variable text serif; reliable body face."
+    },
+    {
+      "id": "libre-baskerville",
+      "family": "Libre Baskerville",
+      "fontsource": "libre-baskerville",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Classic Baskerville optimized for screen body text."
+    },
+    {
+      "id": "eb-garamond",
+      "family": "EB Garamond",
+      "fontsource": "eb-garamond",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Old-style Garamond; literary and timeless."
+    },
+    {
+      "id": "fraunces",
+      "family": "Fraunces",
+      "fontsource": "fraunces",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Soft 'wonky' old-style display serif; characterful headlines."
+    },
+    {
+      "id": "newsreader",
+      "family": "Newsreader",
+      "fontsource": "newsreader",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Newspaper-style text serif with optical sizes."
+    },
+    {
+      "id": "dm-serif-display",
+      "family": "DM Serif Display",
+      "fontsource": "dm-serif-display",
+      "category": "serif",
+      "group": "editorial-serif",
+      "moods": [
+        "editorial-serif",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Bold high-contrast display serif; single weight, headings only."
+    },
+    {
+      "id": "fredoka",
+      "family": "Fredoka",
+      "fontsource": "fredoka",
+      "category": "sans-serif",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Rounded friendly sans; great for kids, food and lifestyle."
+    },
+    {
+      "id": "nunito",
+      "family": "Nunito",
+      "fontsource": "nunito",
+      "category": "sans-serif",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Rounded-terminal sans that works as body text."
+    },
+    {
+      "id": "baloo-2",
+      "family": "Baloo 2",
+      "fontsource": "baloo-2",
+      "category": "display",
+      "group": "playful",
+      "moods": [
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Chunky rounded display; bubbly headlines."
+    },
+    {
+      "id": "quicksand",
+      "family": "Quicksand",
+      "fontsource": "quicksand",
+      "category": "sans-serif",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Light rounded geometric; airy, use 600+ for body on busy backgrounds."
+    },
+    {
+      "id": "comfortaa",
+      "family": "Comfortaa",
+      "fontsource": "comfortaa",
+      "category": "display",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Rounded geometric display; soft and cute."
+    },
+    {
+      "id": "lilita-one",
+      "family": "Lilita One",
+      "fontsource": "lilita-one",
+      "category": "display",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Heavy rounded display; sticker-like titles."
+    },
+    {
+      "id": "chewy",
+      "family": "Chewy",
+      "fontsource": "chewy",
+      "category": "display",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "handwritten"
+      ],
+      "license": "Apache-2.0",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Cartoonish bouncy display; latin only. Apache 2.0."
+    },
+    {
+      "id": "rubik",
+      "family": "Rubik",
+      "fontsource": "rubik",
+      "category": "sans-serif",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "bold-modern",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Slightly rounded grotesque; friendly but professional."
+    },
+    {
+      "id": "luckiest-guy",
+      "family": "Luckiest Guy",
+      "fontsource": "luckiest-guy",
+      "category": "display",
+      "group": "playful",
+      "moods": [
+        "playful",
+        "bold-modern"
+      ],
+      "license": "Apache-2.0",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Comic-book heavy caps; Apache 2.0."
+    },
+    {
+      "id": "inter",
+      "family": "Inter",
+      "fontsource": "inter",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "UI standard; neutral and extremely legible."
+    },
+    {
+      "id": "dm-sans",
+      "family": "DM Sans",
+      "fontsource": "dm-sans",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        500,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Low-contrast geometric sans with optical sizes."
+    },
+    {
+      "id": "manrope",
+      "family": "Manrope",
+      "fontsource": "manrope",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Semi-condensed modern grotesque; clean numerals."
+    },
+    {
+      "id": "work-sans",
+      "family": "Work Sans",
+      "fontsource": "work-sans",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Grotesque tuned for screen; versatile."
+    },
+    {
+      "id": "karla",
+      "family": "Karla",
+      "fontsource": "karla",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Quirky grotesque; pairs well with serifs."
+    },
+    {
+      "id": "figtree",
+      "family": "Figtree",
+      "fontsource": "figtree",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Clean geometric, friendly and crisp."
+    },
+    {
+      "id": "albert-sans",
+      "family": "Albert Sans",
+      "fontsource": "albert-sans",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Scandinavian-style geometric grotesque."
+    },
+    {
+      "id": "public-sans",
+      "family": "Public Sans",
+      "fontsource": "public-sans",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Neutral government-design sans; strong and plain."
+    },
+    {
+      "id": "mulish",
+      "family": "Mulish",
+      "fontsource": "mulish",
+      "category": "sans-serif",
+      "group": "minimal",
+      "moods": [
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Minimalist sans with low contrast; soft and readable."
+    },
+    {
+      "id": "space-grotesk",
+      "family": "Space Grotesk",
+      "fontsource": "space-grotesk",
+      "category": "sans-serif",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        500,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Proportional sibling of Space Mono; quirky tech character."
+    },
+    {
+      "id": "ibm-plex-sans",
+      "family": "IBM Plex Sans",
+      "fontsource": "ibm-plex-sans",
+      "category": "sans-serif",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Engineered corporate grotesque; great for B2B and data."
+    },
+    {
+      "id": "jetbrains-mono",
+      "family": "JetBrains Mono",
+      "fontsource": "jetbrains-mono",
+      "category": "monospace",
+      "group": "tech",
+      "moods": [
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Developer monospace; code snippets and labels."
+    },
+    {
+      "id": "ibm-plex-mono",
+      "family": "IBM Plex Mono",
+      "fontsource": "ibm-plex-mono",
+      "category": "monospace",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Mono with typewriter warmth; code and captions."
+    },
+    {
+      "id": "space-mono",
+      "family": "Space Mono",
+      "fontsource": "space-mono",
+      "category": "monospace",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Retro-futurist monospace; strong personality."
+    },
+    {
+      "id": "roboto-mono",
+      "family": "Roboto Mono",
+      "fontsource": "roboto-mono",
+      "category": "monospace",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        500,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Neutral monospace; numbers and code. OFL-1.1 on fontsource."
+    },
+    {
+      "id": "chakra-petch",
+      "family": "Chakra Petch",
+      "fontsource": "chakra-petch",
+      "category": "sans-serif",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "display-condensed"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Angular square-cornered sans; gaming and esports."
+    },
+    {
+      "id": "orbitron",
+      "family": "Orbitron",
+      "fontsource": "orbitron",
+      "category": "sans-serif",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "display-condensed"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Geometric sci-fi display; latin only. Headings only."
+    },
+    {
+      "id": "exo-2",
+      "family": "Exo 2",
+      "fontsource": "exo-2",
+      "category": "sans-serif",
+      "group": "tech",
+      "moods": [
+        "tech",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Futuristic technical sans that still reads well as body."
+    },
+    {
+      "id": "cormorant-garamond",
+      "family": "Cormorant Garamond",
+      "fontsource": "cormorant-garamond",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Elegant high-contrast Garamond; body only at larger sizes."
+    },
+    {
+      "id": "cinzel",
+      "family": "Cinzel",
+      "fontsource": "cinzel",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Roman inscriptional capitals; all-caps only."
+    },
+    {
+      "id": "bodoni-moda",
+      "family": "Bodoni Moda",
+      "fontsource": "bodoni-moda",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Fashion-magazine Didone with optical sizes."
+    },
+    {
+      "id": "italiana",
+      "family": "Italiana",
+      "fontsource": "italiana",
+      "category": "sans-serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Thin elegant Didone-inspired sans; latin only; large sizes only."
+    },
+    {
+      "id": "marcellus",
+      "family": "Marcellus",
+      "fontsource": "marcellus",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Flared Trajan-like serif; refined titles."
+    },
+    {
+      "id": "tenor-sans",
+      "family": "Tenor Sans",
+      "fontsource": "tenor-sans",
+      "category": "sans-serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Humanist sans with classical proportions; spaced caps."
+    },
+    {
+      "id": "prata",
+      "family": "Prata",
+      "fontsource": "prata",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Didone display serif; latin only."
+    },
+    {
+      "id": "gilda-display",
+      "family": "Gilda Display",
+      "fontsource": "gilda-display",
+      "category": "serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Delicate Didone for wedding and beauty."
+    },
+    {
+      "id": "josefin-sans",
+      "family": "Josefin Sans",
+      "fontsource": "josefin-sans",
+      "category": "sans-serif",
+      "group": "luxury",
+      "moods": [
+        "luxury",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        300,
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Vintage geometric sans with elegant lowercase."
+    },
+    {
+      "id": "caveat",
+      "family": "Caveat",
+      "fontsource": "caveat",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Natural handwritten note style; annotations and accents."
+    },
+    {
+      "id": "dancing-script",
+      "family": "Dancing Script",
+      "fontsource": "dancing-script",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Bouncy connected script."
+    },
+    {
+      "id": "pacifico",
+      "family": "Pacifico",
+      "fontsource": "pacifico",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Retro surf brush script; bold and fun."
+    },
+    {
+      "id": "kalam",
+      "family": "Kalam",
+      "fontsource": "kalam",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Informal felt-pen handwriting; one of the more readable hands."
+    },
+    {
+      "id": "permanent-marker",
+      "family": "Permanent Marker",
+      "fontsource": "permanent-marker",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "bold-modern",
+        "playful"
+      ],
+      "license": "Apache-2.0",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Thick marker caps; latin only. Apache 2.0."
+    },
+    {
+      "id": "satisfy",
+      "family": "Satisfy",
+      "fontsource": "satisfy",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "luxury"
+      ],
+      "license": "Apache-2.0",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Smooth brush script; latin only. Apache 2.0."
+    },
+    {
+      "id": "great-vibes",
+      "family": "Great Vibes",
+      "fontsource": "great-vibes",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Formal flowing calligraphic script; large sizes only."
+    },
+    {
+      "id": "indie-flower",
+      "family": "Indie Flower",
+      "fontsource": "indie-flower",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Bubbly casual handwriting."
+    },
+    {
+      "id": "patrick-hand",
+      "family": "Patrick Hand",
+      "fontsource": "patrick-hand",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "playful",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Clean comic-style handwriting; legible at small sizes."
+    },
+    {
+      "id": "bebas-neue",
+      "family": "Bebas Neue",
+      "fontsource": "bebas-neue",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Iconic all-caps condensed headline face."
+    },
+    {
+      "id": "oswald",
+      "family": "Oswald",
+      "fontsource": "oswald",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Reworked Alternate Gothic; condensed headlines and labels."
+    },
+    {
+      "id": "anton",
+      "family": "Anton",
+      "fontsource": "anton",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Heavy condensed impact-style headline face."
+    },
+    {
+      "id": "barlow-condensed",
+      "family": "Barlow Condensed",
+      "fontsource": "barlow-condensed",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Slightly rounded condensed grotesk; great for big numbers."
+    },
+    {
+      "id": "league-gothic",
+      "family": "League Gothic",
+      "fontsource": "league-gothic",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "editorial-serif"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Classic narrow News Gothic revival; poster headlines."
+    },
+    {
+      "id": "fjalla-one",
+      "family": "Fjalla One",
+      "fontsource": "fjalla-one",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Medium-contrast condensed sans for headlines."
+    },
+    {
+      "id": "big-shoulders-display",
+      "family": "Big Shoulders Display",
+      "fontsource": "big-shoulders-display",
+      "category": "display",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Chicago-inspired condensed display; industrial feel."
+    },
+    {
+      "id": "teko",
+      "family": "Teko",
+      "fontsource": "teko",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "tech"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "heading",
+      "notes": "Squarish condensed; sports and tech stats."
+    },
+    {
+      "id": "roboto-condensed",
+      "family": "Roboto Condensed",
+      "fontsource": "roboto-condensed",
+      "category": "sans-serif",
+      "group": "display-condensed",
+      "moods": [
+        "display-condensed",
+        "minimal"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700,
+        900
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Condensed Roboto; readable as dense body text too."
+    }
+  ],
+  "pairings": [
+    {
+      "id": "montserrat--inter",
+      "heading": "montserrat",
+      "body": "inter",
+      "mood": [
+        "bold-modern",
+        "minimal"
+      ],
+      "rationale": "Heavy geometric headline over a neutral UI sans; safe, high-contrast default."
+    },
+    {
+      "id": "poppins--dm-sans",
+      "heading": "poppins",
+      "body": "dm-sans",
+      "mood": [
+        "bold-modern"
+      ],
+      "rationale": "Two geometric sans with shared DNA; Poppins 800 adds punch, DM Sans keeps body light."
+    },
+    {
+      "id": "archivo--work-sans",
+      "heading": "archivo",
+      "body": "work-sans",
+      "mood": [
+        "bold-modern"
+      ],
+      "rationale": "Archivo 900 grotesque headline with Work Sans' open screen-tuned body."
+    },
+    {
+      "id": "plus-jakarta-sans--figtree",
+      "heading": "plus-jakarta-sans",
+      "body": "figtree",
+      "mood": [
+        "bold-modern",
+        "minimal"
+      ],
+      "rationale": "Startup-clean pairing; Jakarta's sharper forms lead, Figtree reads easily."
+    },
+    {
+      "id": "outfit--nunito",
+      "heading": "outfit",
+      "body": "nunito",
+      "mood": [
+        "bold-modern",
+        "playful"
+      ],
+      "rationale": "Geometric headline softened by Nunito's rounded body text."
+    },
+    {
+      "id": "sora--manrope",
+      "heading": "sora",
+      "body": "manrope",
+      "mood": [
+        "bold-modern",
+        "tech"
+      ],
+      "rationale": "Wide techy display over semi-condensed Manrope; good for stats-heavy slides."
+    },
+    {
+      "id": "syne--inter",
+      "heading": "syne",
+      "body": "inter",
+      "mood": [
+        "bold-modern",
+        "luxury"
+      ],
+      "rationale": "Expressive art-gallery headline balanced by plain Inter body."
+    },
+    {
+      "id": "unbounded--lexend",
+      "heading": "unbounded",
+      "body": "lexend",
+      "mood": [
+        "bold-modern",
+        "playful"
+      ],
+      "rationale": "Wide rounded display with wide legible Lexend; consistent horizontal rhythm."
+    },
+    {
+      "id": "lexend--source-serif-4",
+      "heading": "lexend",
+      "body": "source-serif-4",
+      "mood": [
+        "bold-modern",
+        "editorial-serif"
+      ],
+      "rationale": "Sans headline with serif body for a modern-explainer feel."
+    },
+    {
+      "id": "playfair-display--lora",
+      "heading": "playfair-display",
+      "body": "lora",
+      "mood": [
+        "editorial-serif"
+      ],
+      "rationale": "Classic high-contrast display with calligraphic text serif."
+    },
+    {
+      "id": "playfair-display--karla",
+      "heading": "playfair-display",
+      "body": "karla",
+      "mood": [
+        "editorial-serif",
+        "luxury"
+      ],
+      "rationale": "Didone-ish headline contrasted with a quirky grotesque body."
+    },
+    {
+      "id": "dm-serif-display--dm-sans",
+      "heading": "dm-serif-display",
+      "body": "dm-sans",
+      "mood": [
+        "editorial-serif"
+      ],
+      "rationale": "Same superfamily; serif display plus geometric sans text."
+    },
+    {
+      "id": "fraunces--newsreader",
+      "heading": "fraunces",
+      "body": "newsreader",
+      "mood": [
+        "editorial-serif",
+        "playful"
+      ],
+      "rationale": "Soft wonky display serif over a calm newspaper text serif."
+    },
+    {
+      "id": "merriweather--mulish",
+      "heading": "merriweather",
+      "body": "mulish",
+      "mood": [
+        "editorial-serif",
+        "minimal"
+      ],
+      "rationale": "Sturdy serif headlines with low-contrast sans body for screens."
+    },
+    {
+      "id": "eb-garamond--public-sans",
+      "heading": "eb-garamond",
+      "body": "public-sans",
+      "mood": [
+        "editorial-serif"
+      ],
+      "rationale": "Literary Garamond heading with neutral, sturdy body."
+    },
+    {
+      "id": "libre-baskerville--source-serif-4",
+      "heading": "libre-baskerville",
+      "body": "source-serif-4",
+      "mood": [
+        "editorial-serif"
+      ],
+      "rationale": "Traditional Baskerville head with a modern text serif."
+    },
+    {
+      "id": "newsreader--inter",
+      "heading": "newsreader",
+      "body": "inter",
+      "mood": [
+        "editorial-serif",
+        "minimal"
+      ],
+      "rationale": "Newsroom look: serif headline, UI-grade sans body."
+    },
+    {
+      "id": "source-serif-4--ibm-plex-sans",
+      "heading": "source-serif-4",
+      "body": "ibm-plex-sans",
+      "mood": [
+        "editorial-serif",
+        "tech"
+      ],
+      "rationale": "Report-style pairing for data journalism and thought leadership."
+    },
+    {
+      "id": "fredoka--nunito",
+      "heading": "fredoka",
+      "body": "nunito",
+      "mood": [
+        "playful"
+      ],
+      "rationale": "Rounded on rounded; friendly and cohesive for lifestyle content."
+    },
+    {
+      "id": "baloo-2--quicksand",
+      "heading": "baloo-2",
+      "body": "quicksand",
+      "mood": [
+        "playful"
+      ],
+      "rationale": "Chunky bubbly headings with airy rounded body (use Quicksand 600)."
+    },
+    {
+      "id": "lilita-one--rubik",
+      "heading": "lilita-one",
+      "body": "rubik",
+      "mood": [
+        "playful",
+        "bold-modern"
+      ],
+      "rationale": "Sticker-style title over a slightly rounded grotesque."
+    },
+    {
+      "id": "luckiest-guy--poppins",
+      "heading": "luckiest-guy",
+      "body": "poppins",
+      "mood": [
+        "playful",
+        "bold-modern"
+      ],
+      "rationale": "Comic caps headline grounded by clean geometric body."
+    },
+    {
+      "id": "chewy--nunito",
+      "heading": "chewy",
+      "body": "nunito",
+      "mood": [
+        "playful"
+      ],
+      "rationale": "Cartoon display with rounded readable body; kids and food."
+    },
+    {
+      "id": "comfortaa--outfit",
+      "heading": "comfortaa",
+      "body": "outfit",
+      "mood": [
+        "playful",
+        "minimal"
+      ],
+      "rationale": "Soft rounded geometric headline with crisp geometric body."
+    },
+    {
+      "id": "inter--inter",
+      "heading": "inter",
+      "body": "inter",
+      "mood": [
+        "minimal"
+      ],
+      "rationale": "Single-family system: weight contrast (800 vs 400) does all the work."
+    },
+    {
+      "id": "manrope--karla",
+      "heading": "manrope",
+      "body": "karla",
+      "mood": [
+        "minimal"
+      ],
+      "rationale": "Two quiet grotesques with enough difference for hierarchy."
+    },
+    {
+      "id": "albert-sans--lora",
+      "heading": "albert-sans",
+      "body": "lora",
+      "mood": [
+        "minimal",
+        "editorial-serif"
+      ],
+      "rationale": "Clean Scandinavian sans headings with a warm serif body."
+    },
+    {
+      "id": "space-grotesk--inter",
+      "heading": "space-grotesk",
+      "body": "inter",
+      "mood": [
+        "tech",
+        "minimal"
+      ],
+      "rationale": "Quirky tech grotesk heading over neutral UI body; SaaS standard."
+    },
+    {
+      "id": "ibm-plex-sans--ibm-plex-mono",
+      "heading": "ibm-plex-sans",
+      "body": "ibm-plex-mono",
+      "mood": [
+        "tech"
+      ],
+      "rationale": "Plex superfamily; sans headings, mono body for developer content."
+    },
+    {
+      "id": "jetbrains-mono--inter",
+      "heading": "jetbrains-mono",
+      "body": "inter",
+      "mood": [
+        "tech"
+      ],
+      "rationale": "Code-flavored headline with clean body for dev tips."
+    },
+    {
+      "id": "space-mono--space-grotesk",
+      "heading": "space-mono",
+      "body": "space-grotesk",
+      "mood": [
+        "tech",
+        "editorial-serif"
+      ],
+      "rationale": "Retro mono headline with its proportional sibling for text."
+    },
+    {
+      "id": "orbitron--exo-2",
+      "heading": "orbitron",
+      "body": "exo-2",
+      "mood": [
+        "tech"
+      ],
+      "rationale": "Sci-fi display with a futuristic but readable body."
+    },
+    {
+      "id": "chakra-petch--roboto-mono",
+      "heading": "chakra-petch",
+      "body": "roboto-mono",
+      "mood": [
+        "tech",
+        "display-condensed"
+      ],
+      "rationale": "Angular gaming headline with neutral mono body."
+    },
+    {
+      "id": "cormorant-garamond--josefin-sans",
+      "heading": "cormorant-garamond",
+      "body": "josefin-sans",
+      "mood": [
+        "luxury"
+      ],
+      "rationale": "Elegant serif headline with vintage geometric body; fashion and beauty."
+    },
+    {
+      "id": "cinzel--cormorant-garamond",
+      "heading": "cinzel",
+      "body": "cormorant-garamond",
+      "mood": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "rationale": "Inscriptional caps over refined Garamond text at larger sizes."
+    },
+    {
+      "id": "bodoni-moda--work-sans",
+      "heading": "bodoni-moda",
+      "body": "work-sans",
+      "mood": [
+        "luxury"
+      ],
+      "rationale": "Fashion-magazine Didone with clean grotesque body."
+    },
+    {
+      "id": "italiana--mulish",
+      "heading": "italiana",
+      "body": "mulish",
+      "mood": [
+        "luxury",
+        "minimal"
+      ],
+      "rationale": "Thin elegant headline with soft minimalist body."
+    },
+    {
+      "id": "marcellus--lora",
+      "heading": "marcellus",
+      "body": "lora",
+      "mood": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "rationale": "Flared classical titles with calligraphic text serif."
+    },
+    {
+      "id": "gilda-display--albert-sans",
+      "heading": "gilda-display",
+      "body": "albert-sans",
+      "mood": [
+        "luxury"
+      ],
+      "rationale": "Delicate Didone with crisp modern sans; real estate and wedding."
+    },
+    {
+      "id": "prata--josefin-sans",
+      "heading": "prata",
+      "body": "josefin-sans",
+      "mood": [
+        "luxury"
+      ],
+      "rationale": "Didone headline over elegant geometric body."
+    },
+    {
+      "id": "tenor-sans--eb-garamond",
+      "heading": "tenor-sans",
+      "body": "eb-garamond",
+      "mood": [
+        "luxury",
+        "editorial-serif"
+      ],
+      "rationale": "Spaced-caps humanist sans heading with classic Garamond body."
+    },
+    {
+      "id": "caveat--inter",
+      "heading": "caveat",
+      "body": "inter",
+      "mood": [
+        "handwritten",
+        "minimal"
+      ],
+      "rationale": "Personal note-style heading with neutral body; tips and journaling."
+    },
+    {
+      "id": "dancing-script--lora",
+      "heading": "dancing-script",
+      "body": "lora",
+      "mood": [
+        "handwritten",
+        "luxury"
+      ],
+      "rationale": "Romantic script with warm serif text; weddings and quotes."
+    },
+    {
+      "id": "pacifico--poppins",
+      "heading": "pacifico",
+      "body": "poppins",
+      "mood": [
+        "handwritten",
+        "playful"
+      ],
+      "rationale": "Retro brush title with clean geometric body; food and travel."
+    },
+    {
+      "id": "permanent-marker--rubik",
+      "heading": "permanent-marker",
+      "body": "rubik",
+      "mood": [
+        "handwritten",
+        "bold-modern"
+      ],
+      "rationale": "Marker headline with sturdy friendly body; bold DIY energy."
+    },
+    {
+      "id": "kalam--nunito",
+      "heading": "kalam",
+      "body": "nunito",
+      "mood": [
+        "handwritten",
+        "playful"
+      ],
+      "rationale": "Informal felt-pen heading with rounded body for education."
+    },
+    {
+      "id": "great-vibes--cormorant-garamond",
+      "heading": "great-vibes",
+      "body": "cormorant-garamond",
+      "mood": [
+        "handwritten",
+        "luxury"
+      ],
+      "rationale": "Formal script accent over elegant serif; invitations."
+    },
+    {
+      "id": "patrick-hand--karla",
+      "heading": "patrick-hand",
+      "body": "karla",
+      "mood": [
+        "handwritten",
+        "minimal"
+      ],
+      "rationale": "Comic hand heading with quirky grotesque body."
+    },
+    {
+      "id": "satisfy--josefin-sans",
+      "heading": "satisfy",
+      "body": "josefin-sans",
+      "mood": [
+        "handwritten",
+        "luxury"
+      ],
+      "rationale": "Brush script with elegant geometric body; boutique brands."
+    },
+    {
+      "id": "indie-flower--quicksand",
+      "heading": "indie-flower",
+      "body": "quicksand",
+      "mood": [
+        "handwritten",
+        "playful"
+      ],
+      "rationale": "Casual hand with airy rounded body; light and personal."
+    },
+    {
+      "id": "bebas-neue--montserrat",
+      "heading": "bebas-neue",
+      "body": "montserrat",
+      "mood": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "rationale": "Iconic condensed caps over geometric body; the classic social combo."
+    },
+    {
+      "id": "oswald--source-serif-4",
+      "heading": "oswald",
+      "body": "source-serif-4",
+      "mood": [
+        "display-condensed",
+        "editorial-serif"
+      ],
+      "rationale": "Condensed gothic headline with serif body; news-poster feel."
+    },
+    {
+      "id": "anton--inter",
+      "heading": "anton",
+      "body": "inter",
+      "mood": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "rationale": "Maximum-impact headline with neutral body."
+    },
+    {
+      "id": "barlow-condensed--ibm-plex-sans",
+      "heading": "barlow-condensed",
+      "body": "ibm-plex-sans",
+      "mood": [
+        "display-condensed",
+        "tech"
+      ],
+      "rationale": "Condensed numbers and headings with engineered body; stats slides."
+    },
+    {
+      "id": "league-gothic--libre-baskerville",
+      "heading": "league-gothic",
+      "body": "libre-baskerville",
+      "mood": [
+        "display-condensed",
+        "editorial-serif"
+      ],
+      "rationale": "Vintage poster gothic with classic Baskerville body."
+    },
+    {
+      "id": "fjalla-one--work-sans",
+      "heading": "fjalla-one",
+      "body": "work-sans",
+      "mood": [
+        "display-condensed",
+        "bold-modern"
+      ],
+      "rationale": "Condensed headline with open grotesque body."
+    },
+    {
+      "id": "big-shoulders-display--space-grotesk",
+      "heading": "big-shoulders-display",
+      "body": "space-grotesk",
+      "mood": [
+        "display-condensed",
+        "tech"
+      ],
+      "rationale": "Industrial condensed display with quirky tech body."
+    },
+    {
+      "id": "teko--roboto-condensed",
+      "heading": "teko",
+      "body": "roboto-condensed",
+      "mood": [
+        "display-condensed",
+        "tech"
+      ],
+      "rationale": "Squarish sports headline with dense but readable condensed body."
+    },
+    {
+      "id": "roboto-condensed--merriweather",
+      "heading": "roboto-condensed",
+      "body": "merriweather",
+      "mood": [
+        "display-condensed",
+        "editorial-serif"
+      ],
+      "rationale": "Condensed sans headings with sturdy serif body."
+    }
+  ]
+}

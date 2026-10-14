@@ -1,0 +1,75 @@
+// Renders a slide on an offscreen Konva stage at exactly the preset's pixel size (scale 1), so exports
+// never inherit rounding from the on-screen zoom level.
+import { createRoot } from 'react-dom/client';
+import { flushSync } from 'react-dom';
+import type Konva from 'konva';
+import type { Slide } from '@/model/types';
+import { SlideStage } from '@/editor/SlideStage';
+import { preloadImages } from '@/editor/render/images';
+import { ensureFonts } from '@/styles/fontLoader';
+
+export interface RenderOptions {
+  mime?: 'image/png' | 'image/jpeg' | 'image/webp';
+  quality?: number;
+  /** 1 = preset size; 2 = double resolution. */
+  pixelRatio?: number;
+}
+
+/** Renders to a canvas at width×height×pixelRatio (offscreen, synchronous; fonts/images must be ready). */
+export function renderSlideToCanvas(slide: Slide, width: number, height: number, pixelRatio = 1): HTMLCanvasElement {
+  const host = document.createElement('div');
+  host.style.cssText = 'position:fixed;left:-100000px;top:0;pointer-events:none;';
+  document.body.appendChild(host);
+  const root = createRoot(host);
+  let stage: Konva.Stage | null = null;
+  try {
+    flushSync(() => {
+      root.render(<SlideStage ref={(s) => { stage = s; }} slide={slide} width={width} height={height} displayWidth={width} />);
+    });
+    if (!stage) throw new Error('Offscreen stage failed to mount');
+    return (stage as Konva.Stage).toCanvas({ pixelRatio });
+  } finally {
+    root.unmount();
+    host.remove();
+  }
+}
+
+export function renderSlideToDataURL(slide: Slide, width: number, height: number, opts: RenderOptions = {}): string {
+  const host = document.createElement('div');
+  host.style.cssText = 'position:fixed;left:-100000px;top:0;pointer-events:none;';
+  document.body.appendChild(host);
+  const root = createRoot(host);
+  let stage: Konva.Stage | null = null;
+  try {
+    flushSync(() => {
+      root.render(<SlideStage ref={(s) => { stage = s; }} slide={slide} width={width} height={height} displayWidth={width} />);
+    });
+    if (!stage) throw new Error('Offscreen stage failed to mount');
+    return (stage as Konva.Stage).toDataURL({ pixelRatio: opts.pixelRatio ?? 1, mimeType: opts.mime ?? 'image/png', quality: opts.quality ?? 0.92 });
+  } finally {
+    root.unmount();
+    host.remove();
+  }
+}
+
+/** Fonts used by text elements (incl. rich-text spans), recursively. */
+export function slideFonts(slides: Slide[]): string[] {
+  const out = new Set<string>();
+  const walk = (els: Slide['elements']) => {
+    for (const e of els) {
+      if (e.kind === 'text') {
+        out.add(e.fontId);
+        e.spans?.forEach((s) => s.fontId && out.add(s.fontId));
+      } else if (e.kind === 'chart' || e.kind === 'table') out.add(e.fontId);
+      else if (e.kind === 'group') walk(e.children);
+    }
+  };
+  slides.forEach((s) => walk(s.elements));
+  return [...out];
+}
+
+/** Waits for fonts and images, then renders at the exact output size. */
+export async function renderSlide(slide: Slide, width: number, height: number, opts: RenderOptions = {}): Promise<string> {
+  await Promise.all([ensureFonts(slideFonts([slide])), preloadImages([slide])]);
+  return renderSlideToDataURL(slide, width, height, opts);
+}
