@@ -84,6 +84,53 @@ Source: [Fontsource](https://fontsource.org) npm packages, which redistribute th
 | Teko | display-condensed | @fontsource/teko@5.3.0 | OFL-1.1 | assets/fonts/teko/LICENSE |
 | Roboto Condensed | display-condensed | @fontsource/roboto-condensed@5.3.0 | OFL-1.1 | assets/fonts/roboto-condensed/LICENSE |
 
+## Script fonts for other languages (bundled offline in `assets/fonts/script/`)
+
+So a carousel translated into Tamil, Hindi, Arabic, Thai, Russian and more keeps its design, each design-font category (sans, serif, display, handwriting) has a matching font per script, listed in `research/script-fonts.json`. All are SIL OFL 1.1, shipped unmodified with their license files. Retrieved 2026-10-14 via `scripts/fetch-script-fonts.mjs`. The Cyrillic, Greek and Vietnamese subsets of the design fonts above come from the same Fontsource packages (`scripts/fetch-fonts.mjs`). Chinese, Japanese and Korean use the operating system's fonts.
+
+| Family | Scripts | Package | License | License file |
+|---|---|---|---|---|
+| Noto Sans Tamil | Tamil | @fontsource-variable/noto-sans-tamil@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-tamil/LICENSE |
+| Noto Serif Tamil | Tamil | @fontsource-variable/noto-serif-tamil@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-tamil/LICENSE |
+| Baloo Thambi 2 | Tamil | @fontsource-variable/baloo-thambi-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-thambi-2/LICENSE |
+| Kavivanar | Tamil | @fontsource/kavivanar@5.3.0 | OFL-1.1 | assets/fonts/script/kavivanar/LICENSE |
+| Noto Sans Devanagari | Devanagari | @fontsource-variable/noto-sans-devanagari@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-devanagari/LICENSE |
+| Noto Serif Devanagari | Devanagari | @fontsource-variable/noto-serif-devanagari@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-devanagari/LICENSE |
+| Baloo 2 | Devanagari | @fontsource-variable/baloo-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-2/LICENSE |
+| Kalam | Devanagari | @fontsource/kalam@5.3.0 | OFL-1.1 | assets/fonts/script/kalam/LICENSE |
+| Noto Sans Bengali | Bengali | @fontsource-variable/noto-sans-bengali@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-bengali/LICENSE |
+| Noto Serif Bengali | Bengali | @fontsource-variable/noto-serif-bengali@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-bengali/LICENSE |
+| Baloo Da 2 | Bengali | @fontsource-variable/baloo-da-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-da-2/LICENSE |
+| Noto Sans Telugu | Telugu | @fontsource-variable/noto-sans-telugu@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-telugu/LICENSE |
+| Noto Serif Telugu | Telugu | @fontsource-variable/noto-serif-telugu@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-telugu/LICENSE |
+| Baloo Tammudu 2 | Telugu | @fontsource-variable/baloo-tammudu-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-tammudu-2/LICENSE |
+| Noto Sans Kannada | Kannada | @fontsource-variable/noto-sans-kannada@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-kannada/LICENSE |
+| Noto Serif Kannada | Kannada | @fontsource-variable/noto-serif-kannada@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-kannada/LICENSE |
+| Baloo Tamma 2 | Kannada | @fontsource-variable/baloo-tamma-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-tamma-2/LICENSE |
+| Noto Sans Malayalam | Malayalam | @fontsource-variable/noto-sans-malayalam@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-malayalam/LICENSE |
+| Noto Serif Malayalam | Malayalam | @fontsource-variable/noto-serif-malayalam@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-malayalam/LICENSE |
+| Baloo Chettan 2 | Malayalam | @fontsource-variable/baloo-chettan-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-chettan-2/LICENSE |
+| Noto Sans Gujarati | Gujarati | @fontsource-variable/noto-sans-gujarati@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-gujarati/LICENSE |
+| Noto Serif Gujarati | Gujarati | @fontsource-variable/noto-serif-gujarati@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-gujarati/LICENSE |
+| Baloo Bhai 2 | Gujarati | @fontsource-variable/baloo-bhai-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-bhai-2/LICENSE |
+| Noto Sans Gurmukhi | Gurmukhi | @fontsource-variable/noto-sans-gurmukhi@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-gurmukhi/LICENSE |
+| Noto Serif Gurmukhi | Gurmukhi | @fontsource-variable/noto-serif-gurmukhi@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-gurmukhi/LICENSE |
+| Baloo Paaji 2 | Gurmukhi | @fontsource-variable/baloo-paaji-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-paaji-2/LICENSE |
+| Noto Sans Oriya | Odia | @fontsource-variable/noto-sans-oriya@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-oriya/LICENSE |
+| Noto Serif Oriya | Odia | @fontsource-variable/noto-serif-oriya@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-oriya/LICENSE |
+| Baloo Bhaina 2 | Odia | @fontsource-variable/baloo-bhaina-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-bhaina-2/LICENSE |
+| Noto Sans Sinhala | Sinhala | @fontsource-variable/noto-sans-sinhala@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-sinhala/LICENSE |
+| Noto Serif Sinhala | Sinhala | @fontsource-variable/noto-serif-sinhala@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-sinhala/LICENSE |
+| Noto Sans Arabic | Arabic | @fontsource-variable/noto-sans-arabic@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-arabic/LICENSE |
+| Noto Naskh Arabic | Arabic | @fontsource-variable/noto-naskh-arabic@5.3.0 | OFL-1.1 | assets/fonts/script/noto-naskh-arabic/LICENSE |
+| Cairo | Arabic | @fontsource-variable/cairo@5.3.0 | OFL-1.1 | assets/fonts/script/cairo/LICENSE |
+| Noto Sans Hebrew | Hebrew | @fontsource-variable/noto-sans-hebrew@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-hebrew/LICENSE |
+| Noto Serif Hebrew | Hebrew | @fontsource-variable/noto-serif-hebrew@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-hebrew/LICENSE |
+| Noto Sans Thai | Thai | @fontsource-variable/noto-sans-thai@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-thai/LICENSE |
+| Noto Serif Thai | Thai | @fontsource-variable/noto-serif-thai@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-thai/LICENSE |
+| Noto Sans | Cyrillic, Greek, Vietnamese | @fontsource-variable/noto-sans@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans/LICENSE |
+| Noto Serif | Cyrillic, Greek, Vietnamese | @fontsource-variable/noto-serif@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif/LICENSE |
+
 ## Icons (bundled offline)
 
 | Library | Package | License | Notes |
