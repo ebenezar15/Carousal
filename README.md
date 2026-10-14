@@ -156,6 +156,20 @@ Write a `LayoutFn` in `src/engine/layout/layouts.ts` using the primitives (`fitS
 | `npm run validate:research` | Checks research data, palette contrast and bundled fonts |
 | `npm run fonts:fetch`, `npm run icons:build`, `npm run models:fetch` | Rebuild the bundled fonts, icon set and background-removal model from npm |
 
+## CI and releases
+
+- **CI** (`.github/workflows/ci.yml`) runs on every pull request and push to `main`:
+  - research validation, typecheck, lint, unit tests and the production build;
+  - the Playwright end-to-end suite;
+  - a native desktop compile on Linux, macOS and Windows.
+- **Releases** (`.github/workflows/release.yml`): push a tag such as `v0.1.0`, or start the workflow manually in the Actions tab. It builds installers (macOS universal `.dmg`, Windows `.msi`/`.exe`, Linux `.AppImage`/`.deb`) and attaches them to a **draft** GitHub release for you to review and publish.
+
+The installers aren't code-signed yet, so the first launch needs one extra step:
+- **macOS:** right-click the app → *Open* → *Open*.
+- **Windows:** SmartScreen → *More info* → *Run anyway*.
+
+To sign them, add an Apple Developer ID or a Windows code-signing certificate as repository secrets (see the [Tauri signing guide](https://v2.tauri.app/distribute/sign/)).
+
 ## Known limitations
 
 - **Untested against live services.** Claude, Ollama and stock photo search are tested against mocked services here. Try them with your own key or a local model.
