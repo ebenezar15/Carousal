@@ -2,23 +2,271 @@
   "version": 1,
   "source": "@fontsource and @fontsource-variable npm packages (same OFL-1.1 files as Google Fonts). Bundled offline by scripts/fetch-script-fonts.mjs.",
   "notes": "Script fallbacks keep a design's own Latin font and fill in glyphs it does not have. Each design font category maps to the closest-feeling font for the script, so a serif design stays serif in Tamil, a rounded display design stays rounded, and so on. Variable fonts cover every weight; static fonts are split at weight midpoints. Chinese, Japanese and Korean use the operating system's fonts (Noto CJK is several MB per weight).",
-  "categories": ["sans-serif", "serif", "display", "handwriting", "monospace"],
+  "categories": [
+    "sans-serif",
+    "serif",
+    "display",
+    "handwriting",
+    "monospace"
+  ],
   "scripts": [
-    { "id": "tamil", "label": "Tamil", "subset": "tamil", "langs": ["ta"], "fonts": { "sans-serif": "noto-sans-tamil", "serif": "noto-serif-tamil", "display": "baloo-thambi-2", "handwriting": "kavivanar" } },
-    { "id": "devanagari", "label": "Devanagari", "subset": "devanagari", "langs": ["hi", "mr", "ne", "sa"], "fonts": { "sans-serif": "noto-sans-devanagari", "serif": "noto-serif-devanagari", "display": "baloo-2", "handwriting": "kalam" } },
-    { "id": "bengali", "label": "Bengali", "subset": "bengali", "langs": ["bn", "as"], "fonts": { "sans-serif": "noto-sans-bengali", "serif": "noto-serif-bengali", "display": "baloo-da-2", "handwriting": "noto-sans-bengali" } },
-    { "id": "telugu", "label": "Telugu", "subset": "telugu", "langs": ["te"], "fonts": { "sans-serif": "noto-sans-telugu", "serif": "noto-serif-telugu", "display": "baloo-tammudu-2", "handwriting": "noto-sans-telugu" } },
-    { "id": "kannada", "label": "Kannada", "subset": "kannada", "langs": ["kn"], "fonts": { "sans-serif": "noto-sans-kannada", "serif": "noto-serif-kannada", "display": "baloo-tamma-2", "handwriting": "noto-sans-kannada" } },
-    { "id": "malayalam", "label": "Malayalam", "subset": "malayalam", "langs": ["ml"], "fonts": { "sans-serif": "noto-sans-malayalam", "serif": "noto-serif-malayalam", "display": "baloo-chettan-2", "handwriting": "noto-sans-malayalam" } },
-    { "id": "gujarati", "label": "Gujarati", "subset": "gujarati", "langs": ["gu"], "fonts": { "sans-serif": "noto-sans-gujarati", "serif": "noto-serif-gujarati", "display": "baloo-bhai-2", "handwriting": "noto-sans-gujarati" } },
-    { "id": "gurmukhi", "label": "Gurmukhi", "subset": "gurmukhi", "langs": ["pa"], "fonts": { "sans-serif": "noto-sans-gurmukhi", "serif": "noto-serif-gurmukhi", "display": "baloo-paaji-2", "handwriting": "noto-sans-gurmukhi" } },
-    { "id": "oriya", "label": "Odia", "subset": "oriya", "langs": ["or"], "fonts": { "sans-serif": "noto-sans-oriya", "serif": "noto-serif-oriya", "display": "baloo-bhaina-2", "handwriting": "noto-sans-oriya" } },
-    { "id": "sinhala", "label": "Sinhala", "subset": "sinhala", "langs": ["si"], "fonts": { "sans-serif": "noto-sans-sinhala", "serif": "noto-serif-sinhala", "display": "noto-sans-sinhala", "handwriting": "noto-sans-sinhala" } },
-    { "id": "arabic", "label": "Arabic", "subset": "arabic", "langs": ["ar", "fa", "ur", "ps"], "rtl": true, "fonts": { "sans-serif": "noto-sans-arabic", "serif": "noto-naskh-arabic", "display": "cairo", "handwriting": "noto-naskh-arabic" } },
-    { "id": "hebrew", "label": "Hebrew", "subset": "hebrew", "langs": ["he", "yi"], "rtl": true, "fonts": { "sans-serif": "noto-sans-hebrew", "serif": "noto-serif-hebrew", "display": "noto-sans-hebrew", "handwriting": "noto-sans-hebrew" } },
-    { "id": "thai", "label": "Thai", "subset": "thai", "langs": ["th"], "fonts": { "sans-serif": "noto-sans-thai", "serif": "noto-serif-thai", "display": "noto-sans-thai", "handwriting": "noto-sans-thai" } },
-    { "id": "cyrillic", "label": "Cyrillic", "subset": "cyrillic", "extraSubsets": ["cyrillic-ext"], "langs": ["ru", "uk", "bg", "sr", "kk", "be", "mk"], "fonts": { "sans-serif": "noto-sans", "serif": "noto-serif", "display": "noto-sans", "handwriting": "noto-sans" } },
-    { "id": "greek", "label": "Greek", "subset": "greek", "extraSubsets": ["greek-ext"], "langs": ["el"], "fonts": { "sans-serif": "noto-sans", "serif": "noto-serif", "display": "noto-sans", "handwriting": "noto-sans" } },
-    { "id": "vietnamese", "label": "Vietnamese", "subset": "vietnamese", "langs": ["vi"], "fonts": { "sans-serif": "noto-sans", "serif": "noto-serif", "display": "noto-sans", "handwriting": "noto-sans" } }
+    {
+      "id": "tamil",
+      "label": "Tamil",
+      "subset": "tamil",
+      "langs": [
+        "ta"
+      ],
+      "fonts": {
+        "sans-serif": "catamaran",
+        "serif": "arima",
+        "display": "baloo-thambi-2",
+        "handwriting": "kavivanar"
+      },
+      "alternatives": [
+        "catamaran",
+        "mukta-malar",
+        "hind-madurai",
+        "meera-inimai",
+        "pavanam",
+        "arima",
+        "baloo-thambi-2",
+        "coiny",
+        "kavivanar"
+      ],
+      "note": "Modern (reformed, post-1978) letterforms only. Noto Sans/Serif Tamil, Anek Tamil and Tiro Tamil render the pre-reform ligatures (e.g. the old forms of லை, ணா, றா, னா) in browsers, so they are not used."
+    },
+    {
+      "id": "devanagari",
+      "label": "Devanagari",
+      "subset": "devanagari",
+      "langs": [
+        "hi",
+        "mr",
+        "ne",
+        "sa"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-devanagari",
+        "serif": "noto-serif-devanagari",
+        "display": "baloo-2",
+        "handwriting": "kalam"
+      }
+    },
+    {
+      "id": "bengali",
+      "label": "Bengali",
+      "subset": "bengali",
+      "langs": [
+        "bn",
+        "as"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-bengali",
+        "serif": "noto-serif-bengali",
+        "display": "baloo-da-2",
+        "handwriting": "noto-sans-bengali"
+      }
+    },
+    {
+      "id": "telugu",
+      "label": "Telugu",
+      "subset": "telugu",
+      "langs": [
+        "te"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-telugu",
+        "serif": "noto-serif-telugu",
+        "display": "baloo-tammudu-2",
+        "handwriting": "noto-sans-telugu"
+      }
+    },
+    {
+      "id": "kannada",
+      "label": "Kannada",
+      "subset": "kannada",
+      "langs": [
+        "kn"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-kannada",
+        "serif": "noto-serif-kannada",
+        "display": "baloo-tamma-2",
+        "handwriting": "noto-sans-kannada"
+      }
+    },
+    {
+      "id": "malayalam",
+      "label": "Malayalam",
+      "subset": "malayalam",
+      "langs": [
+        "ml"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-malayalam",
+        "serif": "noto-serif-malayalam",
+        "display": "baloo-chettan-2",
+        "handwriting": "noto-sans-malayalam"
+      }
+    },
+    {
+      "id": "gujarati",
+      "label": "Gujarati",
+      "subset": "gujarati",
+      "langs": [
+        "gu"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-gujarati",
+        "serif": "noto-serif-gujarati",
+        "display": "baloo-bhai-2",
+        "handwriting": "noto-sans-gujarati"
+      }
+    },
+    {
+      "id": "gurmukhi",
+      "label": "Gurmukhi",
+      "subset": "gurmukhi",
+      "langs": [
+        "pa"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-gurmukhi",
+        "serif": "noto-serif-gurmukhi",
+        "display": "baloo-paaji-2",
+        "handwriting": "noto-sans-gurmukhi"
+      }
+    },
+    {
+      "id": "oriya",
+      "label": "Odia",
+      "subset": "oriya",
+      "langs": [
+        "or"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-oriya",
+        "serif": "noto-serif-oriya",
+        "display": "baloo-bhaina-2",
+        "handwriting": "noto-sans-oriya"
+      }
+    },
+    {
+      "id": "sinhala",
+      "label": "Sinhala",
+      "subset": "sinhala",
+      "langs": [
+        "si"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-sinhala",
+        "serif": "noto-serif-sinhala",
+        "display": "noto-sans-sinhala",
+        "handwriting": "noto-sans-sinhala"
+      }
+    },
+    {
+      "id": "arabic",
+      "label": "Arabic",
+      "subset": "arabic",
+      "langs": [
+        "ar",
+        "fa",
+        "ur",
+        "ps"
+      ],
+      "rtl": true,
+      "fonts": {
+        "sans-serif": "noto-sans-arabic",
+        "serif": "noto-naskh-arabic",
+        "display": "cairo",
+        "handwriting": "noto-naskh-arabic"
+      }
+    },
+    {
+      "id": "hebrew",
+      "label": "Hebrew",
+      "subset": "hebrew",
+      "langs": [
+        "he",
+        "yi"
+      ],
+      "rtl": true,
+      "fonts": {
+        "sans-serif": "noto-sans-hebrew",
+        "serif": "noto-serif-hebrew",
+        "display": "noto-sans-hebrew",
+        "handwriting": "noto-sans-hebrew"
+      }
+    },
+    {
+      "id": "thai",
+      "label": "Thai",
+      "subset": "thai",
+      "langs": [
+        "th"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans-thai",
+        "serif": "noto-serif-thai",
+        "display": "noto-sans-thai",
+        "handwriting": "noto-sans-thai"
+      }
+    },
+    {
+      "id": "cyrillic",
+      "label": "Cyrillic",
+      "subset": "cyrillic",
+      "extraSubsets": [
+        "cyrillic-ext"
+      ],
+      "langs": [
+        "ru",
+        "uk",
+        "bg",
+        "sr",
+        "kk",
+        "be",
+        "mk"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans",
+        "serif": "noto-serif",
+        "display": "noto-sans",
+        "handwriting": "noto-sans"
+      }
+    },
+    {
+      "id": "greek",
+      "label": "Greek",
+      "subset": "greek",
+      "extraSubsets": [
+        "greek-ext"
+      ],
+      "langs": [
+        "el"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans",
+        "serif": "noto-serif",
+        "display": "noto-sans",
+        "handwriting": "noto-sans"
+      }
+    },
+    {
+      "id": "vietnamese",
+      "label": "Vietnamese",
+      "subset": "vietnamese",
+      "langs": [
+        "vi"
+      ],
+      "fonts": {
+        "sans-serif": "noto-sans",
+        "serif": "noto-serif",
+        "display": "noto-sans",
+        "handwriting": "noto-sans"
+      }
+    }
   ]
 }

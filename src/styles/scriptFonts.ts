@@ -18,6 +18,9 @@ export interface ScriptDef {
   langs: string[];
   rtl?: boolean;
   fonts: Record<Exclude<FontCategory, 'monospace'>, string>;
+  /** Fonts the user may pick instead of matching each design (Settings → Fonts for other languages). */
+  alternatives?: string[];
+  note?: string;
 }
 
 export const scripts = catalog.scripts as ScriptDef[];
@@ -98,6 +101,28 @@ export function isRtlText(text: string): boolean {
 const BASE = `${import.meta.env.BASE_URL}fonts`;
 const fallbackFaces = new Map<string, FontFace[]>(); // subset → faces across categories
 let registered = false;
+const registeredFaces: FontFace[] = [];
+/** Per-script font override (script id → package id); missing = match each design's category. */
+let overrides: Record<string, string> = {};
+
+export const familyLabel = (pkg: string) => packages[pkg]?.family ?? pkg;
+
+/**
+ * Uses one font for a script in every design (e.g. Mukta Malar for all Tamil text), or '' to match
+ * each design's category again. Returns true if anything changed (callers re-measure text).
+ */
+export function setScriptFontOverrides(next: Record<string, string>): boolean {
+  const clean = Object.fromEntries(Object.entries(next).filter(([, v]) => v));
+  if (JSON.stringify(clean) === JSON.stringify(overrides)) return false;
+  overrides = clean;
+  if (registered && typeof document !== 'undefined' && 'fonts' in document) {
+    registeredFaces.forEach((f) => document.fonts.delete(f));
+    registeredFaces.length = 0;
+    fallbackFaces.clear();
+    registered = false;
+  }
+  return true;
+}
 
 /** Adds every fallback face to document.fonts (not loaded; ensureSubsets loads what text needs). */
 export function registerScriptFallbacks(): void {
@@ -106,7 +131,7 @@ export function registerScriptFallbacks(): void {
   const seen = new Set<string>();
   for (const s of scripts) {
     for (const cat of FALLBACK_CATEGORIES) {
-      const pkg = packages[s.fonts[cat]];
+      const pkg = packages[overrides[s.id] || s.fonts[cat]];
       if (!pkg) continue;
       for (const face of pkg.faces) {
         if (![s.subset, ...(s.extraSubsets ?? [])].includes(face.subset)) continue;
@@ -119,6 +144,7 @@ export function registerScriptFallbacks(): void {
           display: 'block',
         });
         document.fonts.add(ff);
+        registeredFaces.push(ff);
         const list = fallbackFaces.get(face.subset) ?? [];
         list.push(ff);
         fallbackFaces.set(face.subset, list);

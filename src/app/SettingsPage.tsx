@@ -5,6 +5,7 @@ import { translationMemory } from '@/storage/translationMemory';
 import { useSettings } from './store';
 import { OllamaSection } from './settings/OllamaSection';
 import { OpenAISection } from './settings/OpenAISection';
+import { ScriptFontsSection } from './settings/ScriptFontsSection';
 
 const PROVIDERS: { id: ProviderPreference; label: string; hint: string }[] = [
   { id: 'auto', label: 'Auto', hint: 'Claude if a key is set and you are online, else your free/local model, else Ollama, else built-in rules.' },
@@ -90,6 +91,8 @@ export function SettingsPage() {
       <OpenAISection />
 
       <OllamaSection />
+
+      <ScriptFontsSection />
 
       <TranslationMemorySection />
 

@@ -1,27 +1,27 @@
 {
   "generated": "2026-10-14",
   "packages": {
-    "noto-sans-tamil": {
-      "family": "Noto Sans Tamil",
+    "catamaran": {
+      "family": "Catamaran",
       "license": "OFL-1.1",
       "version": "5.3.0",
       "faces": [
         {
           "subset": "tamil",
-          "file": "script/noto-sans-tamil/tamil-wght.woff2",
+          "file": "script/catamaran/tamil-wght.woff2",
           "weight": "100 900"
         }
       ]
     },
-    "noto-serif-tamil": {
-      "family": "Noto Serif Tamil",
+    "arima": {
+      "family": "Arima",
       "license": "OFL-1.1",
       "version": "5.3.0",
       "faces": [
         {
           "subset": "tamil",
-          "file": "script/noto-serif-tamil/tamil-wght.woff2",
-          "weight": "100 900"
+          "file": "script/arima/tamil-wght.woff2",
+          "weight": "100 700"
         }
       ]
     },
@@ -45,6 +45,116 @@
         {
           "subset": "tamil",
           "file": "script/kavivanar/tamil-400.woff2",
+          "weight": "1 1000"
+        }
+      ]
+    },
+    "mukta-malar": {
+      "family": "Mukta Malar",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-200.woff2",
+          "weight": "1 250"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-300.woff2",
+          "weight": "251 350"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-400.woff2",
+          "weight": "351 450"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-500.woff2",
+          "weight": "451 550"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-600.woff2",
+          "weight": "551 650"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-700.woff2",
+          "weight": "651 750"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/mukta-malar/tamil-800.woff2",
+          "weight": "751 1000"
+        }
+      ]
+    },
+    "hind-madurai": {
+      "family": "Hind Madurai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "tamil",
+          "file": "script/hind-madurai/tamil-300.woff2",
+          "weight": "1 350"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/hind-madurai/tamil-400.woff2",
+          "weight": "351 450"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/hind-madurai/tamil-500.woff2",
+          "weight": "451 550"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/hind-madurai/tamil-600.woff2",
+          "weight": "551 650"
+        },
+        {
+          "subset": "tamil",
+          "file": "script/hind-madurai/tamil-700.woff2",
+          "weight": "651 1000"
+        }
+      ]
+    },
+    "meera-inimai": {
+      "family": "Meera Inimai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "tamil",
+          "file": "script/meera-inimai/tamil-400.woff2",
+          "weight": "1 1000"
+        }
+      ]
+    },
+    "pavanam": {
+      "family": "Pavanam",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "tamil",
+          "file": "script/pavanam/tamil-400.woff2",
+          "weight": "1 1000"
+        }
+      ]
+    },
+    "coiny": {
+      "family": "Coiny",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "tamil",
+          "file": "script/coiny/tamil-400.woff2",
           "weight": "1 1000"
         }
       ]

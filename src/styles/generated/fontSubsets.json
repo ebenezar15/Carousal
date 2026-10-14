@@ -202,6 +202,17 @@
       "greek",
       "greek-ext",
       "vietnamese"
+    ],
+    "arima": [
+      "greek",
+      "greek-ext",
+      "vietnamese"
+    ],
+    "baloo-thambi-2": [
+      "vietnamese"
+    ],
+    "coiny": [
+      "vietnamese"
     ]
   },
   "ranges": {

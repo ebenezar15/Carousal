@@ -41,6 +41,11 @@
       "id": "display-condensed",
       "label": "Display / Condensed",
       "description": "Tall, narrow, all-caps-friendly faces that fit big words in tight space; headlines and numbers."
+    },
+    {
+      "id": "tamil",
+      "label": "Tamil (modern script)",
+      "description": "Contemporary Tamil typefaces in the reformed (modern) script, with matching Latin letters. Usable for any text; also the fallbacks for Tamil in every design."
     }
   ],
   "fonts": [
@@ -1810,6 +1815,221 @@
       "variable": true,
       "usage": "both",
       "notes": "Condensed Roboto; readable as dense body text too."
+    },
+    {
+      "id": "catamaran",
+      "family": "Catamaran",
+      "fontsource": "catamaran",
+      "category": "sans-serif",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Clean modern sans; the default for Tamil in sans designs."
+    },
+    {
+      "id": "mukta-malar",
+      "family": "Mukta Malar",
+      "fontsource": "mukta-malar",
+      "category": "sans-serif",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Friendly contemporary sans popular in Tamil media."
+    },
+    {
+      "id": "hind-madurai",
+      "family": "Hind Madurai",
+      "fontsource": "hind-madurai",
+      "category": "sans-serif",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Neutral UI-style sans; very legible body text."
+    },
+    {
+      "id": "meera-inimai",
+      "family": "Meera Inimai",
+      "fontsource": "meera-inimai",
+      "category": "sans-serif",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "body",
+      "notes": "Soft humanist sans for longer Tamil text."
+    },
+    {
+      "id": "pavanam",
+      "family": "Pavanam",
+      "fontsource": "pavanam",
+      "category": "sans-serif",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "body",
+      "notes": "Light, airy sans for minimal designs."
+    },
+    {
+      "id": "arima",
+      "family": "Arima",
+      "fontsource": "arima",
+      "category": "display",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        700
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Elegant high-contrast display; the default for Tamil in serif and luxury designs."
+    },
+    {
+      "id": "baloo-thambi-2",
+      "family": "Baloo Thambi 2",
+      "fontsource": "baloo-thambi-2",
+      "category": "display",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Rounded, bold display; the default for Tamil in display designs."
+    },
+    {
+      "id": "coiny",
+      "family": "Coiny",
+      "fontsource": "coiny",
+      "category": "display",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Chunky, playful display for loud hooks."
+    },
+    {
+      "id": "kavivanar",
+      "family": "Kavivanar",
+      "fontsource": "kavivanar",
+      "category": "handwriting",
+      "group": "tamil",
+      "moods": [
+        "tamil"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext",
+        "tamil"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Handwritten Tamil; the default in hand-drawn designs."
     }
   ],
   "pairings": [

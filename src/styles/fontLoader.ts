@@ -58,7 +58,7 @@ function loadFace(fontId: string, weight: number, style: 'normal' | 'italic'): P
         new FontFace(cssFamily(fontId), `url(${BASE}/${fontId}/${subset}-${weight}-${style}.woff2) format('woff2')`, {
           weight: String(weight),
           style,
-          unicodeRange: subset === 'latin' ? LATIN : LATIN_EXT,
+          unicodeRange: subset === 'latin' ? LATIN : subset === 'latin-ext' ? LATIN_EXT : unicodeRangeOf(subset),
         }),
     );
     // Extra subsets are registered too but only loaded when text needs them (ensureTextFonts).

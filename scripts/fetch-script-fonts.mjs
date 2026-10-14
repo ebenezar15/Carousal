@@ -18,7 +18,7 @@ const failures = [];
 // Which subsets each package must provide.
 const need = new Map();
 for (const s of catalog.scripts) {
-  for (const pkg of new Set(Object.values(s.fonts))) {
+  for (const pkg of new Set([...Object.values(s.fonts), ...(s.alternatives ?? [])])) {
     const set = need.get(pkg) ?? new Set();
     [s.subset, ...(s.extraSubsets ?? [])].forEach((x) => set.add(x));
     need.set(pkg, set);

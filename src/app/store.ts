@@ -24,6 +24,8 @@ export interface Settings {
   openaiModel: string;
   /** '' = same as openaiModel. */
   openaiFastModel: string;
+  /** Font override per script (script id → font id); '' or missing = match each design. */
+  scriptFonts: Record<string, string>;
   theme: 'system' | 'light' | 'dark';
 }
 
@@ -38,6 +40,7 @@ export const defaultSettings: Settings = {
   openaiBaseUrl: '',
   openaiModel: '',
   openaiFastModel: '',
+  scriptFonts: {},
   theme: 'system',
 };
 

@@ -4554,6 +4554,456 @@
           "file": "roboto-condensed/vietnamese-900-normal.woff2"
         }
       ]
+    },
+    {
+      "id": "catamaran",
+      "family": "Catamaran",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/tamil-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "mukta-malar",
+      "family": "Mukta Malar",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/tamil-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "hind-madurai",
+      "family": "Hind Madurai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/tamil-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "meera-inimai",
+      "family": "Meera Inimai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "meera-inimai/latin-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "meera-inimai/tamil-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "pavanam",
+      "family": "Pavanam",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/tamil-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "arima",
+      "family": "Arima",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/greek-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/vietnamese-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/tamil-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/greek-700-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/greek-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/vietnamese-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "baloo-thambi-2",
+      "family": "Baloo Thambi 2",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "coiny",
+      "family": "Coiny",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/vietnamese-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "kavivanar",
+      "family": "Kavivanar",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/tamil-400-normal.woff2"
+        }
+      ]
     }
   ]
 }

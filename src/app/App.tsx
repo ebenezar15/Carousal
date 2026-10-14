@@ -6,7 +6,8 @@ const EditorPage = lazy(() => import('@/editor/EditorPage').then((m) => ({ defau
 const SettingsPage = lazy(() => import('./SettingsPage').then((m) => ({ default: m.SettingsPage })));
 const Loading = () => <div className="p-10 text-center text-sm text-zinc-500">Loading…</div>;
 import { endGesture, useDocument, useProjects, useRoute, useSettings } from './store';
-import { useSlideFonts } from '@/editor/render/fonts';
+import { ensureSlideFonts, useSlideFonts } from '@/editor/render/fonts';
+import { setScriptFontOverrides } from '@/styles/scriptFonts';
 
 export function App() {
   const { route, go: setRoute } = useRoute();
@@ -17,6 +18,12 @@ export function App() {
   // Whatever carousel is open, load its fonts and script subsets (e.g. Tamil) so it renders correctly.
   useSlideFonts(useDocument((s) => s.carousel?.slides));
   useSlideFonts(useProjects((s) => s.current?.carousel.slides));
+  // A chosen font for a script (e.g. Mukta Malar for all Tamil) re-registers the fallbacks; reload what's open.
+  useEffect(() => {
+    if (!setScriptFontOverrides(settings.scriptFonts ?? {})) return;
+    const slides = useDocument.getState().carousel?.slides ?? useProjects.getState().current?.carousel.slides;
+    if (slides) void ensureSlideFonts(slides);
+  }, [settings.scriptFonts]);
 
   useEffect(() => {
     void load();
