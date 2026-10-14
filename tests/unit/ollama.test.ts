@@ -32,7 +32,7 @@ describe('Ollama detection', () => {
     const out = await p.complete({ system: 'sys', messages: [{ role: 'user', content: 'hi' }], jsonSchema: { type: 'object' } });
     expect(out).toBe('{"ok":true}');
     const body = JSON.parse((fetchMock.mock.calls[1] as unknown as [string, RequestInit])[1].body as string);
-    expect(body).toMatchObject({ model: 'llama3.2', stream: false, format: 'json', options: { num_ctx: 8192, num_predict: 4096 } });
+    expect(body).toMatchObject({ model: 'llama3.2', stream: false, format: 'json', keep_alive: '30m', options: { num_ctx: 6144, num_predict: 4096 } });
     expect(body.messages[0].role).toBe('system');
     expect(body.messages[0].content).toMatch(/^sys\n\nReply with a single JSON object only/);
     expect(body.messages[0].content).toContain('{"type":"object"}');

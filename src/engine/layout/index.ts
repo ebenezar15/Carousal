@@ -1,5 +1,5 @@
 import { findFont, getStyle } from '@/styles';
-import { ensureFonts } from '@/styles/fontLoader';
+import { ensureTextFonts } from '@/styles/fontLoader';
 import { loadIcons } from '@/styles/icons';
 import type { Carousel, CarouselTheme } from '@/model/types';
 import { buildCarousel, rebuildSlide, chooseLayouts, type BuildInput } from './engine';
@@ -29,6 +29,7 @@ export function themeFonts(theme: CarouselTheme): string[] {
  * before the webfonts load would size text with the fallback font and cause overflow/overlap.
  */
 export async function layoutCarousel(input: BuildInput): Promise<Carousel> {
-  await Promise.all([ensureFonts(themeFonts(input.theme)), loadIcons()]);
+  // The plan's text decides which script subsets (Tamil, Cyrillic, …) must be loaded before measuring.
+  await Promise.all([ensureTextFonts(themeFonts(input.theme), [JSON.stringify(input.plan), input.theme.handle ?? '']), loadIcons()]);
   return buildCarousel(input);
 }

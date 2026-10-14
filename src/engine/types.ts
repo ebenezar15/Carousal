@@ -28,9 +28,14 @@ export interface CompletionRequest {
   /** JSON schema the output must match; providers that support constrained decoding pass it on. */
   jsonSchema: Record<string, unknown>;
   signal?: AbortSignal;
+  /**
+   * 'fast' = a small, well-defined task (translation, captions, headline ideas): providers may use a
+   * cheaper/faster model for it (Settings → "Model for quick tasks").
+   */
+  tier?: 'quality' | 'fast';
 }
 
-export type ProviderId = 'claude' | 'ollama' | 'rules';
+export type ProviderId = 'claude' | 'ollama' | 'openai' | 'rules';
 
 export interface AIProvider {
   id: Exclude<ProviderId, 'rules'>;

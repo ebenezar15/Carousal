@@ -9,6 +9,7 @@ import { newId } from '@/model/id';
 import type { CarouselTheme, Project } from '@/model/types';
 import { renderSlideToDataURL } from '@/export/render';
 const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ default: m.ExportDialog })));
+const TranslateDialog = lazy(() => import('./TranslateDialog').then((m) => ({ default: m.TranslateDialog })));
 import { importProjectFile, PROJECT_EXT } from '@/export/projectFile';
 import { providers } from './runtime';
 import { useDocument, useProjects, useRoute, useSettings } from './store';
@@ -18,7 +19,7 @@ import { CarouselView } from './generate/CarouselView';
 import { CaptionPanel } from './CaptionPanel';
 import { SAMPLES } from './sample';
 
-const PROVIDER_LABEL: Record<string, string> = { claude: 'Claude', ollama: 'Ollama', rules: 'Built-in rules' };
+const PROVIDER_LABEL: Record<string, string> = { claude: 'Claude', ollama: 'Ollama', openai: 'Free / local model', rules: 'Built-in rules' };
 
 const initialInput: InputState = { text: '', presetId: DEFAULT_PRESET_ID, opts: defaultOptions, variationCount: 4, handle: '' };
 
@@ -33,6 +34,7 @@ export function GeneratePage() {
   const [aiAvailable, setAiAvailable] = useState(false);
   const [showJson, setShowJson] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [translating, setTranslating] = useState(false);
   const openFile = useRef<HTMLInputElement>(null);
   const abort = useRef<AbortController | null>(null);
 
@@ -166,7 +168,7 @@ export function GeneratePage() {
       <div className="space-y-4">
         <InputPanel value={input} onChange={setInput} onGenerate={() => void onGenerate()} busy={busy} />
         <p className="px-1 text-xs text-zinc-500">
-          AI: <strong>{settings.provider === 'auto' ? 'Auto (Claude → Ollama → rules)' : PROVIDER_LABEL[settings.provider]}</strong> · change in Settings
+          AI: <strong>{settings.provider === 'auto' ? 'Auto (Claude → free model → Ollama → rules)' : PROVIDER_LABEL[settings.provider]}</strong> · change in Settings
         </p>
         <div className="px-1">
           <button className="text-xs font-medium text-brand-600 hover:underline" onClick={() => openFile.current?.click()}>Open project file (.{PROJECT_EXT})…</button>
@@ -217,6 +219,7 @@ export function GeneratePage() {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h1 className="text-lg font-semibold">{current.name}</h1>
               <div className="flex gap-2">
+                <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setTranslating(true)}>Translate…</button>
                 <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setExporting(true)}>Export…</button>
                 <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => useRoute.getState().go('editor')}>Open in editor →</button>
               </div>
@@ -240,6 +243,19 @@ export function GeneratePage() {
               <CaptionPanel compact />
             </section>
             {exporting && <Suspense fallback={null}><ExportDialog project={current} carousel={carousel} plan={plan} onClose={() => setExporting(false)} /></Suspense>}
+            {translating && (
+              <Suspense fallback={null}>
+                <TranslateDialog
+                  project={{ ...current, carousel }}
+                  onClose={() => setTranslating(false)}
+                  onCreated={async (copy) => {
+                    setTranslating(false);
+                    open(await useProjects.getState().save(copy));
+                    useRoute.getState().go('editor');
+                  }}
+                />
+              </Suspense>
+            )}
             <button className="text-xs text-zinc-500 hover:underline" onClick={() => setShowJson((v) => !v)}>{showJson ? 'Hide' : 'Show'} generated plan (JSON)</button>
             {showJson && <pre className="card max-h-96 overflow-auto p-4 text-xs" data-testid="plan-json">{JSON.stringify(plan, null, 2)}</pre>}
           </>

@@ -286,4 +286,6 @@ export interface Project {
   altText?: string[];
   /** Platform the caption was written for. */
   captionPlatform?: string;
+  /** Set on translated copies: the source project and the target language (BCP-47). */
+  translation?: { fromId: string; fromName: string; lang: string; engine: string };
 }

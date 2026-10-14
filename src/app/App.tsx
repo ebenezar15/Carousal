@@ -5,7 +5,8 @@ import { GeneratePage } from './GeneratePage';
 const EditorPage = lazy(() => import('@/editor/EditorPage').then((m) => ({ default: m.EditorPage })));
 const SettingsPage = lazy(() => import('./SettingsPage').then((m) => ({ default: m.SettingsPage })));
 const Loading = () => <div className="p-10 text-center text-sm text-zinc-500">Loading…</div>;
-import { endGesture, useProjects, useRoute, useSettings } from './store';
+import { endGesture, useDocument, useProjects, useRoute, useSettings } from './store';
+import { useSlideFonts } from '@/editor/render/fonts';
 
 export function App() {
   const { route, go: setRoute } = useRoute();
@@ -13,6 +14,9 @@ export function App() {
   const { loaded, settings, load } = useSettings();
   const refresh = useProjects((s) => s.refresh);
   const [online, setOnline] = useState(typeof navigator === 'undefined' ? true : navigator.onLine);
+  // Whatever carousel is open, load its fonts and script subsets (e.g. Tamil) so it renders correctly.
+  useSlideFonts(useDocument((s) => s.carousel?.slides));
+  useSlideFonts(useProjects((s) => s.current?.carousel.slides));
 
   useEffect(() => {
     void load();

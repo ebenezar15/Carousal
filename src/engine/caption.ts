@@ -96,6 +96,7 @@ Never invent facts or statistics that aren't in the carousel.`,
       CaptionSchema,
       undefined,
       signal,
+      'fast',
     );
     const hashtags = value.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`).replace(/\s+/g, '')).slice(0, rule.hashtags[1] || 30);
     const alt = value.altText.length === plan.slides.length ? value.altText : altTextFor(plan);

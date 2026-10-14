@@ -5,5 +5,6 @@ export { pickVariations, makeItMore, type Variation, type MoreDirection } from '
 export { rewriteSlide, headlineOptions, setHeadline, cycleEmphasis, nextLayoutId, NeedsAIError } from './regenerate';
 export { planFromText, parseBlocks } from './rules';
 export { normalizePlan } from './normalize';
-export { createClaudeProvider, CLAUDE_MODELS, DEFAULT_CLAUDE_MODEL } from './providers/claude';
-export { createOllamaProvider, listOllamaModels, DEFAULT_OLLAMA_URL, type OllamaModel } from './providers/ollama';
+export { createClaudeProvider, CLAUDE_MODELS, DEFAULT_CLAUDE_MODEL, DEFAULT_CLAUDE_FAST_MODEL } from './providers/claude';
+export { createOllamaProvider, listOllamaModels, pullOllamaModel, deleteOllamaModel, RECOMMENDED_OLLAMA_MODELS, DEFAULT_OLLAMA_URL, type OllamaModel, type PullProgress } from './providers/ollama';
+export { createOpenAIProvider, listOpenAIModels, OPENAI_PRESETS, getOpenAIPreset, type OpenAIPresetId, type OpenAIModelInfo } from './providers/openai';

@@ -2,7 +2,7 @@
 // rich-text styles (bold, italic, underline, color, marker highlight) to the selected characters.
 import { useEffect, useRef, useState } from 'react';
 import type { TextElement, TextSpan } from '@/model/types';
-import { cssFamily } from '@/styles/fontLoader';
+import { fontStack } from '@/styles/fontLoader';
 import { nearestWeight } from '@/styles';
 import { refitText } from '@/engine/layout/textLayout';
 import { useDocument } from '@/app/store';
@@ -113,7 +113,7 @@ export function InlineTextEditor({ el, zoom, ox, oy, slideIndex }: { el: TextEle
           height: Math.max(el.height * zoom, lineHeight * (text.split('\n').length + 0.2)),
           transform: el.rotation ? `rotate(${el.rotation}deg)` : undefined,
           transformOrigin: 'center',
-          font: `${el.italic ? 'italic ' : ''}${el.fontWeight} ${el.fontSize * zoom}px "${cssFamily(el.fontId)}", sans-serif`,
+          font: `${el.italic ? 'italic ' : ''}${el.fontWeight} ${el.fontSize * zoom}px ${fontStack(el.fontId)}`,
           lineHeight: `${lineHeight}px`,
           letterSpacing: `${el.letterSpacing * zoom}px`,
           textAlign: el.align,

@@ -3,6 +3,7 @@ import { newId } from '@/model/id';
 import type { LineElement, PathElement, ShapeElement, SlideElement, TextElement, TextEmphasis } from '@/model/types';
 import type { Box, Ctx } from './context';
 import { applyCase, emphasisFont, layoutText } from './textLayout';
+import { isRtlText } from '@/styles/scriptFonts';
 
 export interface TextSpec {
   slot: string;
@@ -45,11 +46,12 @@ export function fitStack(specs: TextSpec[], region: Box, valign: 'top' | 'middle
     const sized = live.map((s) => {
       const size = Math.max(s.min, Math.round(s.max * f));
       const lay = measureSpec(s, size, region.w);
-      return { s, size, h: Math.ceil(lay.height), ls: (s.letterSpacing ?? 0) * (size / s.max) };
+      return { s, size, h: Math.ceil(lay.height), ls: (s.letterSpacing ?? 0) * (size / s.max), broke: lay.broke && size > s.min };
     });
     const total = sized.reduce((t, x, idx) => t + x.h + (idx < sized.length - 1 ? Math.round(x.size * (x.s.gapAfter ?? 0.5)) : 0), 0);
     const atFloor = sized.every((x) => x.size <= x.s.min);
-    if (total <= region.h || atFloor) {
+    // Long words (common in Tamil, German, Finnish…) shrink the text rather than split mid-word.
+    if ((total <= region.h && !sized.some((x) => x.broke)) || atFloor) {
       let y = region.y + (valign === 'middle' ? Math.max(0, (region.h - total) / 2) : valign === 'bottom' ? Math.max(0, region.h - total) : 0);
       const elements = sized.map((x, idx) => {
         const el = textEl(x.s, region.x, Math.round(y), region.w, x.h, x.size, x.ls, x.s.align ?? align);
@@ -64,6 +66,8 @@ export function fitStack(specs: TextSpec[], region: Box, valign: 'top' | 'middle
 }
 
 export function textEl(s: TextSpec, x: number, y: number, w: number, h: number, size: number, letterSpacing: number, align: TextElement['align']): TextElement {
+  // Right-to-left text (Arabic, Hebrew, Urdu…) mirrors the layout's alignment.
+  if (align !== 'center' && isRtlText(s.text)) align = align === 'left' ? 'right' : 'left';
   return {
     id: newId('el_'), kind: 'text', slot: s.slot, name: s.slot,
     x, y, width: w, height: h, rotation: s.rotation ?? 0, opacity: 1,

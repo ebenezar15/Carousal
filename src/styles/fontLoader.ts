@@ -1,7 +1,9 @@
 // Registers bundled woff2 fonts (assets/fonts → served at /fonts) with the FontFace API.
 // Canvas (Konva) text only uses a font once it is loaded, so renderers await ensureFonts() first.
+import { create } from 'zustand';
 import { findFont } from './index';
 import { db } from '@/storage/db';
+import { extraSubsetsOf, familyStack, loadFallbackSubsets, registerScriptFallbacks, subsetsForText, unicodeRangeOf } from './scriptFonts';
 
 const loaded = new Map<string, Promise<void>>();
 const BASE = `${import.meta.env.BASE_URL}fonts`;
@@ -13,7 +15,18 @@ const BASE = `${import.meta.env.BASE_URL}fonts`;
 export const cssFamily = (fontId: string) =>
   fontId.startsWith('system:') ? fontId.slice(7) : fontId.startsWith('custom:') ? `cf-custom-${fontId.slice(7)}` : `cf-${fontId}`;
 
+/** Font-family list for canvas text: the font itself, then its script fallback (see scriptFonts.ts). */
+export const fontStack = (fontId: string) => familyStack(cssFamily(fontId), fontId);
+
+/**
+ * Bumped whenever fonts finish loading after first paint, so memoized text layouts re-measure
+ * (RichText subscribes to it).
+ */
+export const useFontsVersion = create<{ v: number; bump(): void }>((set) => ({ v: 0, bump: () => set((s) => ({ v: s.v + 1 })) }));
+
 const customLoaded = new Map<string, Promise<void>>();
+/** Registered-but-unloaded faces for extra subsets (cyrillic, greek, vietnamese) by font id and subset. */
+const extraFaces = new Map<string, Map<string, FontFace[]>>();
 
 function loadCustom(fontId: string): Promise<void> {
   let p = customLoaded.get(fontId);
@@ -48,6 +61,16 @@ function loadFace(fontId: string, weight: number, style: 'normal' | 'italic'): P
           unicodeRange: subset === 'latin' ? LATIN : LATIN_EXT,
         }),
     );
+    // Extra subsets are registered too but only loaded when text needs them (ensureTextFonts).
+    const extras = extraFaces.get(fontId) ?? new Map<string, FontFace[]>();
+    extraFaces.set(fontId, extras);
+    for (const subset of extraSubsetsOf(fontId)) {
+      const range = unicodeRangeOf(subset);
+      if (!range) continue;
+      const face = new FontFace(cssFamily(fontId), `url(${BASE}/${fontId}/${subset}-${weight}-${style}.woff2) format('woff2')`, { weight: String(weight), style, unicodeRange: range });
+      document.fonts.add(face);
+      extras.set(subset, [...(extras.get(subset) ?? []), face]);
+    }
     p = Promise.all(
       faces.map(async (face) => {
         document.fonts.add(face);
@@ -67,6 +90,7 @@ function loadFace(fontId: string, weight: number, style: 'normal' | 'italic'): P
 
 /** Loads every bundled weight (and italic) of the given fonts. Unknown ids are ignored. */
 export async function ensureFonts(fontIds: Iterable<string>): Promise<void> {
+  if (typeof FontFace === 'undefined' || typeof document === 'undefined' || !('fonts' in document)) return; // tests / non-browser
   const jobs: Promise<void>[] = [];
   for (const id of new Set(fontIds)) {
     if (id.startsWith('custom:')) {
@@ -79,6 +103,25 @@ export async function ensureFonts(fontIds: Iterable<string>): Promise<void> {
     def.italics.forEach((w) => jobs.push(loadFace(id, w, 'italic')));
   }
   await Promise.all(jobs);
+}
+
+/**
+ * Loads the fonts *and* the script subsets the given texts need: extra subsets of the design fonts
+ * (e.g. Cyrillic Montserrat) and the bundled script fallbacks (e.g. Tamil). Call before measuring or
+ * rendering text that may contain non-Latin characters.
+ */
+export async function ensureTextFonts(fontIds: Iterable<string>, texts: Iterable<string>): Promise<void> {
+  if (typeof FontFace === 'undefined' || typeof document === 'undefined' || !('fonts' in document)) return;
+  const ids = [...new Set(fontIds)];
+  registerScriptFallbacks();
+  await ensureFonts(ids);
+  const subsets = new Set<string>();
+  for (const t of texts) subsetsForText(t).forEach((s) => subsets.add(s));
+  if (!subsets.size) return;
+  const pending: FontFace[] = [];
+  for (const id of ids) for (const s of subsets) for (const f of extraFaces.get(id)?.get(s) ?? []) if (f.status !== 'loaded') pending.push(f);
+  const [, fallbacks] = await Promise.all([Promise.all(pending.map((f) => f.load().catch((e) => console.warn('Font subset failed to load', e)))), loadFallbackSubsets(subsets)]);
+  if (pending.length || fallbacks) useFontsVersion.getState().bump();
 }
 
 const LATIN =

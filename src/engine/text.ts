@@ -61,7 +61,7 @@ const STOP = new Set(
 
 /** Picks words worth emphasizing: numbers first, then the longest non-stopword. */
 export function pickEmphasis(headline: string, max = 1): string[] {
-  const tokens = words(headline).map((w) => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}%]+$/gu, '')).filter(Boolean);
+  const tokens = words(headline).map((w) => w.replace(/^[^\p{L}\p{M}\p{N}]+|[^\p{L}\p{M}\p{N}%]+$/gu, '')).filter(Boolean);
   const nums = tokens.filter((t) => /\d/.test(t));
   const rest = tokens.filter((t) => !/\d/.test(t) && !STOP.has(t.toLowerCase()) && t.length > 3).sort((a, b) => b.length - a.length);
   return [...nums, ...rest].slice(0, max);

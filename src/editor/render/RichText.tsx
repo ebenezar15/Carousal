@@ -1,9 +1,9 @@
 import { Fragment, useMemo } from 'react';
 import { Group, Rect, Text, TextPath } from 'react-konva';
 import type { LinearGradient, TextElement } from '@/model/types';
-import { cssFamily } from '@/styles/fontLoader';
+import { fontStack, useFontsVersion } from '@/styles/fontLoader';
 import { nearestWeight } from '@/styles';
-import { applyCase, layoutElement } from '@/engine/layout/textLayout';
+import { applyCase, layoutElement, trackingFor } from '@/engine/layout/textLayout';
 
 const shadowProps = (s?: TextElement['shadow']) =>
   s ? { shadowColor: s.color, shadowBlur: s.blur, shadowOffsetX: s.offsetX, shadowOffsetY: s.offsetY, shadowOpacity: s.opacity } : {};
@@ -21,7 +21,10 @@ export function gradientPoints(g: LinearGradient, w: number, h: number) {
 
 /** Draws text in element-local coordinates (0,0 = top-left of the box). */
 export function RichText({ el }: { el: TextElement }) {
-  const layout = useMemo(() => layoutElement(el), [el]);
+  // Re-measure when late fonts (e.g. a Tamil fallback) finish loading.
+  const fontsVersion = useFontsVersion((s) => s.v);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const layout = useMemo(() => layoutElement(el), [el, fontsVersion]);
   if (el.curve) return <CurvedText el={el} />;
   const offsetY = el.verticalAlign === 'middle' ? (el.height - layout.height) / 2 : el.verticalAlign === 'bottom' ? el.height - layout.height : 0;
   const em = el.emphasis;
@@ -56,10 +59,10 @@ export function RichText({ el }: { el: TextElement }) {
                     x={x}
                     y={y}
                     text={run.text}
-                    fontFamily={cssFamily(run.style.fontId)}
+                    fontFamily={fontStack(run.style.fontId)}
                     fontSize={el.fontSize}
                     fontStyle={`${run.style.italic ? 'italic ' : ''}${weight}`}
-                    letterSpacing={el.letterSpacing}
+                    letterSpacing={trackingFor(run.text, el.letterSpacing)}
                     lineHeight={el.lineHeight}
                     height={lh}
                     verticalAlign="middle"
@@ -99,10 +102,10 @@ function CurvedText({ el }: { el: TextElement }) {
     <TextPath
       data={data}
       text={applyCase(el.text.replace(/\n/g, ' '), el.textCase)}
-      fontFamily={cssFamily(el.fontId)}
+      fontFamily={fontStack(el.fontId)}
       fontSize={el.fontSize}
       fontStyle={`${el.italic ? 'italic ' : ''}${el.fontWeight}`}
-      letterSpacing={el.letterSpacing}
+      letterSpacing={trackingFor(el.text, el.letterSpacing)}
       fill={el.fill}
       {...(grad ? { fillLinearGradientStartPoint: grad.start, fillLinearGradientEndPoint: grad.end, fillLinearGradientColorStops: grad.stops, fillPriority: 'linear-gradient' } : {})}
       align="center"

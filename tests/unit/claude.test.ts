@@ -37,11 +37,21 @@ describe('Claude provider', () => {
     const body = JSON.parse(init.body as string);
     expect(body).toMatchObject({
       model: 'claude-opus-5-5',
-      system: 'sys',
+      system: [{ type: 'text', text: 'sys', cache_control: { type: 'ephemeral' } }],
       fallbacks: 'default',
       output_config: { effort: 'medium', format: { type: 'json_schema', schema: { type: 'object' } } },
     });
     expect(body.betas).toBeUndefined(); // the SDK moves betas into the header
+  });
+
+  it('runs quick tasks on the fast model at low effort', async () => {
+    await setSecret(CLAUDE_KEY, 'sk-ant-test', false);
+    const fetchMock = vi.fn(async (_url: string, _init: RequestInit) => messageResponse({ content: [{ type: 'text', text: '{}' }] }));
+    vi.stubGlobal('fetch', fetchMock);
+    await createClaudeProvider(() => 'claude-opus-5-5', () => 'claude-haiku-5-5').complete({ system: 's', messages: [{ role: 'user', content: 'x' }], jsonSchema: {}, tier: 'fast' });
+    const body = JSON.parse(fetchMock.mock.calls[0]![1].body as string);
+    expect(body).toMatchObject({ model: 'claude-haiku-5-5', output_config: { effort: 'low' } });
+    expect(body.fallbacks).toBeUndefined();
   });
 
   it('surfaces refusals as a typed error', async () => {

@@ -1,6 +1,6 @@
 import { Group, Image as KImage, Rect, Text } from 'react-konva';
 import type { ImageElement } from '@/model/types';
-import { cssFamily } from '@/styles/fontLoader';
+import { fontStack } from '@/styles/fontLoader';
 import { useImage } from './images';
 import { useFilters } from './filters';
 import { coverCrop, traceMask } from './shapes';
@@ -29,7 +29,7 @@ export function ImageNode({ el }: { el: ImageElement }) {
           align="center"
           verticalAlign="middle"
           text={el.prompt ? `🖼  ${el.prompt}` : el.src ? 'Loading image…' : 'Image'}
-          fontFamily={cssFamily('inter')}
+          fontFamily={fontStack('inter')}
           fontSize={Math.max(14, Math.min(w, h) / 14)}
           fill="#52525B"
         />

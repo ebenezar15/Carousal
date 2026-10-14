@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
-import { CLAUDE_MODELS, listOllamaModels, type OllamaModel, type ProviderPreference } from '@/engine';
+import { CLAUDE_MODELS, type ProviderPreference } from '@/engine';
 import { CLAUDE_KEY, deleteSecret, getSecret, isTauri, setSecret } from '@/secrets';
+import { translationMemory } from '@/storage/translationMemory';
 import { useSettings } from './store';
+import { OllamaSection } from './settings/OllamaSection';
+import { OpenAISection } from './settings/OpenAISection';
 
 const PROVIDERS: { id: ProviderPreference; label: string; hint: string }[] = [
-  { id: 'auto', label: 'Auto', hint: 'Claude if a key is set and you are online, else local Ollama, else built-in rules.' },
+  { id: 'auto', label: 'Auto', hint: 'Claude if a key is set and you are online, else your free/local model, else Ollama, else built-in rules.' },
   { id: 'claude', label: 'Claude (online)', hint: 'Best quality. Needs your Anthropic API key and internet.' },
-  { id: 'ollama', label: 'Ollama (offline)', hint: 'Runs a local model on your machine. Needs Ollama installed.' },
+  { id: 'openai', label: 'Free / local models', hint: 'OpenRouter, Groq or Gemini free tiers, or LM Studio / llama.cpp / Jan on this computer.' },
+  { id: 'ollama', label: 'Ollama (offline)', hint: 'Runs a free local model on your machine. Download models below.' },
   { id: 'rules', label: 'No AI', hint: 'Deterministic rule-based splitter. Always works, fully offline.' },
 ];
 
@@ -15,24 +19,11 @@ export function SettingsPage() {
   const [hasKey, setHasKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [remember, setRemember] = useState(false);
-  const [ollama, setOllama] = useState<OllamaModel[] | null | 'checking'>('checking');
   const desktop = isTauri();
 
   useEffect(() => {
     void getSecret(CLAUDE_KEY).then((k) => setHasKey(Boolean(k)));
   }, []);
-
-  const checkOllama = async () => {
-    setOllama('checking');
-    setOllama(await listOllamaModels(settings.ollamaUrl));
-  };
-  useEffect(() => {
-    let alive = true;
-    void listOllamaModels(settings.ollamaUrl).then((m) => alive && setOllama(m));
-    return () => {
-      alive = false;
-    };
-  }, [settings.ollamaUrl]);
 
   const saveKey = async () => {
     if (!keyInput.trim()) return;
@@ -58,12 +49,21 @@ export function SettingsPage() {
 
       <section className="card space-y-3 p-5">
         <h2 className="font-semibold">Claude</h2>
-        <div>
-          <label className="label" htmlFor="model">Model</label>
-          <select id="model" className="field" value={settings.claudeModel} onChange={(e) => update({ claudeModel: e.target.value })}>
-            {CLAUDE_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
-          </select>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="label" htmlFor="model">Model</label>
+            <select id="model" className="field" value={settings.claudeModel} onChange={(e) => update({ claudeModel: e.target.value })}>
+              {CLAUDE_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="label" htmlFor="fast-model">Model for quick tasks</label>
+            <select id="fast-model" className="field" value={settings.claudeFastModel} onChange={(e) => update({ claudeFastModel: e.target.value })}>
+              {CLAUDE_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+            </select>
+          </div>
         </div>
+        <p className="text-xs text-zinc-500">Quick tasks are translation, captions and headline ideas. Prompts are cached between calls, so repeated work costs less.</p>
         <div>
           <label className="label" htmlFor="key">API key {hasKey && <span className="ml-1 text-emerald-600">● saved</span>}</label>
           <div className="flex gap-2">
@@ -87,44 +87,11 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="card space-y-3 p-5">
-        <h2 className="font-semibold">Ollama (offline AI)</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <label className="label" htmlFor="ollama-url">Server URL</label>
-            <input id="ollama-url" className="field" value={settings.ollamaUrl} onChange={(e) => update({ ollamaUrl: e.target.value })} />
-          </div>
-          <div>
-            <label className="label" htmlFor="ollama-model">Model</label>
-            <select id="ollama-model" className="field" value={settings.ollamaModel} onChange={(e) => update({ ollamaModel: e.target.value })} disabled={!Array.isArray(ollama) || ollama.length === 0}>
-              <option value="">First available</option>
-              {Array.isArray(ollama) && ollama.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
-            </select>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 text-sm" role="status">
-          {ollama === 'checking' ? (
-            <span className="text-zinc-500">Checking…</span>
-          ) : ollama === null ? (
-            <span className="text-amber-700 dark:text-amber-400">Not detected.</span>
-          ) : ollama.length === 0 ? (
-            <span className="text-amber-700 dark:text-amber-400">Running, but no models installed.</span>
-          ) : (
-            <span className="text-emerald-700 dark:text-emerald-400">Connected · {ollama.length} model{ollama.length > 1 ? 's' : ''}</span>
-          )}
-          <button className="btn-ghost px-2 py-1 text-xs" onClick={checkOllama}>Re-check</button>
-        </div>
-        {ollama !== 'checking' && (ollama === null || ollama.length === 0) && (
-          <div className="rounded-lg bg-zinc-100 p-3 text-xs leading-relaxed text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-            <p>1. Install Ollama from ollama.com, then pull a model: <code>ollama pull qwen2.5:7b</code> (or <code>llama3.2</code>, <code>mistral</code>).</p>
-            {!desktop && (
-              <p className="mt-1">
-                2. The browser version also needs Ollama to accept requests from this page. Start it with <code>OLLAMA_ORIGINS={location.origin} ollama serve</code>. The desktop app does not need this.
-              </p>
-            )}
-          </div>
-        )}
-      </section>
+      <OpenAISection />
+
+      <OllamaSection />
+
+      <TranslationMemorySection />
 
       <StockKeys />
 
@@ -167,6 +134,23 @@ function StockKeys() {
           <p className="mt-1 text-xs text-zinc-500">{k.help}</p>
         </div>
       ))}
+    </section>
+  );
+}
+
+function TranslationMemorySection() {
+  const [count, setCount] = useState<number | null>(null);
+  useEffect(() => {
+    void translationMemory.count!().then(setCount);
+  }, []);
+  return (
+    <section className="card space-y-2 p-5">
+      <h2 className="font-semibold">Translation memory</h2>
+      <p className="text-xs text-zinc-500">Every translation you accept is remembered on this device, so the same text is never sent to an AI model twice — re-translating or reusing lines is instant and free.</p>
+      <div className="flex items-center gap-3 text-sm">
+        <span data-testid="tm-count">{count === null ? '…' : `${count} saved translation${count === 1 ? '' : 's'}`}</span>
+        <button className="btn-ghost px-2 py-1 text-xs" disabled={!count} onClick={async () => { if (confirm('Forget all saved translations?')) { await translationMemory.clear!(); setCount(0); } }}>Clear</button>
+      </div>
     </section>
   );
 }

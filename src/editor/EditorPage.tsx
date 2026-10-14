@@ -4,6 +4,7 @@ import { useDocument, useProjects, useRoute } from '@/app/store';
 import { getPreset } from '@/styles';
 import { renderSlide } from '@/export/render';
 const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ default: m.ExportDialog })));
+const TranslateDialog = lazy(() => import('@/app/TranslateDialog').then((m) => ({ default: m.TranslateDialog })));
 import { EditorCanvas } from './EditorCanvas';
 import { Inspector } from './Inspector';
 import { SlideStrip } from './SlideStrip';
@@ -61,6 +62,7 @@ export function EditorPage() {
   const saved = useAutosave();
   const plan = useDocument((s) => s.plan);
   const [exporting, setExporting] = useState(false);
+  const [translating, setTranslating] = useState(false);
   // Below lg the side panels become toggleable drawers so the canvas keeps the screen.
   const [drawer, setDrawer] = useState<'left' | 'right' | null>(null);
   useShortcuts();
@@ -114,9 +116,22 @@ export function EditorPage() {
         ))}
         <span className="ml-auto hidden text-[11px] text-zinc-400 xl:inline">{preset.label} · {preset.width}×{preset.height}</span>
         <button className="btn-ghost px-2 py-1 text-xs lg:hidden" aria-label="Toggle properties" aria-expanded={drawer === 'right'} onClick={() => setDrawer((d) => (d === 'right' ? null : 'right'))}>Properties</button>
+        <button className="btn-ghost px-2 py-1 text-xs" onClick={() => setTranslating(true)}>Translate…</button>
         <button className="btn-primary px-3 py-1 text-xs" onClick={() => setExporting(true)}>Export…</button>
       </div>
       {exporting && <Suspense fallback={null}><ExportDialog project={current} carousel={carousel} plan={plan} initialSlide={ed.slideIndex} onClose={() => setExporting(false)} /></Suspense>}
+      {translating && (
+        <Suspense fallback={null}>
+          <TranslateDialog
+            project={{ ...current, carousel, plan: plan ?? current.plan }}
+            onClose={() => setTranslating(false)}
+            onCreated={async (copy) => {
+              setTranslating(false);
+              useProjects.getState().open(await save(copy));
+            }}
+          />
+        </Suspense>
+      )}
       <div className="relative flex min-h-0 flex-1">
         <aside className={`${drawer === 'left' ? 'absolute inset-y-0 left-0 z-30 flex shadow-2xl' : 'hidden'} w-72 shrink-0 flex-col border-r border-zinc-200 bg-white lg:static lg:flex lg:shadow-none dark:border-zinc-800 dark:bg-zinc-950`}>
           <div className="flex border-b border-zinc-200 dark:border-zinc-800" role="tablist" aria-label="Editor panels">
