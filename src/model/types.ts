@@ -181,8 +181,21 @@ export type SlideElement = TextElement | ShapeElement | LineElement | PathElemen
 
 export interface GradientStop { offset: number; color: string }
 
+export type PatternKind = 'dots' | 'grid' | 'lines' | 'halftone' | 'perspective-grid' | 'diagonal' | 'waves' | 'checker' | 'zigzag' | 'stripes' | 'crosses' | 'rings' | 'triangles';
+
+/** Procedural surface textures (generated in the app; no image files). */
+export type TextureKind = 'paper' | 'linen' | 'canvas' | 'concrete' | 'watercolor' | 'grunge' | 'crumpled' | 'terrazzo' | 'brushed' | 'kraft' | 'riso' | 'stucco';
+
+export interface BackgroundTexture {
+  kind: TextureKind;
+  /** Strength 0..1. */
+  amount: number;
+  /** Tile scale (1 = 512px tiles). */
+  scale?: number;
+}
+
 export interface BackgroundPattern {
-  kind: 'dots' | 'grid' | 'lines' | 'halftone' | 'perspective-grid' | 'diagonal';
+  kind: PatternKind;
   color: string;
   opacity: number;
   /** Cell size in output pixels. */
@@ -196,6 +209,7 @@ interface BackgroundExtras {
   pattern?: BackgroundPattern;
   /** Film grain amount 0..1. */
   noise?: number;
+  texture?: BackgroundTexture;
   /**
    * Panoramic backgrounds: this slide shows window `index` of a background `count` slides wide,
    * so gradients and patterns flow seamlessly when swiping.
@@ -235,7 +249,13 @@ export interface DesignModifiers {
   headlineCase?: 'none' | 'upper';
   headlineWeight?: number;
   emphasis?: 'color' | 'highlight' | 'underline' | 'box' | 'italic';
-  background?: 'solid' | 'gradient' | 'mesh';
+  /** 'plain' = one flat color with no pattern, grain or texture. */
+  background?: 'solid' | 'gradient' | 'mesh' | 'radial' | 'plain';
+  /** Override the style's surface texture ('none' removes it). */
+  texture?: TextureKind | 'none';
+  textureAmount?: number;
+  /** Override the style's background pattern ('none' removes it). */
+  pattern?: PatternKind | 'none';
   panoramic?: boolean;
 }
 

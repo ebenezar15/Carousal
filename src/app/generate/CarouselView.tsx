@@ -29,6 +29,8 @@ const MORE: { dir: MoreDirection; label: string }[] = [
   { dir: 'minimal', label: 'More minimal' },
   { dir: 'colorful', label: 'More colorful' },
   { dir: 'professional', label: 'More professional' },
+  { dir: 'plain', label: 'Plain' },
+  { dir: 'textured', label: 'Textured' },
 ];
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '').slice(0, 40) || 'carousel';

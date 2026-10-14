@@ -12,7 +12,9 @@ import { applyTheme, changePreset, findReplace } from '../ops';
 import { applyBrandKit, removeBrandKit } from '../brand';
 import { IMAGE_ACCEPT, storeImage } from '../assets';
 import { FontPicker } from './TextProps';
-import { ColorField, IconButton, Row, Section, Select, Toggle } from './fields';
+import { ColorField, IconButton, Row, Section, Select, Slider, Toggle } from './fields';
+import { PATTERN_OPTIONS, TEXTURE_OPTIONS } from './bgOptions';
+import type { DesignModifiers } from '@/model/types';
 
 const themeFonts = (t: CarouselTheme) => [t.headingFont, t.bodyFont, ...(getStyle(t.styleId).fonts.accent ? [getStyle(t.styleId).fonts.accent!] : [])];
 
@@ -64,18 +66,45 @@ export function DesignPanel() {
           }}
         />
         <div className="flex flex-wrap gap-1">
-          {(['bold', 'minimal', 'colorful', 'professional'] as MoreDirection[]).map((d) => (
-            <IconButton key={d} label={`Make it more ${d}`} onClick={() => void retheme(makeItMore(theme, d))}>More {d}</IconButton>
+          {(['bold', 'minimal', 'colorful', 'professional', 'plain', 'textured'] as MoreDirection[]).map((d) => (
+            <IconButton key={d} label={d === 'plain' ? 'Make it plain' : d === 'textured' ? 'Next texture' : `Make it more ${d}`} onClick={() => void retheme(makeItMore(theme, d))}>{d === 'plain' ? 'Plain' : d === 'textured' ? 'Textured' : `More ${d}`}</IconButton>
           ))}
         </div>
         <p className="text-[11px] text-zinc-500">
           Theme changes re-lay out generated slides with your current text. Elements you added are kept{manualCount ? `; ${manualCount} hand-made slide${manualCount > 1 ? 's are' : ' is'} left as is` : ''}.
         </p>
       </Section>
+      {canRebuild && <BackgroundSection theme={theme} />}
       <PlatformSection />
       <BrandSection />
       <FindReplaceSection />
     </div>
+  );
+}
+
+/** Background look for every slide: type (incl. plain), texture, pattern and decoration density. */
+function BackgroundSection({ theme }: { theme: CarouselTheme }) {
+  const m = theme.modifiers ?? {};
+  const set = (patch: Partial<DesignModifiers>) => {
+    const modifiers = { ...m, ...patch } as Record<string, unknown>;
+    Object.keys(modifiers).forEach((k) => modifiers[k] === undefined && delete modifiers[k]);
+    void retheme({ ...theme, modifiers: modifiers as DesignModifiers });
+  };
+  return (
+    <Section title="Background (all slides)">
+      <Select
+        label="Background"
+        value={m.background ?? 'style'}
+        options={[['style', 'Style default'], ['plain', 'Plain (flat color only)'], ['solid', 'Solid'], ['gradient', 'Gradient'], ['radial', 'Radial glow'], ['mesh', 'Mesh gradient']]}
+        onChange={(v) => set(v === 'plain' ? { background: 'plain', decoration: 'none' } : { background: v === 'style' ? undefined : (v as DesignModifiers['background']), decoration: m.background === 'plain' ? undefined : m.decoration })}
+      />
+      <Row>
+        <Select label="Texture" value={m.texture ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ...TEXTURE_OPTIONS]} onChange={(v) => set({ texture: v === 'style' ? undefined : (v as DesignModifiers['texture']), textureAmount: undefined })} />
+        <Select label="Pattern" value={m.pattern ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ...PATTERN_OPTIONS]} onChange={(v) => set({ pattern: v === 'style' ? undefined : (v as DesignModifiers['pattern']) })} />
+      </Row>
+      {m.texture && m.texture !== 'none' && <Slider label="Texture strength" value={m.textureAmount ?? 0.5} min={0.05} max={1} step={0.05} onChange={(v) => set({ textureAmount: v })} />}
+      <Select label="Decorations" value={m.decoration ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ['minimal', 'Minimal'], ['normal', 'Normal'], ['rich', 'Rich']]} onChange={(v) => set({ decoration: v === 'style' ? undefined : (v as DesignModifiers['decoration']) })} />
+    </Section>
   );
 }
 

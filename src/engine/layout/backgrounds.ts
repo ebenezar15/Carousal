@@ -1,6 +1,6 @@
 // Background systems: solid, linear/radial/mesh gradients, patterns, grain and panoramic spans.
 // Every tint is checked so body text keeps ≥ 4.5:1 contrast on the lightest/darkest point.
-import type { Background, BackgroundPattern } from '@/model/types';
+import type { Background, BackgroundPattern, TextureKind } from '@/model/types';
 import { contrast, mix } from '@/styles/color';
 import type { Ctx } from './context';
 
@@ -22,6 +22,17 @@ const PATTERNS: Record<string, BackgroundPattern['kind']> = {
   diagonal: 'diagonal',
 };
 
+/** Area-filling patterns read much stronger than line patterns, so they start fainter. */
+const FILLED = new Set<BackgroundPattern['kind']>(['stripes', 'checker', 'triangles']);
+
+/** Texture names used in research/styles.json → procedural texture kinds. */
+const STYLE_TEXTURES: Record<string, TextureKind> = { 'paper-grain': 'paper', 'riso-grain': 'riso', paper: 'paper', grain: 'riso' };
+
+/** Strengths that keep text contrast intact on light and dark palettes (checked by the real-pixel audit). */
+export const DEFAULT_TEXTURE_AMOUNT: Partial<Record<TextureKind, number>> = {
+  paper: 0.4, kraft: 0.4, crumpled: 0.25, linen: 0.5, canvas: 0.5, watercolor: 0.3, concrete: 0.4, stucco: 0.35, grunge: 0.4, terrazzo: 0.55, brushed: 0.3, riso: 0.4,
+};
+
 export function isPanoramic(ctx: Ctx): boolean {
   return ctx.mod.panoramic ?? (ctx.style.layout.panoramic || ctx.style.background.type === 'panoramic');
 }
@@ -30,7 +41,8 @@ export function buildBackground(ctx: Ctx, index: number): Background {
   const { pal, style, mod } = ctx;
   const sb = style.background;
   const text = pal.text;
-  const kind = mod.background ?? (sb.type === 'linear-gradient' || sb.type === 'panoramic' ? 'gradient' : sb.type === 'mesh-gradient' ? 'mesh' : sb.type === 'radial-gradient' ? 'radial' : 'solid');
+  const plain = mod.background === 'plain';
+  const kind = plain ? 'solid' : mod.background ?? (sb.type === 'linear-gradient' || sb.type === 'panoramic' ? 'gradient' : sb.type === 'mesh-gradient' ? 'mesh' : sb.type === 'radial-gradient' ? 'radial' : 'solid');
   const span = isPanoramic(ctx) ? { index, count: ctx.total } : undefined;
 
   let bg: Background;
@@ -57,18 +69,22 @@ export function buildBackground(ctx: Ctx, index: number): Background {
   }
 
   const patternName = typeof sb.pattern === 'string' ? sb.pattern : null;
-  if (patternName && PATTERNS[patternName] && ctx.decoration !== 'none') {
-    const kindP = PATTERNS[patternName]!;
+  const styleP = patternName ? PATTERNS[patternName] : undefined;
+  const kindP = plain || mod.pattern === 'none' ? undefined : mod.pattern ?? (ctx.decoration !== 'none' ? styleP : undefined);
+  if (kindP) {
     bg.pattern = {
       kind: kindP,
       color: kindP === 'lines' ? safeTint(pal.bg, pal.primary, text, 0.6, 1) : text,
       // Kept faint enough that small text on top still clears 4.5:1 (verified by the real-pixel audit test).
-      opacity: kindP === 'perspective-grid' ? 0.08 : Math.min(0.2, Number(sb.patternOpacity ?? 0.1)) * (kindP === 'lines' ? 2.5 : 1),
-      size: Math.round((kindP === 'lines' ? 64 : kindP === 'halftone' ? 22 : 40) * ctx.k),
+      opacity: kindP === 'perspective-grid' ? 0.08 : FILLED.has(kindP) ? 0.05 : Math.min(0.2, Number(sb.patternOpacity ?? 0.1)) * (kindP === 'lines' ? 2.5 : 1),
+      size: Math.round((kindP === 'lines' ? 64 : kindP === 'halftone' ? 22 : FILLED.has(kindP) ? 60 : 40) * ctx.k),
     };
   }
   const noise = typeof sb.noise === 'number' ? sb.noise : sb.texture ? 0.05 : 0;
-  if (noise > 0 && ctx.decoration !== 'none') bg.noise = Math.min(0.12, noise);
+  if (!plain && noise > 0 && ctx.decoration !== 'none') bg.noise = Math.min(0.12, noise);
+  const styleTexture = typeof sb.texture === 'string' ? STYLE_TEXTURES[sb.texture] : undefined;
+  const texture = plain || mod.texture === 'none' ? undefined : mod.texture ?? styleTexture;
+  if (texture) bg.texture = { kind: texture, amount: mod.textureAmount ?? DEFAULT_TEXTURE_AMOUNT[texture] ?? 0.5 };
   if (span) bg.span = span;
   return bg;
 }
