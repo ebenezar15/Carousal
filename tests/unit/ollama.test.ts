@@ -22,7 +22,7 @@ describe('Ollama detection', () => {
     expect(await p.isAvailable()).toBe(false);
   });
 
-  it('sends the JSON schema as the format and returns the message content', async () => {
+  it('asks for JSON mode with the schema in the system prompt and returns the message content', async () => {
     const fetchMock = vi.fn((url: string) =>
       url.endsWith('/api/tags') ? json({ models: [{ name: 'llama3.2:latest' }] }) : json({ message: { content: '{"ok":true}' } }),
     );
@@ -32,7 +32,9 @@ describe('Ollama detection', () => {
     const out = await p.complete({ system: 'sys', messages: [{ role: 'user', content: 'hi' }], jsonSchema: { type: 'object' } });
     expect(out).toBe('{"ok":true}');
     const body = JSON.parse((fetchMock.mock.calls[1] as unknown as [string, RequestInit])[1].body as string);
-    expect(body).toMatchObject({ model: 'llama3.2', stream: false, format: { type: 'object' } });
-    expect(body.messages[0]).toEqual({ role: 'system', content: 'sys' });
+    expect(body).toMatchObject({ model: 'llama3.2', stream: false, format: 'json', options: { num_ctx: 8192, num_predict: 4096 } });
+    expect(body.messages[0].role).toBe('system');
+    expect(body.messages[0].content).toMatch(/^sys\n\nReply with a single JSON object only/);
+    expect(body.messages[0].content).toContain('{"type":"object"}');
   });
 });

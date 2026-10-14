@@ -26,6 +26,36 @@ export function extractJson(text: string): unknown {
   }
 }
 
+type JsonSchemaNode = { type?: string | string[]; anyOf?: JsonSchemaNode[]; properties?: Record<string, JsonSchemaNode>; items?: JsonSchemaNode };
+
+const allows = (node: JsonSchemaNode, type: string): boolean =>
+  node.type === type || (Array.isArray(node.type) && node.type.includes(type)) || !!node.anyOf?.some((n) => allows(n, type));
+
+/**
+ * Fills properties a model left out with their empty value (null, [] or ''), guided by the JSON schema.
+ * Small local models in plain JSON mode often skip fields they have nothing for; filling them avoids a
+ * slow repair round-trip. Enums, numbers and objects are left alone, so real gaps still fail validation.
+ */
+export function fillMissing(schema: JsonSchemaNode, data: unknown): unknown {
+  if (Array.isArray(data)) return schema.items ? data.map((d) => fillMissing(schema.items!, d)) : data;
+  if (!data || typeof data !== 'object' || !schema.properties) return data;
+  const out: Record<string, unknown> = { ...(data as Record<string, unknown>) };
+  for (const [key, prop] of Object.entries(schema.properties)) {
+    if (out[key] === undefined) {
+      if (allows(prop, 'null')) out[key] = null;
+      else if (allows(prop, 'array')) out[key] = [];
+      else if (prop.type === 'string' && !('enum' in prop)) out[key] = '';
+    } else out[key] = fillMissing(prop.anyOf?.find((n) => n.type === 'object') ?? prop, out[key]);
+  }
+  return out;
+}
+
+export const jsonSchemaOf = (schema: z.ZodType): Record<string, unknown> => {
+  const json = z.toJSONSchema(schema) as Record<string, unknown>;
+  delete json.$schema;
+  return json;
+};
+
 export type ParseOutcome = { ok: true; plan: CarouselPlan } | { ok: false; error: string };
 
 export function parsePlan(text: string): ParseOutcome {
@@ -35,7 +65,7 @@ export function parsePlan(text: string): ParseOutcome {
   } catch (e) {
     return { ok: false, error: `Invalid JSON: ${(e as Error).message}` };
   }
-  const result = CarouselPlanSchema.safeParse(data);
+  const result = CarouselPlanSchema.safeParse(fillMissing(jsonSchemaOf(CarouselPlanSchema), data));
   if (!result.success) {
     const issues = result.error.issues.slice(0, 12).map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`);
     return { ok: false, error: issues.join('\n') };
@@ -52,7 +82,7 @@ export function parseWith<T>(schema: z.ZodType<T>, text: string): { ok: true; va
   } catch (e) {
     return { ok: false, error: `Invalid JSON: ${(e as Error).message}` };
   }
-  const r = schema.safeParse(data);
+  const r = schema.safeParse(fillMissing(jsonSchemaOf(schema), data));
   if (r.success) return { ok: true, value: r.data };
   return { ok: false, error: r.error.issues.slice(0, 12).map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`).join('\n') };
 }
@@ -66,8 +96,7 @@ export async function completeJson<T>(
   validate: (text: string) => { ok: true; value: T } | { ok: false; error: string } = (t) => parseWith(schema, t),
   signal?: AbortSignal,
 ): Promise<{ value: T; attempts: number }> {
-  const jsonSchema = z.toJSONSchema(schema) as Record<string, unknown>;
-  delete jsonSchema.$schema;
+  const jsonSchema = jsonSchemaOf(schema);
   const messages: ChatMessage[] = [first];
   let lastError = '';
   for (let attempt = 1; attempt <= MAX_REPAIRS + 1; attempt++) {

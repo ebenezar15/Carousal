@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { extractJson, generatePlan, parsePlan, runProvider } from '@/engine/generate';
 import { planFromText } from '@/engine/rules';
-import { planJsonSchema } from '@/engine/schema';
+import { normalizePlan } from '@/engine/normalize';
+import { emptySlide, planJsonSchema } from '@/engine/schema';
 import { defaultOptions, type AIProvider } from '@/engine/types';
 import { ARTICLE } from './fixtures';
 
@@ -45,6 +46,21 @@ describe('parsePlan', () => {
   });
   it('rejects empty slide lists', () => {
     expect(parsePlan(JSON.stringify({ ...validPlan, slides: [] })).ok).toBe(false);
+  });
+  it('fills optional fields a local model left out, but not missing enums', () => {
+    const sparse = { title: 'T', language: 'en', paletteMood: 'bold', slides: [{ role: 'hook', headline: 'Why 3 releases?' }, { role: 'stat', headline: 'Fewer incidents', stat: { value: '46%', label: 'fewer' } }] };
+    const r = parsePlan(JSON.stringify(sparse));
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.plan.slides[0]).toMatchObject({ body: '', bullets: [], stat: null, quote: null, emphasis: [], layoutHint: '', iconKeywords: [] });
+      expect(r.plan.slides[1]!.stat).toEqual({ value: '46%', label: 'fewer' });
+      expect(r.plan).toMatchObject({ caption: '', hashtags: [] });
+    }
+    const noRole = parsePlan(JSON.stringify({ ...sparse, slides: [{ headline: 'x' }] }));
+    expect(noRole.ok).toBe(false);
+    if (!noRole.ok) expect(noRole.error).toContain('slides.0.role');
+    const noStatLabel = parsePlan(JSON.stringify({ ...sparse, slides: [{ role: 'stat', headline: 'x', stat: { value: '4' } }] }));
+    expect(noStatLabel.ok).toBe(true); // nested strings are filled too
   });
 });
 
@@ -105,5 +121,15 @@ describe('generatePlan provider selection', () => {
     const r = await generatePlan(ARTICLE, defaultOptions, 'auto', [fakeProvider([JSON.stringify(shuffled)])]);
     expect(r.plan.slides[0]!.role).toBe('hook');
     expect(r.plan.slides.at(-1)!.role).toBe('cta');
+  });
+});
+
+describe('normalizePlan', () => {
+  it('drops repeated slides and keeps a hook first and a CTA last', () => {
+    const body = (h: string) => emptySlide('body', h, 'Same text');
+    const plan = { ...validPlan, slides: [body('A'), body('B'), body('A'), body(' a '), body('B'), body('C')] };
+    const out = normalizePlan(plan, defaultOptions);
+    expect(out.slides.map((s) => s.role)).toEqual(['hook', 'body', 'body', 'body', 'cta']);
+    expect(out.slides.slice(1, 4).map((s) => s.headline)).toEqual(['A', 'B', 'C']);
   });
 });

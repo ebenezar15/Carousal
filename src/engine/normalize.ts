@@ -30,7 +30,15 @@ export function targetCount(opts: GenerateOptions): { min: number; max: number }
 }
 
 export function normalizePlan(plan: CarouselPlan, opts: GenerateOptions): CarouselPlan {
-  let slides = plan.slides.filter((s) => s.headline.trim() || s.body.trim() || s.bullets.length || s.stat || s.quote);
+  // Drop empty slides and repeats (small local models sometimes loop over the same few slides).
+  const seen = new Set<string>();
+  let slides = plan.slides.filter((s) => {
+    if (!(s.headline.trim() || s.body.trim() || s.bullets.length || s.stat || s.quote)) return false;
+    const key = [s.headline, s.body, ...s.bullets].map((t) => t.toLowerCase().replace(/\s+/g, ' ').trim()).join('|');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 
   // Exactly one hook at the front and one CTA at the back.
   let hook = slides.find((s) => s.role === 'hook');

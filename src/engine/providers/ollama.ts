@@ -4,6 +4,24 @@ import type { AIProvider, CompletionRequest } from '../types';
 
 export const DEFAULT_OLLAMA_URL = 'http://localhost:11434';
 
+/**
+ * Generation limits for local models. num_ctx: Ollama's default window can cut off our system prompt;
+ * num_predict: a hard stop for the rare model that loops instead of closing the JSON.
+ */
+export const OLLAMA_OPTIONS = { temperature: 0.4, num_ctx: 8192, num_predict: 4096 };
+
+/**
+ * We ask for plain JSON mode with the schema in the prompt instead of `format: <schema>`. Grammar-
+ * constrained decoding emits keys in alphabetical order (role and title come last), which in live
+ * tests made small models write repetitive, role-less slides and run several times longer.
+ */
+export function ollamaSystemPrompt(system: string, jsonSchema: Record<string, unknown>): string {
+  return `${system}
+
+Reply with a single JSON object only, no prose. It must match this JSON Schema, with keys in the order listed:
+${JSON.stringify(jsonSchema)}`;
+}
+
 export interface OllamaModel { name: string; size?: number }
 
 export async function listOllamaModels(baseUrl = DEFAULT_OLLAMA_URL, timeoutMs = 1500): Promise<OllamaModel[] | null> {
@@ -42,9 +60,9 @@ export function createOllamaProvider(getConfig: () => { baseUrl: string; model: 
         body: JSON.stringify({
           model: useModel,
           stream: false,
-          format: req.jsonSchema,
-          options: { temperature: 0.4 },
-          messages: [{ role: 'system', content: req.system }, ...req.messages],
+          format: 'json',
+          options: OLLAMA_OPTIONS,
+          messages: [{ role: 'system', content: ollamaSystemPrompt(req.system, req.jsonSchema) }, ...req.messages],
         }),
       });
       if (!res.ok) throw new Error(`Ollama error ${res.status}: ${await res.text().catch(() => '')}`);
