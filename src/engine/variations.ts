@@ -92,7 +92,10 @@ export function pickVariations(plan: CarouselPlan, opts: { count: number; tone: 
   });
 }
 
-export type MoreDirection = 'bold' | 'minimal' | 'colorful' | 'professional';
+export type MoreDirection = 'bold' | 'minimal' | 'colorful' | 'professional' | 'plain' | 'textured';
+
+/** Order the "Textured" button cycles through. */
+export const TEXTURE_CYCLE = ['paper', 'linen', 'watercolor', 'concrete', 'kraft', 'grunge', 'crumpled', 'terrazzo', 'canvas', 'stucco', 'riso', 'brushed'] as const;
 
 /** Deterministic design transforms behind the "Make it more …" buttons (work offline). */
 export function makeItMore(theme: CarouselTheme, dir: MoreDirection): CarouselTheme {
@@ -126,6 +129,20 @@ export function makeItMore(theme: CarouselTheme, dir: MoreDirection): CarouselTh
       m.decoration = 'rich';
       paletteId = byMood('colorful', style.palettes) ?? byMood('colorful', palettes.map((p) => p.id)) ?? paletteId;
       break;
+    case 'plain':
+      m.background = 'plain';
+      m.decoration = 'none';
+      m.texture = 'none';
+      m.pattern = 'none';
+      m.panoramic = false;
+      break;
+    case 'textured': {
+      const at = TEXTURE_CYCLE.indexOf(m.texture as (typeof TEXTURE_CYCLE)[number]);
+      m.texture = TEXTURE_CYCLE[(at + 1) % TEXTURE_CYCLE.length];
+      m.textureAmount = undefined;
+      if (m.background === 'plain') m.background = undefined;
+      break;
+    }
     case 'professional': {
       m.decoration = 'minimal';
       m.emphasis = 'color';

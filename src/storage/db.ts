@@ -35,6 +35,15 @@ export interface AssetRecord {
   createdAt: number;
 }
 
+/** Translation memory: a source string (with style tags) → its accepted translation, per language. */
+export interface TranslationRecord {
+  key: string;
+  lang: string;
+  source: string;
+  text: string;
+  at: number;
+}
+
 export interface SettingRecord {
   key: string;
   value: unknown;
@@ -46,6 +55,7 @@ export class CarouselDB extends Dexie {
   brandKits!: EntityTable<BrandKit, 'id'>;
   assets!: EntityTable<AssetRecord, 'id'>;
   settings!: EntityTable<SettingRecord, 'key'>;
+  translations!: EntityTable<TranslationRecord, 'key'>;
 
   constructor(name = 'carouselforge') {
     super(name);
@@ -56,6 +66,7 @@ export class CarouselDB extends Dexie {
       assets: 'id, createdAt',
       settings: 'key',
     });
+    this.version(2).stores({ translations: 'key, lang, at' });
   }
 }
 

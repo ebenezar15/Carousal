@@ -2,8 +2,8 @@
 import type { Slide } from '@/model/types';
 import type { PlatformPreset } from '@/styles';
 import { preloadImages } from '@/editor/render/images';
-import { ensureFonts } from '@/styles/fontLoader';
-import { renderSlideToCanvas, slideFonts } from './render';
+import { renderSlideToCanvas } from './render';
+import { ensureSlideFonts } from '@/editor/render/fonts';
 
 export type ImageFormat = 'png' | 'jpg' | 'webp';
 export const MIME: Record<ImageFormat, string> = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' };
@@ -31,7 +31,7 @@ export function webpEncodeSupported(): boolean {
 }
 
 export async function prepareSlides(slides: Slide[]): Promise<void> {
-  await Promise.all([ensureFonts(slideFonts(slides)), preloadImages(slides)]);
+  await Promise.all([ensureSlideFonts(slides), preloadImages(slides)]);
 }
 
 export function canvasToBlob(canvas: HTMLCanvasElement, mime: string, quality?: number): Promise<Blob> {

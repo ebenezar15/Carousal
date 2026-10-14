@@ -76,6 +76,7 @@ Write 3 alternative headlines for slide ${index + 1} (role "${slide.role}"), eac
     HeadlineOptions,
     undefined,
     signal,
+    'fast',
   );
   return value.options.map((o) => o.trim()).filter(Boolean).slice(0, 3);
 }

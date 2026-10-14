@@ -4,13 +4,30 @@ import { removeBackground } from '@/image/bgremove';
 import { tableMetrics } from '../render/TableQR';
 import { assetBlob, IMAGE_ACCEPT, storeImage } from '../assets';
 import * as A from '../actions';
+import { useDocument } from '@/app/store';
+import { useEditor } from '../store';
+import { getPreset } from '@/styles';
 import { ColorField, IconButton, NumberField, Row, Section, Segmented, Select, Slider, Toggle } from './fields';
 
 type Set<T> = (patch: Partial<T>) => void;
 
 export function CommonProps({ el, set, multi }: { el: SlideElement; set: Set<SlideElement>; multi: boolean }) {
+  const carousel = useDocument((s) => s.carousel)!;
+  const slideIndex = useEditor((s) => s.slideIndex);
+  const W = getPreset(carousel.presetId).width;
+  const overRight = el.x + el.width > W + 1 && slideIndex < carousel.slides.length - 1;
+  const overLeft = el.x < -1 && slideIndex > 0;
   return (
     <Section title={multi ? 'Selection' : 'Position & size'}>
+      {!multi && (overRight || overLeft) && (
+        <div className="rounded-md bg-brand-50 p-2 text-[11px] text-brand-800 dark:bg-brand-500/10 dark:text-brand-100">
+          This element crosses the slide edge.
+          <div className="mt-1 flex flex-wrap gap-1">
+            {overRight && <IconButton label="Continue onto next slide" onClick={() => A.continueSelection('next')}>Continue on next slide →</IconButton>}
+            {overLeft && <IconButton label="Continue onto previous slide" onClick={() => A.continueSelection('prev')}>← Continue on previous slide</IconButton>}
+          </div>
+        </div>
+      )}
       {!multi && (
         <>
           <Row>

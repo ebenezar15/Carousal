@@ -7,6 +7,7 @@ import { useEditor } from '../store';
 import { IMAGE_ACCEPT, imageElement, storeImage } from '../assets';
 import { importStockPhoto, searchStock, stockProviders, type StockPhoto } from '../stock';
 import { Section } from './fields';
+import { GRAPHICS, GRAPHIC_GROUPS, TEXT_GRAPHICS, graphic, textGraphic } from '../graphics';
 
 interface EmojiGroup { name: string; emojis: { emoji: string; name: string }[] }
 
@@ -57,6 +58,33 @@ export function InsertPanel() {
             </button>
           ))}
         </div>
+      </Section>
+      <Section title="Text graphics">
+        <div className="grid grid-cols-2 gap-1">
+          {TEXT_GRAPHICS.map((t) => (
+            <button key={t.id} className={tile} onClick={() => A.addElement(textGraphic(env, t.id), { behind: t.behind })}>{t.label}</button>
+          ))}
+        </div>
+      </Section>
+      <Section title="Graphics">
+        {GRAPHIC_GROUPS.map((group) => (
+          <div key={group} className="mb-2">
+            <p className="mb-1 text-[11px] text-zinc-500">{group}</p>
+            <div className="grid grid-cols-5 gap-1">
+              {GRAPHICS.filter((g) => g.group === group).map((g) => (
+                <button key={g.id} title={g.label} aria-label={`Add ${g.label}`} className="flex aspect-square items-center justify-center rounded-md border border-zinc-200 p-1 hover:border-brand-500 dark:border-zinc-700" onClick={() => A.addElement(graphic(env, g.id))}>
+                  <svg viewBox={`0 0 ${g.viewBox[0]} ${g.viewBox[1]}`} className="max-h-full max-w-full" aria-hidden>
+                    {g.parts.map((p, i) =>
+                      p.d.map((d, j) => (
+                        <path key={`${i}-${j}`} d={d} fill={p.fill ? env.pal[p.fill] : 'none'} stroke={p.stroke ? env.pal[p.stroke] : 'none'} strokeWidth={p.strokeWidth ?? 0} strokeLinecap="round" strokeLinejoin="round" opacity={p.opacity ?? 1} />
+                      )),
+                    )}
+                  </svg>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </Section>
       <Section title="Shapes & lines">
         <div className="grid grid-cols-3 gap-1">

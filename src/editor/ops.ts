@@ -291,6 +291,18 @@ export function syncPlanText(plan: CarouselPlan, slideIndex: number, slide: Slid
  * Re-lays out the carousel with a new theme from the (synced) plan. Hand-made slides are kept as they
  * are, and elements the user added (no engine slot) are carried over onto the rebuilt slides.
  */
+/**
+ * Continues an element that crosses a slide edge onto the neighbouring slide: the copy sits one slide
+ * width further along, so both halves line up when swiping (continuous carousels).
+ */
+export function continueAcross(doc: Doc, slideIndex: number, id: string, direction: 'next' | 'prev', slideWidth: number): Doc {
+  const target = slideIndex + (direction === 'next' ? 1 : -1);
+  const el = doc.carousel.slides[slideIndex]?.elements.find((e) => e.id === id);
+  if (!el || target < 0 || target >= doc.carousel.slides.length) return doc;
+  const copy = cloneElement(el, direction === 'next' ? -slideWidth : slideWidth, 0);
+  return addElements(doc, target, [{ ...copy, name: `${el.name ?? el.kind} (continued)` }]);
+}
+
 export function applyTheme(doc: Doc, theme: CarouselTheme, presetId = doc.carousel.presetId): Doc {
   const rebuilt = buildCarousel({ plan: doc.plan, presetId, theme });
   const slides = rebuilt.slides.map((s, i) => {
@@ -298,7 +310,18 @@ export function applyTheme(doc: Doc, theme: CarouselTheme, presetId = doc.carous
     if (!old) return s;
     if (old.manual) return old;
     const userEls = old.elements.filter((e) => !e.slot);
-    return { ...s, id: old.id, elements: [...s.elements, ...userEls] };
+    // Animations set on generated elements carry over to the rebuilt element in the same slot.
+    const animBySlot = new Map<string, NonNullable<SlideElement['anim']>[]>();
+    old.elements.forEach((e) => e.slot && e.anim && animBySlot.set(e.slot, [...(animBySlot.get(e.slot) ?? []), e.anim]));
+    const seen = new Map<string, number>();
+    const rebuiltEls = s.elements.map((e) => {
+      if (!e.slot || !animBySlot.has(e.slot)) return e;
+      const n = seen.get(e.slot) ?? 0;
+      seen.set(e.slot, n + 1);
+      const list = animBySlot.get(e.slot)!;
+      return { ...e, anim: list[Math.min(n, list.length - 1)] };
+    });
+    return { ...s, id: old.id, elements: [...rebuiltEls, ...userEls] };
   });
   return { ...doc, carousel: { ...rebuilt, id: doc.carousel.id, slides } };
 }

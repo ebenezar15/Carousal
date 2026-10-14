@@ -52,10 +52,10 @@ test('generates design variations offline, regenerates, persists and exports exa
   // Make it more … works offline.
   await page.getByRole('button', { name: 'Bolder' }).click();
   await page.getByRole('button', { name: 'More minimal' }).click();
-  const seamless = page.getByLabel('Seamless background');
-  await expect(seamless).toBeEnabled();
-  await seamless.click();
-  await expect(seamless).toBeChecked(); // re-layout is async; state reflects the rebuilt carousel
+  const continuous = page.getByLabel('Continuous slides');
+  await expect(continuous).toBeEnabled();
+  await continuous.selectOption('ribbon');
+  await expect(continuous).toHaveValue('ribbon'); // re-layout is async; state reflects the rebuilt carousel
 
   // New designs re-picks the set.
   await page.getByRole('button', { name: '↻ New designs' }).click();

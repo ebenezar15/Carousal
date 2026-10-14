@@ -86,5 +86,26 @@ for (const r of ['hook', 'intro', 'body', 'list', 'step', 'stat', 'quote', 'comp
 
 for (const s of stylesJson.styles) Object.keys(dp.roles || {}).forEach(r => check(s.roleLayouts[r], `style ${s.id} has no layout for role ${r}`));
 
+// Script fallback fonts (multi-language text in the design's own style)
+const scriptFonts = load('research/script-fonts.json');
+const generatedScripts = existsSync(join(root, 'src/styles/generated/scriptFonts.json')) ? load('src/styles/generated/scriptFonts.json') : null;
+check(generatedScripts, 'src/styles/generated/scriptFonts.json missing — run npm run fonts:fetch-scripts');
+const scriptLangs = new Set();
+for (const s of scriptFonts.scripts) {
+  for (const cat of ['sans-serif', 'serif', 'display', 'handwriting']) {
+    const pkg = s.fonts[cat];
+    check(pkg, `script ${s.id} has no ${cat} font`);
+    const gen = generatedScripts?.packages?.[pkg];
+    check(gen, `script ${s.id}: ${pkg} not bundled`);
+    if (gen) {
+      check(gen.faces.some((f) => f.subset === s.subset), `script ${s.id}: ${pkg} lacks the ${s.subset} subset`);
+      gen.faces.forEach((f) => check(existsSync(join(root, 'assets/fonts', f.file)), `missing font file ${f.file}`));
+      check(existsSync(join(root, 'assets/fonts/script', pkg, 'LICENSE')), `missing LICENSE for ${pkg}`);
+      check(/OFL|Apache/i.test(gen.license), `${pkg} license ${gen.license} is not OFL/Apache`);
+    }
+  }
+  s.langs.forEach((l) => { check(!scriptLangs.has(l), `language ${l} mapped to two scripts`); scriptLangs.add(l); });
+}
+
 if (errors.length) { console.error(`✗ ${errors.length} problem(s):\n- ` + errors.join('\n- ')); process.exit(1); }
-console.log(`✓ research valid: ${presets.length} presets, ${fontsJson.fonts.length} fonts, ${fontsJson.pairings.length} pairings, ${palettes.length} palettes, ${stylesJson.styles.length} styles`);
+console.log(`✓ research valid: ${presets.length} presets, ${fontsJson.fonts.length} fonts, ${fontsJson.pairings.length} pairings, ${palettes.length} palettes, ${stylesJson.styles.length} styles, ${scriptFonts.scripts.length} script fallbacks`);

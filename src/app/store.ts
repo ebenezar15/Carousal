@@ -6,21 +6,41 @@ import type { Carousel, Project } from '@/model/types';
 import type { CarouselPlan } from '@/engine/schema';
 import type { Doc } from '@/editor/ops';
 import { projectsRepo, settingsRepo } from '@/storage/repo';
-import { DEFAULT_CLAUDE_MODEL, DEFAULT_OLLAMA_URL, type ProviderPreference } from '@/engine';
+import { DEFAULT_CLAUDE_FAST_MODEL, DEFAULT_CLAUDE_MODEL, DEFAULT_OLLAMA_URL, type OpenAIPresetId, type ProviderPreference } from '@/engine';
 
 export interface Settings {
   provider: ProviderPreference;
   claudeModel: string;
+  /** Model for quick tasks (translation, captions, headline ideas). */
+  claudeFastModel: string;
   ollamaUrl: string;
   ollamaModel: string;
+  /** '' = same as ollamaModel. */
+  ollamaFastModel: string;
+  /** OpenAI-compatible "free / local models" provider. */
+  openaiPreset: OpenAIPresetId;
+  /** '' = the preset's URL. */
+  openaiBaseUrl: string;
+  openaiModel: string;
+  /** '' = same as openaiModel. */
+  openaiFastModel: string;
+  /** Font override per script (script id → font id); '' or missing = match each design. */
+  scriptFonts: Record<string, string>;
   theme: 'system' | 'light' | 'dark';
 }
 
 export const defaultSettings: Settings = {
   provider: 'auto',
   claudeModel: DEFAULT_CLAUDE_MODEL,
+  claudeFastModel: DEFAULT_CLAUDE_FAST_MODEL,
   ollamaUrl: DEFAULT_OLLAMA_URL,
   ollamaModel: '',
+  ollamaFastModel: '',
+  openaiPreset: 'openrouter',
+  openaiBaseUrl: '',
+  openaiModel: '',
+  openaiFastModel: '',
+  scriptFonts: {},
   theme: 'system',
 };
 

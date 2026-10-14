@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Arc, Circle, Group, Line, Rect, Text } from 'react-konva';
 import type { ChartElement } from '@/model/types';
-import { cssFamily } from '@/styles/fontLoader';
+import { fontStack } from '@/styles/fontLoader';
 import { contrast } from '@/styles/color';
 
 /** Rounds an axis maximum up to 1/2/2.5/5 × 10ⁿ so ticks are tidy numbers. */
@@ -16,7 +16,7 @@ const fmt = (v: number) => (Math.abs(v) >= 1000 ? `${Math.round(v / 100) / 10}k`
 
 /** Bar / line / pie / donut chart drawn from editable data, in element-local coords. */
 export function ChartNode({ el }: { el: ChartElement }) {
-  const fam = cssFamily(el.fontId);
+  const fam = fontStack(el.fontId);
   const fs = el.fontSize;
   const color = (i: number) => el.series[i]?.color ?? el.colors[i % el.colors.length] ?? '#5B5BF0';
   const legendH = el.showLegend && (el.chartType === 'pie' || el.chartType === 'donut' ? el.labels.length : el.series.length) > 1 ? fs * 1.8 : 0;
@@ -116,7 +116,7 @@ function Legend({ el, items, y }: { el: ChartElement; items: [string, string][];
       {items.map(([label, c], i) => (
         <Fragment key={i}>
           <Rect x={i * itemW} y={fs * 0.15} width={fs * 0.8} height={fs * 0.8} fill={c} cornerRadius={fs * 0.2} />
-          <Text x={i * itemW + fs * 1.2} y={0} width={itemW - fs * 1.4} text={label} fontFamily={cssFamily(el.fontId)} fontSize={fs} fill={el.textColor} wrap="none" ellipsis />
+          <Text x={i * itemW + fs * 1.2} y={0} width={itemW - fs * 1.4} text={label} fontFamily={fontStack(el.fontId)} fontSize={fs} fill={el.textColor} wrap="none" ellipsis />
         </Fragment>
       ))}
     </Group>

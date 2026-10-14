@@ -1,8 +1,9 @@
 // Slideshow video export: MP4/WebM via WebCodecs (Mediabunny) and animated GIF (gifenc).
 // Slides hold for `hold` seconds, then transition to the next over `transition` seconds.
 import type { Slide } from '@/model/types';
-import { renderSlideToCanvas } from './render';
+import { FrameRenderer } from './render';
 import { prepareSlides } from './images';
+import { frameOf, introDuration, needsLiveHold, slideHasAnimation } from '@/editor/animation';
 
 export type Transition = 'fade' | 'slide' | 'zoom' | 'none';
 
@@ -16,13 +17,36 @@ export interface VideoOptions {
   signal?: AbortSignal;
 }
 
-/** Renders slides at the video size (downscaled when needed so encoders accept it). */
-async function frames(slides: Slide[], w: number, h: number, outW: number): Promise<HTMLCanvasElement[]> {
+/**
+ * One slide's segment of the video: animated slides play their entrances first (`intro` seconds), then
+ * hold; slides with looping animations are rendered live for the whole segment.
+ */
+export class SlideClip {
+  readonly intro: number;
+  readonly duration: number;
+  private readonly live: boolean;
+  private still: HTMLCanvasElement | null = null;
+  private first: HTMLCanvasElement | null = null;
+  constructor(readonly slide: Slide, private renderer: FrameRenderer, private unit: number, hold: number) {
+    this.intro = slideHasAnimation(slide) ? introDuration(slide) : 0;
+    this.duration = this.intro + hold;
+    this.live = needsLiveHold(slide);
+  }
+  private draw(t: number) {
+    return this.renderer.render(frameOf(this.slide, t, this.unit));
+  }
+  /** The slide at time t (seconds into its segment). */
+  at(t: number): HTMLCanvasElement {
+    if (t <= 0 && this.intro > 0) return (this.first ??= this.draw(0));
+    if (this.live || t < this.intro) return this.draw(t);
+    return (this.still ??= this.draw(Math.max(t, this.intro)));
+  }
+}
+
+async function clips(slides: Slide[], w: number, h: number, outW: number, hold: number): Promise<{ segs: SlideClip[]; done(): void }> {
   await prepareSlides(slides);
-  return slides.map((s) => {
-    const src = renderSlideToCanvas(s, w, h, outW / w);
-    return src;
-  });
+  const renderer = new FrameRenderer(w, h, outW / w);
+  return { segs: slides.map((s) => new SlideClip(s, renderer, w / 1080, hold)), done: () => renderer.dispose() };
 }
 
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -85,27 +109,38 @@ export async function slidesToVideo(slides: Slide[], o: VideoOptions): Promise<V
   output.addVideoTrack(source, { frameRate: fps });
   await output.start();
 
-  const imgs = await frames(slides, o.width, o.height, size.width);
-  const trans = o.transition === 'none' ? 0 : o.transitionDuration;
-  const total = imgs.length * o.hold + (imgs.length - 1) * trans;
+  const { segs, done: disposeFrames } = await clips(slides, o.width, o.height, size.width, o.hold);
+  const trans = o.transition === 'none' || segs.length < 2 ? 0 : o.transitionDuration;
+  const starts: number[] = [];
+  let acc = 0;
+  for (const c of segs) {
+    starts.push(acc);
+    acc += c.duration + trans;
+  }
+  const total = acc - trans;
   const totalFrames = Math.round(total * fps);
   let t = 0;
   for (let f = 0; f < totalFrames; f++) {
     if (o.signal?.aborted) {
+      disposeFrames();
       await output.cancel();
       throw new DOMException('Export cancelled', 'AbortError');
     }
     const time = f / fps;
-    // Which segment are we in?
-    const seg = o.hold + trans;
-    const i = Math.min(imgs.length - 1, Math.floor(time / seg));
-    const local = time - i * seg;
-    if (local < o.hold || i === imgs.length - 1) drawTransition(ctx, imgs[i]!, imgs[i]!, 1, 'none');
-    else drawTransition(ctx, imgs[i]!, imgs[i + 1]!, (local - o.hold) / trans, o.transition);
+    let i = segs.length - 1;
+    while (i > 0 && time < starts[i]!) i--;
+    const local = time - starts[i]!;
+    const clip = segs[i]!;
+    if (local < clip.duration || i === segs.length - 1) drawTransition(ctx, clip.at(local), clip.at(local), 1, 'none');
+    else drawTransition(ctx, clip.at(clip.duration), segs[i + 1]!.at(0), (local - clip.duration) / trans, o.transition);
     await source.add(time, 1 / fps);
     t = time;
-    if (f % 15 === 0) o.onProgress?.(f / totalFrames);
+    if (f % 15 === 0) {
+      o.onProgress?.(f / totalFrames);
+      await new Promise((r) => setTimeout(r, 0));
+    }
   }
+  disposeFrames();
   await output.finalize();
   o.onProgress?.(1);
   return { blob: new Blob([target.buffer!], { type: mp4 ? 'video/mp4' : 'video/webm' }), ext: mp4 ? 'mp4' : 'webm', codec, ...size, duration: t };
@@ -114,7 +149,7 @@ export async function slidesToVideo(slides: Slide[], o: VideoOptions): Promise<V
 export async function slidesToGif(slides: Slide[], o: VideoOptions & { maxWidth?: number; fps?: number }): Promise<Blob> {
   const { GIFEncoder, quantize, applyPalette } = await import('gifenc');
   const size = videoSize(o.width, o.height, o.maxWidth ?? 540);
-  const imgs = await frames(slides, o.width, o.height, size.width);
+  const { segs, done: disposeFrames } = await clips(slides, o.width, o.height, size.width, o.hold);
   const canvas = document.createElement('canvas');
   canvas.width = size.width;
   canvas.height = size.height;
@@ -122,27 +157,40 @@ export async function slidesToGif(slides: Slide[], o: VideoOptions & { maxWidth?
   const gif = GIFEncoder();
   const fps = o.fps ?? 12;
   const transFrames = o.transition === 'none' ? 0 : Math.max(2, Math.round(o.transitionDuration * fps));
-  const steps = imgs.length + (imgs.length - 1) * transFrames;
+  const introFrames = segs.map((c) => Math.round(c.intro * fps));
+  const steps = segs.length + introFrames.reduce((a, b) => a + b, 0) + (segs.length - 1) * transFrames;
   let done = 0;
   const write = (delayMs: number) => {
     const { data } = ctx.getImageData(0, 0, size.width, size.height);
     const palette = quantize(data, 256);
     gif.writeFrame(applyPalette(data, palette), size.width, size.height, { palette, delay: Math.round(delayMs) });
   };
-  for (let i = 0; i < imgs.length; i++) {
-    if (o.signal?.aborted) throw new DOMException('Export cancelled', 'AbortError');
-    drawTransition(ctx, imgs[i]!, imgs[i]!, 1, 'none');
-    write(o.hold * 1000); // one frame held for the whole duration keeps GIFs small
+  for (let i = 0; i < segs.length; i++) {
+    if (o.signal?.aborted) {
+      disposeFrames();
+      throw new DOMException('Export cancelled', 'AbortError');
+    }
+    const clip = segs[i]!;
+    // Entrance animation frame by frame, then the finished slide held as one long frame (keeps GIFs small).
+    for (let f = 0; f < introFrames[i]!; f++) {
+      drawTransition(ctx, clip.at(f / fps), clip.at(f / fps), 1, 'none');
+      write(1000 / fps);
+      o.onProgress?.(++done / steps);
+      await new Promise((r) => setTimeout(r, 0));
+    }
+    drawTransition(ctx, clip.at(clip.duration), clip.at(clip.duration), 1, 'none');
+    write(o.hold * 1000);
     o.onProgress?.(++done / steps);
-    if (i < imgs.length - 1) {
+    if (i < segs.length - 1) {
       for (let f = 1; f <= transFrames; f++) {
-        drawTransition(ctx, imgs[i]!, imgs[i + 1]!, f / (transFrames + 1), o.transition);
+        drawTransition(ctx, clip.at(clip.duration), segs[i + 1]!.at(0), f / (transFrames + 1), o.transition);
         write(1000 / fps);
         o.onProgress?.(++done / steps);
         await new Promise((r) => setTimeout(r, 0)); // keep the UI responsive
       }
     }
   }
+  disposeFrames();
   gif.finish();
   return new Blob([gif.bytes() as BlobPart], { type: 'image/gif' });
 }

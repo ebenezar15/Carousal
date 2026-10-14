@@ -11,10 +11,12 @@ export const CLAUDE_MODELS = [
   { id: 'claude-haiku-5-5', label: 'Claude Haiku 5.5 (fastest, cheapest)' },
 ] as const;
 export const DEFAULT_CLAUDE_MODEL = 'claude-opus-5-5';
+/** Small, well-defined jobs (translation, captions, headline ideas) run here by default: ~40× cheaper. */
+export const DEFAULT_CLAUDE_FAST_MODEL = 'claude-haiku-5-5';
 
 export class ClaudeRefusalError extends Error {}
 
-export function createClaudeProvider(getModel: () => string): AIProvider {
+export function createClaudeProvider(getModel: () => string, getFastModel: () => string = getModel): AIProvider {
   return {
     id: 'claude',
     label: 'Claude (online)',
@@ -37,14 +39,17 @@ export function createClaudeProvider(getModel: () => string): AIProvider {
         fetch: appFetch as typeof fetch,
         maxRetries: 2,
       });
-      const model = getModel();
+      const fast = req.tier === 'fast';
+      const model = (fast ? getFastModel() : getModel()) || DEFAULT_CLAUDE_MODEL;
       const response = await client.beta.messages.create(
         {
           model,
           max_tokens: 16000,
-          system: req.system,
+          // The system prompt is identical across calls of a kind (plans, rewrites, translation batches),
+          // so it is cached: repeat calls within 5 minutes read it at a fraction of the input price.
+          system: [{ type: 'text', text: req.system, cache_control: { type: 'ephemeral' } }],
           messages: req.messages,
-          output_config: { effort: 'medium', format: { type: 'json_schema', schema: req.jsonSchema } },
+          output_config: { effort: fast ? 'low' : 'medium', format: { type: 'json_schema', schema: req.jsonSchema } },
           // Server-side fallback re-runs a declined request on a suitable model instead of failing.
           ...(model === 'claude-haiku-5-5' ? {} : { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }),
         },

@@ -95,12 +95,13 @@ export async function completeJson<T>(
   schema: z.ZodType<T>,
   validate: (text: string) => { ok: true; value: T } | { ok: false; error: string } = (t) => parseWith(schema, t),
   signal?: AbortSignal,
+  tier: 'quality' | 'fast' = 'quality',
 ): Promise<{ value: T; attempts: number }> {
   const jsonSchema = jsonSchemaOf(schema);
   const messages: ChatMessage[] = [first];
   let lastError = '';
   for (let attempt = 1; attempt <= MAX_REPAIRS + 1; attempt++) {
-    const text = await provider.complete({ system, messages, jsonSchema, signal });
+    const text = await provider.complete({ system, messages, jsonSchema, signal, tier });
     const parsed = validate(text);
     if (parsed.ok) return { value: parsed.value, attempts: attempt };
     lastError = parsed.error;

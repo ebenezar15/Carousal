@@ -5,6 +5,34 @@ import type { SlideRole } from '@/styles/types';
 
 export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image' | 'group' | 'chart' | 'table' | 'qr';
 
+export type EnterAnimation = 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom' | 'pop' | 'rotate' | 'wipe' | 'drop';
+/** Word/letter animations for text (typewriter, word by word…). */
+export type TextAnimation = 'none' | 'typewriter' | 'word-fade' | 'word-rise' | 'word-pop' | 'word-slide' | 'highlight-sweep';
+export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink';
+
+/** How an element animates in video/GIF exports and the animation preview (seconds). */
+export interface ElementAnimation {
+  enter: EnterAnimation;
+  /** Start time on the slide's timeline. */
+  delay: number;
+  duration: number;
+  text?: TextAnimation;
+  loop?: LoopAnimation;
+}
+
+/** Render-only pose computed for one animation frame (never saved). */
+export interface Pose {
+  dx: number;
+  dy: number;
+  scale: number;
+  rotate: number;
+  opacity: number;
+  /** 0..1 horizontal reveal (wipe). */
+  clip?: number;
+  /** Text animation in progress: kind and 0..1 progress. */
+  text?: { kind: TextAnimation; progress: number };
+}
+
 export interface ElementBase {
   id: string;
   kind: ElementKind;
@@ -19,6 +47,9 @@ export interface ElementBase {
   hidden?: boolean;
   /** Semantic slot the layout engine filled, e.g. 'headline' or 'slide-number'. Lets "swap theme" re-flow content. */
   slot?: string;
+  anim?: ElementAnimation;
+  /** Set only on frames produced by the animation timeline (see editor/animation.ts). */
+  pose?: Pose;
 }
 
 export interface TextEmphasis {
@@ -72,6 +103,12 @@ export interface TextElement extends ElementBase {
   curve?: number;
   /** Gradient fill across the text box (overrides `fill`). */
   fillGradient?: LinearGradient;
+  /** 3D extrusion / long shadow: `depth` stacked copies toward `angle` (degrees, 45 = down-right). */
+  extrude?: { depth: number; color: string; angle: number };
+  /** RGB-split glitch: two offset copies in contrasting colors behind the text. */
+  glitch?: { colors: [string, string]; offset: number };
+  /** Echo / stacked outline copies behind the text (`step` px apart vertically). */
+  echo?: { count: number; step: number; color: string };
 }
 
 export interface ShapeElement extends ElementBase {
@@ -181,8 +218,21 @@ export type SlideElement = TextElement | ShapeElement | LineElement | PathElemen
 
 export interface GradientStop { offset: number; color: string }
 
+export type PatternKind = 'dots' | 'grid' | 'lines' | 'halftone' | 'perspective-grid' | 'diagonal' | 'waves' | 'checker' | 'zigzag' | 'stripes' | 'crosses' | 'rings' | 'triangles';
+
+/** Procedural surface textures (generated in the app; no image files). */
+export type TextureKind = 'paper' | 'linen' | 'canvas' | 'concrete' | 'watercolor' | 'grunge' | 'crumpled' | 'terrazzo' | 'brushed' | 'kraft' | 'riso' | 'stucco';
+
+export interface BackgroundTexture {
+  kind: TextureKind;
+  /** Strength 0..1. */
+  amount: number;
+  /** Tile scale (1 = 512px tiles). */
+  scale?: number;
+}
+
 export interface BackgroundPattern {
-  kind: 'dots' | 'grid' | 'lines' | 'halftone' | 'perspective-grid' | 'diagonal';
+  kind: PatternKind;
   color: string;
   opacity: number;
   /** Cell size in output pixels. */
@@ -196,6 +246,7 @@ interface BackgroundExtras {
   pattern?: BackgroundPattern;
   /** Film grain amount 0..1. */
   noise?: number;
+  texture?: BackgroundTexture;
   /**
    * Panoramic backgrounds: this slide shows window `index` of a background `count` slides wide,
    * so gradients and patterns flow seamlessly when swiping.
@@ -235,9 +286,19 @@ export interface DesignModifiers {
   headlineCase?: 'none' | 'upper';
   headlineWeight?: number;
   emphasis?: 'color' | 'highlight' | 'underline' | 'box' | 'italic';
-  background?: 'solid' | 'gradient' | 'mesh';
+  /** 'plain' = one flat color with no pattern, grain or texture. */
+  background?: 'solid' | 'gradient' | 'mesh' | 'radial' | 'plain';
+  /** Override the style's surface texture ('none' removes it). */
+  texture?: TextureKind | 'none';
+  textureAmount?: number;
+  /** Override the style's background pattern ('none' removes it). */
+  pattern?: PatternKind | 'none';
   panoramic?: boolean;
+  /** What flows across slide seams when panoramic (continuous) mode is on. */
+  continuous?: ContinuousStyle;
 }
+
+export type ContinuousStyle = 'flow' | 'ribbon' | 'path' | 'blocks' | 'word';
 
 export interface CarouselTheme {
   styleId: string;
@@ -286,4 +347,6 @@ export interface Project {
   altText?: string[];
   /** Platform the caption was written for. */
   captionPlatform?: string;
+  /** Set on translated copies: the source project and the target language (BCP-47). */
+  translation?: { fromId: string; fromName: string; lang: string; engine: string };
 }

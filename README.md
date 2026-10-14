@@ -2,8 +2,15 @@
 
 Turn raw content — notes, a blog post, a document, a URL or bullet points — into polished social media carousels. CarouselForge generates several distinct designs at once, gives you a full editor to change anything, checks readability, and exports exact-size files for every major platform. It runs as a web app/PWA and as a desktop app (Tauri), and **everything except cloud AI, URL import and stock photos works offline**.
 
-- **Generate:** paste text, upload `.txt/.md/.docx/.pdf`, or import a URL. Claude (online), a local Ollama model (offline) or built-in rules (no AI) write the slides. You get 3–6 designs side by side, each with its own style system, layout logic and font pairing.
+- **Generate:** paste text, upload `.txt/.md/.docx/.pdf`, or import a URL. The slides are written by Claude (online), a free model (OpenRouter, Groq, Gemini, or LM Studio/llama.cpp on your computer), a local Ollama model (offline, downloadable from inside the app), or built-in rules (no AI). You get 3–6 designs side by side, each with its own style system, layout logic and font pairing.
 - **Edit:** a canvas editor with layers, snapping, rulers, grouping, unlimited undo, rich text, fonts (bundled, installed, uploaded), shapes, icons, emoji, charts, tables, QR codes, images with crop/mask/filters and offline background removal, gradient/mesh/image/pattern backgrounds, brand kits, find & replace and templates.
+- **Design extras:**
+  - 12 procedural textures, 13 patterns, and plain backgrounds.
+  - 33 graphics: doodles, sparkles, bursts, stickers.
+  - Text effects: neon, outline, 3D, retro, glitch, echo, sticker, highlighter.
+  - Continuous slides, with graphics and photos that flow across seams.
+  - Animations: entrances, typewriter, word-by-word, loops.
+- **Translate:** turn a finished carousel into Tamil, Hindi, Arabic, Japanese or 30+ other languages with the exact same design. Fonts, colors, effects and emphasized words carry over, and matching fonts for each script are bundled offline. You review every line before the copy is created.
 - **Check:** contrast is measured on the actual pixels behind each text box. The checker also flags text too small for phones, platform safe zones, missing alt text and slide limits.
 - **Publish:** PNG/JPG/WebP (1×/2×), ZIP, LinkedIn PDF, MP4/GIF slideshows, a caption with hashtags and per-slide alt text, and portable `.carousel` project files.
 
@@ -17,6 +24,8 @@ npm run dev            # http://localhost:5173
 ```
 
 On first launch, pick one of the sample topics to see the whole flow without any setup.
+
+**Just want to install the app?** Follow the step-by-step [installation guide](docs/INSTALL.md).
 
 ### Desktop app (Tauri 2)
 
@@ -38,12 +47,13 @@ How the desktop app differs from the browser version:
 
 ## AI providers
 
-Choose one in **Settings**. *Auto* tries Claude, then Ollama, then the built-in rules.
+Choose one in **Settings**. *Auto* tries Claude, then your free/local model (once set up), then Ollama, then the built-in rules.
 
 | Provider | Needs | Notes |
 |---|---|---|
 | **Claude** | Your Anthropic API key, internet | Default model `claude-opus-5-5`; Sonnet 5.5 and Haiku 5.5 can be picked in Settings. Output must match a schema; invalid output is repaired, and on failure the app falls back to rules. |
-| **Ollama** | Ollama running locally | Fully offline after the model download. Detected automatically at `http://localhost:11434`. |
+| **Free / local models** | A free key (OpenRouter, Groq, Google Gemini) or a local server (LM Studio, llama.cpp, Jan) | Any OpenAI-compatible API. The model list loads live; OpenRouter shows its free models only. A *Test connection* button checks the setup. |
+| **Ollama** | Ollama running locally | Fully offline after the model download. Detected automatically at `http://localhost:11434`. Models can be downloaded and deleted from **Settings → Ollama**. |
 | **Built-in rules** | Nothing | Deterministic splitter for headings, paragraphs, lists, numbers and quotes. Always available. |
 
 ### Installing Ollama (offline AI)
@@ -52,11 +62,12 @@ Choose one in **Settings**. *Auto* tries Claude, then Ollama, then the built-in 
    - **macOS:** download the app from <https://ollama.com/download>, or run `brew install ollama`.
    - **Windows:** run the installer from <https://ollama.com/download>.
    - **Linux:** `curl -fsSL https://ollama.com/install.sh | sh`
-2. Pull a model while you're online. Any instruction-tuned model works; these are good starting points:
+2. Download a model while you're online, either in **Settings → Ollama → Free models to download** or in a terminal:
    ```bash
-   ollama pull qwen2.5:7b      # best quality/size balance (≈4.7 GB, 8 GB RAM+)
-   ollama pull llama3.2:3b     # lighter machines (≈2 GB)
-   ollama pull mistral         # alternative 7B
+   ollama pull gemma3:4b       # recommended: good quality, 140+ languages incl. Tamil (≈3.3 GB, 8 GB RAM)
+   ollama pull gemma3:1b       # older/lighter machines (≈0.8 GB)
+   ollama pull qwen2.5:7b      # very reliable structure (≈4.7 GB, 10 GB RAM)
+   ollama pull gemma3:12b      # best quality if you have 16 GB RAM or a GPU
    ```
 3. Start it. The desktop app and macOS/Windows installs run Ollama in the background automatically. Otherwise run `ollama serve`.
 4. **Browser version only:** allow requests from the app's address:
@@ -71,14 +82,83 @@ Troubleshooting:
 - *No models installed* means you still need to run `ollama pull …`.
 - Small models occasionally produce invalid JSON. The app sends the errors back to the model (up to 2 repair attempts), then falls back to the rules.
 
+## Backgrounds, graphics, text effects and animation
+
+**Backgrounds.** Set these for all slides in **Design → Background**, or for one slide in the slide panel.
+- **Plain:** one flat color with no decoration.
+- **Textures:** paper, kraft, crumpled paper, linen, canvas, watercolor, concrete, stucco, grunge, terrazzo, brushed metal and riso grain. They're generated in the app, so they work offline, and read on light and dark designs.
+- **Patterns:** dots, grid, lines, halftone, diagonal, perspective grid, waves, zigzag, stripes, checker, crosses, rings and triangles.
+- **Quick buttons:** **Plain** and **Textured** also sit next to *Bolder / More minimal* on the Generate page.
+
+**Continuous slides.** Choose a style on the Generate page or in Design → Background. The drawing is laid out across the whole carousel, so it lines up at every seam when swiping.
+- **Seamless flow:** shapes and a wave line across the seams.
+- **Ribbon:** a wide band weaving through every slide.
+- **Journey path:** a dashed route with one stop per slide.
+- **Split shapes:** shapes cut in half at each seam.
+- **Giant word:** the title written huge across the slides.
+- **Your own elements:** any element that crosses a slide edge gets **Continue on next slide** (or previous slide).
+- **Photo:** the slide panel's **Panoramic photo across all slides** spreads one image over every slide.
+
+**Graphics and text graphics** (Insert tab).
+- **Graphics:** 33 original vector graphics in palette colors:
+  - doodles: arrows, underlines, circles, squiggles, checks;
+  - sparkles and bursts: sparkles, starbursts, seals, rays, confetti;
+  - shapes and frames: brush strokes, highlighter, wave divider, arch, ribbon, speech bubble, thought bubble;
+  - stickers: heart, lightning, crown, washi tape, pin, quote mark.
+- **Text graphics:** ready-made styled text: giant background word, big number, neon/outline/3D/retro/glitch/echo titles, sticker label and arc text.
+- **Text effects:** any text box can take neon glow, outline, sticker, retro offset, 3D extrude, long shadow, glitch, echo stack, gradient or highlighter, and every value stays editable.
+
+**Animation.** Pick a style for a slide or all slides from the slide panel's *Animation* section:
+- **Styles:** subtle, lively, typewriter headlines or kinetic word-by-word.
+- **Per element:** select an element to choose its entrance (fade, slide, zoom, pop, drop, spin, wipe/draw-on), word animation (typewriter, word-by-word fade/rise/pop/slide, highlight sweep), loop (float, pulse, wiggle, spin, blink), delay and duration.
+- **Preview:** **▶ Preview** plays the slide, or all slides.
+- **Export:** in *Export → Video / GIF*, each slide plays its animation before its hold. **One animated clip per slide (ZIP)** gives a separate video per slide, for video carousels.
+
+## Translating a carousel
+
+Open a carousel and click **Translate…** (on the Generate page or in the editor toolbar).
+
+1. Pick a language, or type any other language code.
+2. Pick an engine:
+   - **AI model**: your current provider, using its quick-task model.
+   - **On-device**: the translator built into recent Chrome/Edge. Free and private; it downloads each language once.
+   - **Type it myself**: fully offline.
+3. Review every line in the side-by-side list and edit anything.
+4. Click **Create … copy**. The original stays untouched.
+
+What carries over: every element, position, color, effect and font. Emphasized words stay emphasized because they travel with the translation as tags. Text that grows is shrunk to fit its box (down to 55%) before a box grows. Right-to-left languages mirror text alignment. Theme changes on the copy keep the translated text, because the plan is translated too.
+
+Fonts: each design keeps its own font for Latin letters, digits and brand names. Other scripts get a bundled OFL font of the same kind. For Tamil, only fonts that render today's reformed script are used:
+- sans → Catamaran;
+- serif and elegant designs → Arima;
+- display → Baloo Thambi 2;
+- handwriting → Kavivanar.
+
+Mukta Malar, Hind Madurai, Meera Inimai, Pavanam and Coiny are also available. Pick one font for all Tamil text in **Settings → Fonts for other languages**; all nine also appear in the editor's font list under *Tamil*. Noto Sans/Serif Tamil, Anek Tamil and Tiro Tamil aren't used, because browsers draw them with pre-1978 ligatures.
+
+The same pattern covers Devanagari, Bengali, Telugu, Kannada, Malayalam, Gujarati, Gurmukhi, Odia, Sinhala, Arabic, Hebrew, Thai, Cyrillic, Greek and Vietnamese (`research/script-fonts.json`). Cyrillic, Greek and Vietnamese also use the design font's own glyphs when it has them. Chinese, Japanese and Korean use the system's fonts. Thai and CJK lines break at word boundaries, and long words shrink the text instead of being split.
+
+## Using AI efficiently
+
+- **Translation memory:** every accepted translation is stored on the device. The same text is never sent to a model twice; re-running or reusing lines costs nothing. Clear it in Settings.
+- **Batching and deduplication:** a carousel is translated in a few batched requests. Text that repeats across slides, the plan and the caption is sent once.
+- **Quick-task model:** translation, captions and headline ideas use a cheaper model, set per provider in Settings. For Claude the default is Haiku 5.5, which runs at low effort.
+- **Prompt caching (Claude):** system prompts are cached, so repeat calls within 5 minutes read them at a fraction of the price.
+- **Ollama:**
+  - The model stays loaded for 30 minutes between calls.
+  - The context window is sized to each request, which means less memory and faster loads.
+  - Output is capped, so a looping model always stops.
+  - It runs in JSON mode with the schema in the prompt; in live tests this was about 4× faster than grammar-constrained output and wrote better slides.
+
 ## What works offline
 
 | Feature | Offline? |
 |---|---|
-| Generation with Ollama or the built-in rules, design variations, layout engine | ✅ |
+| Generation with Ollama, LM Studio/llama.cpp or the built-in rules, design variations, layout engine | ✅ |
+| Translation with Ollama/local models, the browser's on-device translator, or by hand; all script fonts | ✅ |
 | Editor, all 72 bundled fonts, 1,879 icons, emoji, charts, QR codes, background removal | ✅ |
 | Accessibility check, caption writer (rules mode), every export format, project files | ✅ |
-| Claude, URL import, stock photos (Unsplash/Pexels) | Needs internet. Each shows a clear message when offline. |
+| Claude, free online models (OpenRouter/Groq/Gemini), URL import, stock photos (Unsplash/Pexels) | Needs internet. Each shows a clear message when offline. |
 
 The web build is a PWA: after the first visit it caches the app, fonts, icons, the background-removal model and the PDF engine (≈29 MB) for offline use.
 
@@ -154,7 +234,7 @@ Write a `LayoutFn` in `src/engine/layout/layouts.ts` using the primitives (`fitS
 | `npm run e2e` | End-to-end tests (Playwright): offline generation, editor flows, export verification, mocked-Claude flow, first-run journey, contrast audit of every style. To use a system Chromium, set `PLAYWRIGHT_CHROMIUM=/path/to/chrome`. |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
 | `npm run validate:research` | Checks research data, palette contrast and bundled fonts |
-| `npm run fonts:fetch`, `npm run icons:build`, `npm run models:fetch` | Rebuild the bundled fonts, icon set and background-removal model from npm |
+| `npm run fonts:fetch`, `npm run fonts:fetch-scripts`, `npm run icons:build`, `npm run models:fetch` | Rebuild the bundled design fonts, script fonts, icon set and background-removal model from npm |
 
 ## CI and releases
 
@@ -172,11 +252,12 @@ To sign them, add an Apple Developer ID or a Windows code-signing certificate as
 
 ## Known limitations
 
-- **Untested against live services.** Claude, Ollama and stock photo search are tested against mocked services here. Try them with your own key or a local model.
+- **Live services:** Ollama was tested live (Qwen2.5 3B and Gemma 3 4B, including a full Tamil translation). Claude, the free online services and stock photo search are tested against mocked services only; try them with your own keys.
+- **Curved text** in Indic, Arabic, Thai and similar scripts is drawn straight, because arc text can't shape those scripts.
 - **Video:** MP4 export depends on the browser's H.264 encoder. Chromium builds without proprietary codecs (and some Linux WebViews) produce WebM or need GIF.
 - **Background removal:** soft on fine hair. The model runs at 320×320.
 - **PDF text layer:** Latin text only. Pages in other scripts are image-only (still exact size).
-- **Desktop builds:** only the Linux build was compiled during development; macOS and Windows builds are untested.
+- **Desktop builds:** they compile in CI on Linux, macOS and Windows; the installers are unsigned (see above).
 
 ## Licenses
 

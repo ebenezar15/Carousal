@@ -2,7 +2,7 @@ import { Fragment, useMemo } from 'react';
 import { Group, Rect, Shape, Text } from 'react-konva';
 import qrcode from 'qrcode-generator';
 import type { QRElement, TableElement } from '@/model/types';
-import { cssFamily } from '@/styles/fontLoader';
+import { fontStack } from '@/styles/fontLoader';
 import { layoutText } from '@/engine/layout/textLayout';
 
 /** Row heights from wrapped cell text; shared with the editor to size the element. */
@@ -41,7 +41,7 @@ export function TableNode({ el }: { el: TableElement }) {
                 verticalAlign="middle"
                 align={el.align}
                 text={row[ci] ?? ''}
-                fontFamily={cssFamily(el.fontId)}
+                fontFamily={fontStack(el.fontId)}
                 fontSize={el.fontSize}
                 fontStyle={isHead ? '700' : '400'}
                 lineHeight={1.3}

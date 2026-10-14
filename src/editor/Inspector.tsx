@@ -5,6 +5,7 @@ import { updateElements } from './ops';
 import { CommonProps, ChartProps, ImageProps, LineProps, QRProps, ShapeProps, TableProps } from './panels/ElementProps';
 import { TextProps, patchText } from './panels/TextProps';
 import { SlideProps } from './panels/SlideProps';
+import { ElementAnimationProps, SlideAnimationProps } from './panels/AnimationProps';
 
 /** Right-hand properties panel: the selection's properties, or the slide/background when nothing is selected. */
 export function Inspector() {
@@ -13,7 +14,13 @@ export function Inspector() {
   const { slideIndex, selection } = useEditor();
   const slide = carousel.slides[slideIndex]!;
   const selected = slide.elements.filter((e) => selection.includes(e.id));
-  if (!selected.length) return <SlideProps />;
+  if (!selected.length)
+    return (
+      <>
+        <SlideProps />
+        <SlideAnimationProps />
+      </>
+    );
   const el = selected[0]!;
   const multi = selected.length > 1;
   const set = (patch: Partial<SlideElement>) => apply((d) => updateElements(d, slideIndex, selection, patch));
@@ -28,6 +35,7 @@ export function Inspector() {
       {!multi && el.kind === 'chart' && <ChartProps el={el} set={set as never} />}
       {!multi && el.kind === 'table' && <TableProps el={el} set={set as never} />}
       {!multi && el.kind === 'qr' && <QRProps el={el} set={set as never} />}
+      {!multi && <ElementAnimationProps el={el} set={set} />}
     </div>
   );
 }

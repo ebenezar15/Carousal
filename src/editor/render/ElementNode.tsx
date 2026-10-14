@@ -17,21 +17,30 @@ const fillOrNone = (f?: string) => (f && f !== 'transparent' ? f : undefined);
  */
 export function ElementNode({ el, interactive }: { el: SlideElement; interactive?: boolean }) {
   if (el.hidden) return null;
+  // Animation frames carry a pose (offset, scale, spin, fade, wipe) on top of the element's own transform.
+  const p = el.pose;
+  if (p && p.opacity <= 0) return null;
+  const pad = Math.max(el.width, el.height);
+  const clip = p?.clip !== undefined && p.clip < 1 ? { clipX: -pad, clipY: -pad, clipWidth: pad + el.width * p.clip, clipHeight: el.height + pad * 2 } : {};
   return (
     <Group
       id={el.id}
       name={interactive ? 'element' : undefined}
-      x={el.x + el.width / 2}
-      y={el.y + el.height / 2}
+      x={el.x + el.width / 2 + (p?.dx ?? 0)}
+      y={el.y + el.height / 2 + (p?.dy ?? 0)}
       offsetX={el.width / 2}
       offsetY={el.height / 2}
-      rotation={el.rotation}
-      opacity={el.opacity}
+      rotation={el.rotation + (p?.rotate ?? 0)}
+      scaleX={p?.scale ?? 1}
+      scaleY={p?.scale ?? 1}
+      opacity={el.opacity * (p?.opacity ?? 1)}
       listening={interactive ?? false}
       draggable={interactive && !el.locked}
     >
       {interactive && <Rect width={el.width} height={el.height} fill="transparent" name="hit" />}
-      <ElementBody el={el} interactive={interactive} />
+      <Group {...clip}>
+        <ElementBody el={el} interactive={interactive} />
+      </Group>
     </Group>
   );
 }

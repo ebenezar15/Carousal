@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Group, Image as KImage, Rect, Shape } from 'react-konva';
-import type { Background, BackgroundPattern } from '@/model/types';
+import type { Background, BackgroundPattern, BackgroundTexture } from '@/model/types';
+import { textureTile } from './textures';
 import { hexToRgb } from '@/styles/color';
 import { coverCrop } from './shapes';
 import { useImage } from './images';
@@ -76,6 +77,7 @@ export function BackgroundNode({ bg, width, height }: { bg: Background; width: n
   return (
     <Group x={offset}>
       {fill}
+      {bg.texture && bg.texture.amount > 0 && <TextureNode texture={bg.texture} width={W} height={height} />}
       {bg.pattern && <PatternNode pattern={bg.pattern} width={W} height={height} />}
       {bg.noise ? <NoiseNode amount={bg.noise} width={W} height={height} /> : null}
     </Group>
@@ -127,6 +129,51 @@ export function PatternNode({ pattern: p, width, height }: { pattern: Background
               ctx.lineTo(x, height);
             }
           ctx.stroke();
+        } else if (p.kind === 'stripes') {
+          for (let x = 0; x < width; x += s * 2) ctx.fillRect(x, 0, s, height);
+        } else if (p.kind === 'checker') {
+          for (let y = 0, r = 0; y < height; y += s, r++) for (let x = r % 2 ? s : 0; x < width; x += s * 2) ctx.fillRect(x, y, s, s);
+        } else if (p.kind === 'waves' || p.kind === 'zigzag') {
+          ctx.lineWidth = Math.max(2, s / 12);
+          ctx.beginPath();
+          for (let y = s / 2; y < height + s; y += s) {
+            ctx.moveTo(0, y);
+            for (let x = 0; x <= width; x += p.kind === 'zigzag' ? s / 2 : 4) {
+              const dy = p.kind === 'zigzag' ? ((x / (s / 2)) % 2 ? s / 4 : -s / 4) : Math.sin((x / s) * Math.PI * 2) * (s / 4);
+              ctx.lineTo(x, y + dy);
+            }
+          }
+          ctx.stroke();
+        } else if (p.kind === 'crosses') {
+          ctx.lineWidth = Math.max(2, s / 14);
+          ctx.beginPath();
+          const a = s * 0.16;
+          for (let y = s / 2; y < height; y += s)
+            for (let x = s / 2; x < width; x += s) {
+              ctx.moveTo(x - a, y);
+              ctx.lineTo(x + a, y);
+              ctx.moveTo(x, y - a);
+              ctx.lineTo(x, y + a);
+            }
+          ctx.stroke();
+        } else if (p.kind === 'rings') {
+          ctx.lineWidth = Math.max(2, s / 10);
+          for (let y = s / 2; y < height; y += s)
+            for (let x = s / 2; x < width; x += s) {
+              ctx.beginPath();
+              ctx.arc(x, y, s * 0.3, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+        } else if (p.kind === 'triangles') {
+          for (let y = 0, r = 0; y < height; y += s, r++)
+            for (let x = r % 2 ? s / 2 : 0; x < width; x += s) {
+              ctx.beginPath();
+              ctx.moveTo(x, y + s * 0.8);
+              ctx.lineTo(x + s * 0.4, y + s * 0.15);
+              ctx.lineTo(x + s * 0.8, y + s * 0.8);
+              ctx.closePath();
+              ctx.fill();
+            }
         } else if (p.kind === 'diagonal') {
           ctx.beginPath();
           for (let x = -height; x < width; x += s) {
@@ -176,6 +223,23 @@ function noiseTile(): HTMLCanvasElement | null {
   }
   ctx.putImageData(img, 0, 0);
   return (noiseTileCanvas = c);
+}
+
+function TextureNode({ texture, width, height }: { texture: BackgroundTexture; width: number; height: number }) {
+  const tile = textureTile(texture.kind);
+  if (!tile) return null;
+  const scale = texture.scale ?? 1;
+  return (
+    <Rect
+      width={width}
+      height={height}
+      fillPatternImage={tile as unknown as HTMLImageElement}
+      fillPatternRepeat="repeat"
+      fillPatternScale={{ x: scale, y: scale }}
+      opacity={Math.min(1, texture.amount)}
+      listening={false}
+    />
+  );
 }
 
 function NoiseNode({ amount, width, height }: { amount: number; width: number; height: number }) {

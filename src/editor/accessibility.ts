@@ -80,7 +80,8 @@ export async function checkCarousel(c: Carousel, sample: Sampler): Promise<Issue
   }
 
   for (const [si, slide] of c.slides.entries()) {
-    const texts = textEls(slide.elements).filter((t) => !t.hidden && t.text.trim() && !/^[\p{Emoji}\s]+$/u.test(t.text));
+    // Decorative type (a giant faded background word, the continuous panorama word) isn't content.
+    const texts = textEls(slide.elements).filter((t) => !t.hidden && t.text.trim() && !/^[\p{Emoji}\s]+$/u.test(t.text) && t.slot !== 'panorama-word' && t.opacity >= 0.35);
     let slideWords = 0;
     for (const t of texts) {
       const isChrome = ['slide-number', 'swipe-cue', 'swipe-cue-label', 'watermark', 'footer-handle', 'corner-index', 'avatar-initial', 'source'].includes(t.slot ?? '');

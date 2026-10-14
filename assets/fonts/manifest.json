@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-13",
+  "generated": "2026-10-14",
   "fonts": [
     {
       "id": "montserrat",
@@ -20,6 +20,24 @@
           "file": "montserrat/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "montserrat/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "montserrat/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "montserrat/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -32,6 +50,24 @@
           "file": "montserrat/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "montserrat/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "montserrat/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "montserrat/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -42,6 +78,24 @@
           "weight": 800,
           "style": "normal",
           "file": "montserrat/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "montserrat/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "montserrat/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "montserrat/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -108,6 +162,12 @@
           "file": "archivo/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "archivo/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -120,6 +180,12 @@
           "file": "archivo/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "archivo/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -130,6 +196,12 @@
           "weight": 900,
           "style": "normal",
           "file": "archivo/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "archivo/vietnamese-900-normal.woff2"
         }
       ]
     },
@@ -152,6 +224,18 @@
           "file": "plus-jakarta-sans/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "plus-jakarta-sans/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "plus-jakarta-sans/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -164,6 +248,18 @@
           "file": "plus-jakarta-sans/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "plus-jakarta-sans/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "plus-jakarta-sans/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -174,6 +270,18 @@
           "weight": 800,
           "style": "normal",
           "file": "plus-jakarta-sans/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "plus-jakarta-sans/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "plus-jakarta-sans/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -284,6 +392,12 @@
           "file": "syne/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "syne/greek-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -296,6 +410,12 @@
           "file": "syne/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "syne/greek-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -306,6 +426,12 @@
           "weight": 800,
           "style": "normal",
           "file": "syne/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 800,
+          "style": "normal",
+          "file": "syne/greek-800-normal.woff2"
         }
       ]
     },
@@ -328,6 +454,12 @@
           "file": "lexend/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "lexend/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -340,6 +472,12 @@
           "file": "lexend/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "lexend/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -350,6 +488,12 @@
           "weight": 800,
           "style": "normal",
           "file": "lexend/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "lexend/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -372,6 +516,24 @@
           "file": "unbounded/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "unbounded/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "unbounded/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "unbounded/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -384,6 +546,24 @@
           "file": "unbounded/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "unbounded/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "unbounded/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "unbounded/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -394,6 +574,24 @@
           "weight": 900,
           "style": "normal",
           "file": "unbounded/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "unbounded/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "unbounded/cyrillic-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "unbounded/vietnamese-900-normal.woff2"
         }
       ]
     },
@@ -416,6 +614,18 @@
           "file": "playfair-display/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "playfair-display/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "playfair-display/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -426,6 +636,18 @@
           "weight": 700,
           "style": "normal",
           "file": "playfair-display/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "playfair-display/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "playfair-display/vietnamese-700-normal.woff2"
         },
         {
           "subset": "latin",
@@ -440,6 +662,18 @@
           "file": "playfair-display/latin-ext-900-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "playfair-display/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "playfair-display/vietnamese-900-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -450,6 +684,18 @@
           "weight": 400,
           "style": "italic",
           "file": "playfair-display/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "playfair-display/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "playfair-display/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -472,6 +718,24 @@
           "file": "lora/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "lora/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "lora/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "lora/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -482,6 +746,24 @@
           "weight": 600,
           "style": "normal",
           "file": "lora/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "lora/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "lora/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "lora/vietnamese-600-normal.woff2"
         },
         {
           "subset": "latin",
@@ -496,6 +778,24 @@
           "file": "lora/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "lora/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "lora/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "lora/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -506,6 +806,24 @@
           "weight": 400,
           "style": "italic",
           "file": "lora/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "lora/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "lora/cyrillic-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "lora/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -528,6 +846,24 @@
           "file": "merriweather/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "merriweather/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "merriweather/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "merriweather/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -538,6 +874,24 @@
           "weight": 700,
           "style": "normal",
           "file": "merriweather/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "merriweather/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "merriweather/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "merriweather/vietnamese-700-normal.woff2"
         },
         {
           "subset": "latin",
@@ -552,6 +906,24 @@
           "file": "merriweather/latin-ext-900-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "merriweather/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "merriweather/cyrillic-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "merriweather/vietnamese-900-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -562,6 +934,24 @@
           "weight": 400,
           "style": "italic",
           "file": "merriweather/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "merriweather/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "merriweather/cyrillic-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "merriweather/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -584,6 +974,30 @@
           "file": "source-serif-4/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "source-serif-4/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -594,6 +1008,30 @@
           "weight": 600,
           "style": "normal",
           "file": "source-serif-4/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/greek-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "source-serif-4/vietnamese-600-normal.woff2"
         },
         {
           "subset": "latin",
@@ -608,6 +1046,30 @@
           "file": "source-serif-4/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/greek-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "source-serif-4/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -618,6 +1080,30 @@
           "weight": 400,
           "style": "italic",
           "file": "source-serif-4/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/cyrillic-ext-400-italic.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/greek-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "source-serif-4/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -684,6 +1170,36 @@
           "file": "eb-garamond/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/greek-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "eb-garamond/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -694,6 +1210,36 @@
           "weight": 600,
           "style": "normal",
           "file": "eb-garamond/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/greek-600-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/greek-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "eb-garamond/vietnamese-600-normal.woff2"
         },
         {
           "subset": "latin",
@@ -708,6 +1254,36 @@
           "file": "eb-garamond/latin-ext-800-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/greek-800-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/greek-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "eb-garamond/vietnamese-800-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -718,6 +1294,36 @@
           "weight": 400,
           "style": "italic",
           "file": "eb-garamond/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/cyrillic-ext-400-italic.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/greek-400-italic.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/greek-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "eb-garamond/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -740,6 +1346,12 @@
           "file": "fraunces/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "fraunces/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -750,6 +1362,12 @@
           "weight": 700,
           "style": "normal",
           "file": "fraunces/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "fraunces/vietnamese-700-normal.woff2"
         },
         {
           "subset": "latin",
@@ -764,6 +1382,12 @@
           "file": "fraunces/latin-ext-900-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "fraunces/vietnamese-900-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -774,6 +1398,12 @@
           "weight": 400,
           "style": "italic",
           "file": "fraunces/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "fraunces/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -796,6 +1426,12 @@
           "file": "newsreader/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "newsreader/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -806,6 +1442,12 @@
           "weight": 600,
           "style": "normal",
           "file": "newsreader/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "newsreader/vietnamese-600-normal.woff2"
         },
         {
           "subset": "latin",
@@ -820,6 +1462,12 @@
           "file": "newsreader/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "newsreader/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -830,6 +1478,12 @@
           "weight": 400,
           "style": "italic",
           "file": "newsreader/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "newsreader/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -928,6 +1582,24 @@
           "file": "nunito/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "nunito/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "nunito/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "nunito/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -940,6 +1612,24 @@
           "file": "nunito/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "nunito/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "nunito/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "nunito/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -950,6 +1640,24 @@
           "weight": 900,
           "style": "normal",
           "file": "nunito/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "nunito/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "nunito/cyrillic-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "nunito/vietnamese-900-normal.woff2"
         }
       ]
     },
@@ -972,6 +1680,12 @@
           "file": "baloo-2/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-2/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -984,6 +1698,12 @@
           "file": "baloo-2/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-2/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -994,6 +1714,12 @@
           "weight": 800,
           "style": "normal",
           "file": "baloo-2/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-2/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1016,6 +1742,12 @@
           "file": "quicksand/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "quicksand/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1028,6 +1760,12 @@
           "file": "quicksand/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "quicksand/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1038,6 +1776,12 @@
           "weight": 700,
           "style": "normal",
           "file": "quicksand/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "quicksand/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1060,6 +1804,30 @@
           "file": "comfortaa/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "comfortaa/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1070,6 +1838,30 @@
           "weight": 700,
           "style": "normal",
           "file": "comfortaa/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/greek-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "comfortaa/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1126,6 +1918,18 @@
           "file": "rubik/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik/cyrillic-ext-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1138,6 +1942,18 @@
           "file": "rubik/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "rubik/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "rubik/cyrillic-ext-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1148,6 +1964,18 @@
           "weight": 800,
           "style": "normal",
           "file": "rubik/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "rubik/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "rubik/cyrillic-ext-800-normal.woff2"
         }
       ]
     },
@@ -1190,6 +2018,36 @@
           "file": "inter/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/greek-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "inter/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1202,6 +2060,36 @@
           "file": "inter/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/greek-600-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/greek-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "inter/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1212,6 +2100,36 @@
           "weight": 800,
           "style": "normal",
           "file": "inter/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/greek-800-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/greek-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "inter/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1278,6 +2196,30 @@
           "file": "manrope/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "manrope/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1290,6 +2232,30 @@
           "file": "manrope/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/greek-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "manrope/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1300,6 +2266,30 @@
           "weight": 800,
           "style": "normal",
           "file": "manrope/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/greek-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "manrope/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1322,6 +2312,12 @@
           "file": "work-sans/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "work-sans/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1334,6 +2330,12 @@
           "file": "work-sans/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "work-sans/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1344,6 +2346,12 @@
           "weight": 800,
           "style": "normal",
           "file": "work-sans/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "work-sans/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1498,6 +2506,12 @@
           "file": "public-sans/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "public-sans/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1510,6 +2524,12 @@
           "file": "public-sans/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "public-sans/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1520,6 +2540,12 @@
           "weight": 800,
           "style": "normal",
           "file": "public-sans/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "public-sans/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1542,6 +2568,24 @@
           "file": "mulish/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "mulish/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "mulish/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "mulish/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1554,6 +2598,24 @@
           "file": "mulish/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "mulish/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "mulish/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "mulish/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1564,6 +2626,24 @@
           "weight": 800,
           "style": "normal",
           "file": "mulish/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "mulish/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "mulish/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "mulish/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1586,6 +2666,12 @@
           "file": "space-grotesk/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-grotesk/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 500,
           "style": "normal",
@@ -1598,6 +2684,12 @@
           "file": "space-grotesk/latin-ext-500-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 500,
+          "style": "normal",
+          "file": "space-grotesk/vietnamese-500-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1608,6 +2700,12 @@
           "weight": 700,
           "style": "normal",
           "file": "space-grotesk/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-grotesk/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1630,6 +2728,30 @@
           "file": "ibm-plex-sans/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-sans/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1642,6 +2764,30 @@
           "file": "ibm-plex-sans/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/greek-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-sans/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1652,6 +2798,30 @@
           "weight": 700,
           "style": "normal",
           "file": "ibm-plex-sans/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/greek-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-sans/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1674,6 +2844,30 @@
           "file": "jetbrains-mono/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "jetbrains-mono/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1686,6 +2880,30 @@
           "file": "jetbrains-mono/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/greek-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "jetbrains-mono/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -1696,6 +2914,30 @@
           "weight": 800,
           "style": "normal",
           "file": "jetbrains-mono/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-800-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/cyrillic-ext-800-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/greek-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "jetbrains-mono/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -1718,6 +2960,24 @@
           "file": "ibm-plex-mono/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "ibm-plex-mono/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1730,6 +2990,24 @@
           "file": "ibm-plex-mono/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "ibm-plex-mono/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1740,6 +3018,24 @@
           "weight": 700,
           "style": "normal",
           "file": "ibm-plex-mono/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-mono/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "ibm-plex-mono/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1762,6 +3058,12 @@
           "file": "space-mono/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "space-mono/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1772,6 +3074,12 @@
           "weight": 700,
           "style": "normal",
           "file": "space-mono/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "space-mono/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1794,6 +3102,30 @@
           "file": "roboto-mono/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-mono/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 500,
           "style": "normal",
@@ -1806,6 +3138,30 @@
           "file": "roboto-mono/latin-ext-500-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-500-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-ext-500-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/greek-500-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 500,
+          "style": "normal",
+          "file": "roboto-mono/vietnamese-500-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1816,6 +3172,30 @@
           "weight": 700,
           "style": "normal",
           "file": "roboto-mono/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/greek-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-mono/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1838,6 +3218,12 @@
           "file": "chakra-petch/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "chakra-petch/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1850,6 +3236,12 @@
           "file": "chakra-petch/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "chakra-petch/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1860,6 +3252,12 @@
           "weight": 700,
           "style": "normal",
           "file": "chakra-petch/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "chakra-petch/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -1908,6 +3306,24 @@
           "file": "exo-2/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "exo-2/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "exo-2/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "exo-2/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -1920,6 +3336,24 @@
           "file": "exo-2/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "exo-2/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "exo-2/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "exo-2/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -1930,6 +3364,24 @@
           "weight": 900,
           "style": "normal",
           "file": "exo-2/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "exo-2/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "exo-2/cyrillic-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "exo-2/vietnamese-900-normal.woff2"
         }
       ]
     },
@@ -1952,6 +3404,24 @@
           "file": "cormorant-garamond/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "cormorant-garamond/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -1962,6 +3432,24 @@
           "weight": 600,
           "style": "normal",
           "file": "cormorant-garamond/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "cormorant-garamond/vietnamese-600-normal.woff2"
         },
         {
           "subset": "latin",
@@ -1976,6 +3464,24 @@
           "file": "cormorant-garamond/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "cormorant-garamond/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "cormorant-garamond/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "italic",
@@ -1986,6 +3492,24 @@
           "weight": 400,
           "style": "italic",
           "file": "cormorant-garamond/latin-ext-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "italic",
+          "file": "cormorant-garamond/cyrillic-400-italic.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "cormorant-garamond/cyrillic-ext-400-italic.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "italic",
+          "file": "cormorant-garamond/vietnamese-400-italic.woff2"
         }
       ]
     },
@@ -2128,6 +3652,12 @@
           "weight": 400,
           "style": "normal",
           "file": "tenor-sans/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "tenor-sans/cyrillic-400-normal.woff2"
         }
       ]
     },
@@ -2142,6 +3672,24 @@
           "weight": 400,
           "style": "normal",
           "file": "prata/latin-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "prata/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "prata/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "prata/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2184,6 +3732,12 @@
           "file": "josefin-sans/latin-ext-300-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 300,
+          "style": "normal",
+          "file": "josefin-sans/vietnamese-300-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 400,
           "style": "normal",
@@ -2196,6 +3750,12 @@
           "file": "josefin-sans/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "josefin-sans/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2206,6 +3766,12 @@
           "weight": 700,
           "style": "normal",
           "file": "josefin-sans/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "josefin-sans/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -2228,6 +3794,18 @@
           "file": "caveat/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "caveat/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "caveat/cyrillic-ext-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2238,6 +3816,18 @@
           "weight": 700,
           "style": "normal",
           "file": "caveat/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "caveat/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "caveat/cyrillic-ext-700-normal.woff2"
         }
       ]
     },
@@ -2260,6 +3850,12 @@
           "file": "dancing-script/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "dancing-script/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2270,6 +3866,12 @@
           "weight": 700,
           "style": "normal",
           "file": "dancing-script/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "dancing-script/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -2290,6 +3892,24 @@
           "weight": 400,
           "style": "normal",
           "file": "pacifico/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "pacifico/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "pacifico/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "pacifico/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2370,6 +3990,30 @@
           "weight": 400,
           "style": "normal",
           "file": "great-vibes/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "great-vibes/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2410,6 +4054,12 @@
           "weight": 400,
           "style": "normal",
           "file": "patrick-hand/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "patrick-hand/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2452,6 +4102,24 @@
           "file": "oswald/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "oswald/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "oswald/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "oswald/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -2464,6 +4132,24 @@
           "file": "oswald/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 600,
+          "style": "normal",
+          "file": "oswald/cyrillic-600-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "oswald/cyrillic-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "oswald/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2474,6 +4160,24 @@
           "weight": 700,
           "style": "normal",
           "file": "oswald/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "oswald/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "oswald/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "oswald/vietnamese-700-normal.woff2"
         }
       ]
     },
@@ -2494,6 +4198,12 @@
           "weight": 400,
           "style": "normal",
           "file": "anton/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "anton/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2516,6 +4226,12 @@
           "file": "barlow-condensed/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "barlow-condensed/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 600,
           "style": "normal",
@@ -2528,6 +4244,12 @@
           "file": "barlow-condensed/latin-ext-600-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "barlow-condensed/vietnamese-600-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 800,
           "style": "normal",
@@ -2538,6 +4260,12 @@
           "weight": 800,
           "style": "normal",
           "file": "barlow-condensed/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "barlow-condensed/vietnamese-800-normal.woff2"
         }
       ]
     },
@@ -2558,6 +4286,12 @@
           "weight": 400,
           "style": "normal",
           "file": "league-gothic/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "league-gothic/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2578,6 +4312,18 @@
           "weight": 400,
           "style": "normal",
           "file": "fjalla-one/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "fjalla-one/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "fjalla-one/vietnamese-400-normal.woff2"
         }
       ]
     },
@@ -2600,6 +4346,12 @@
           "file": "big-shoulders-display/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "big-shoulders-display/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2612,6 +4364,12 @@
           "file": "big-shoulders-display/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "big-shoulders-display/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -2622,6 +4380,12 @@
           "weight": 900,
           "style": "normal",
           "file": "big-shoulders-display/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "big-shoulders-display/vietnamese-900-normal.woff2"
         }
       ]
     },
@@ -2676,6 +4440,36 @@
           "file": "roboto-condensed/latin-ext-400-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-ext-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/greek-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "roboto-condensed/vietnamese-400-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 700,
           "style": "normal",
@@ -2688,6 +4482,36 @@
           "file": "roboto-condensed/latin-ext-700-normal.woff2"
         },
         {
+          "subset": "cyrillic",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-700-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-ext-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/greek-700-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/greek-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "roboto-condensed/vietnamese-700-normal.woff2"
+        },
+        {
           "subset": "latin",
           "weight": 900,
           "style": "normal",
@@ -2698,6 +4522,486 @@
           "weight": 900,
           "style": "normal",
           "file": "roboto-condensed/latin-ext-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-900-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/cyrillic-ext-900-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/greek-900-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/greek-ext-900-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 900,
+          "style": "normal",
+          "file": "roboto-condensed/vietnamese-900-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "catamaran",
+      "family": "Catamaran",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "catamaran/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "catamaran/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "catamaran/tamil-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "mukta-malar",
+      "family": "Mukta Malar",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "mukta-malar/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "mukta-malar/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "mukta-malar/tamil-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "hind-madurai",
+      "family": "Hind Madurai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "hind-madurai/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "hind-madurai/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 700,
+          "style": "normal",
+          "file": "hind-madurai/tamil-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "meera-inimai",
+      "family": "Meera Inimai",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "meera-inimai/latin-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "meera-inimai/tamil-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "pavanam",
+      "family": "Pavanam",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "pavanam/tamil-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "arima",
+      "family": "Arima",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/greek-400-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/greek-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "arima/vietnamese-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/latin-700-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/latin-ext-700-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/tamil-700-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/greek-700-normal.woff2"
+        },
+        {
+          "subset": "greek-ext",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/greek-ext-700-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 700,
+          "style": "normal",
+          "file": "arima/vietnamese-700-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "baloo-thambi-2",
+      "family": "Baloo Thambi 2",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/tamil-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "baloo-thambi-2/vietnamese-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "coiny",
+      "family": "Coiny",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/tamil-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "coiny/vietnamese-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "kavivanar",
+      "family": "Kavivanar",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "tamil",
+          "weight": 400,
+          "style": "normal",
+          "file": "kavivanar/tamil-400-normal.woff2"
         }
       ]
     }

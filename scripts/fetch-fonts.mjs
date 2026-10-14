@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Bundles the fonts listed in research/fonts.json into assets/fonts/ for offline use.
 // Source: @fontsource/<id> npm packages (same OFL/Apache files as Google Fonts).
-// Output: assets/fonts/<id>/<subset>-<weight>-<normal|italic>.woff2 + LICENSE, and assets/fonts/manifest.json
+// Output: assets/fonts/<id>/<subset>-<weight>-<normal|italic>.woff2 + LICENSE, and assets/fonts/manifest.json.
+// Besides the eager latin/latin-ext subsets from fonts.json, the Cyrillic, Greek and Vietnamese subsets a
+// font ships are bundled too (loaded only when text needs them); src/styles/generated/fontSubsets.json lists them.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -15,6 +17,8 @@ const only = process.argv.slice(2);
 const work = mkdtempSync(join(tmpdir(), 'fontsource-'));
 const manifest = { generated: new Date().toISOString().slice(0, 10), fonts: [] };
 const failures = [];
+const EXTRA_SUBSETS = ['cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese'];
+const extras = { fonts: {}, ranges: {} };
 
 for (const f of fonts) {
   if (only.length && !only.includes(f.id)) continue;
@@ -30,7 +34,11 @@ for (const f of fonts) {
     mkdirSync(dest, { recursive: true });
     const entry = { id: f.id, family: f.family, license: f.license, version: JSON.parse(readFileSync(join(pk, 'package.json'), 'utf8')).version, faces: [] };
     const styles = [['normal', f.weights], ['italic', f.italics || []]];
-    for (const [style, weights] of styles) for (const w of weights) for (const subset of f.subsets) {
+    const unicode = existsSync(join(pk, 'unicode.json')) ? JSON.parse(readFileSync(join(pk, 'unicode.json'), 'utf8')) : {};
+    const extra = EXTRA_SUBSETS.filter((sub) => unicode[sub] && styles.every(([style, ws]) => ws.every((w) => files.includes(`${f.fontsource}-${sub}-${w}-${style}.woff2`))));
+    if (extra.length) extras.fonts[f.id] = extra;
+    extra.forEach((sub) => (extras.ranges[sub] = unicode[sub]));
+    for (const [style, weights] of styles) for (const w of weights) for (const subset of [...f.subsets, ...extra]) {
       const name = `${f.fontsource}-${subset}-${w}-${style}.woff2`;
       if (!files.includes(name)) { failures.push(`${f.id}: missing ${name}`); continue; }
       const out = `${subset}-${w}-${style}.woff2`;
@@ -48,5 +56,8 @@ for (const f of fonts) {
   }
 }
 rmSync(work, { recursive: true, force: true });
-if (!only.length) writeFileSync(join(outRoot, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+if (!only.length) {
+  writeFileSync(join(outRoot, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+  writeFileSync(join(root, 'src/styles/generated/fontSubsets.json'), JSON.stringify(extras, null, 2) + '\n');
+}
 if (failures.length) { console.error('\nFailures:\n' + failures.join('\n')); process.exit(1); }

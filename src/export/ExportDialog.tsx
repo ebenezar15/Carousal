@@ -8,6 +8,7 @@ import { SlideStage } from '@/editor/SlideStage';
 import { slideFileName, slideToBlob, verifyImage, webpEncodeSupported, slug, type ImageFormat, type Verified } from './images';
 import { pdfPageSizes, slidesToPdf, textFile, zipFiles } from './archive';
 import { slidesToGif, slidesToVideo, videoSize, type Transition } from './video';
+import { ANIMATION_PRESETS, autoAnimate, introDuration, slideHasAnimation, type AnimationPreset } from '@/editor/animation';
 import { exportProjectFile, PROJECT_EXT } from './projectFile';
 import { formatBytes, saveBlob } from './save';
 
@@ -22,7 +23,9 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
   const [scale, setScale] = useState<1 | 2>(1);
   const [quality, setQuality] = useState(0.92);
   const [range, setRange] = useState<'all' | 'current'>('all');
-  const [videoKind, setVideoKind] = useState<'mp4' | 'gif'>('mp4');
+  const [videoKind, setVideoKind] = useState<'mp4' | 'gif' | 'clips'>('mp4');
+  const hasOwnAnimation = useMemo(() => carousel.slides.some(slideHasAnimation), [carousel]);
+  const [animation, setAnimation] = useState<'mine' | AnimationPreset>(hasOwnAnimation ? 'mine' : 'subtle');
   const [hold, setHold] = useState(2.5);
   const [transition, setTransition] = useState<Transition>('slide');
   const [busy, setBusy] = useState<string | null>(null);
@@ -90,14 +93,26 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
       } else if (mode === 'video') {
         setBusy(videoKind === 'gif' ? 'Encoding GIF…' : 'Encoding video…');
         const opts = { width: preset.width, height: preset.height, hold, transition, transitionDuration: 0.6, onProgress: setProgress, signal: abort.current.signal };
-        if (videoKind === 'gif') {
-          const blob = await slidesToGif(slides, opts);
+        const animated = animation === 'mine' ? slides : slides.map((sl) => autoAnimate(sl, animation));
+        if (videoKind === 'clips') {
+          // One short animated clip per slide, for carousels that mix videos (Instagram, TikTok, LinkedIn).
+          const files: { name: string; blob: Blob }[] = [];
+          for (let i = 0; i < animated.length; i++) {
+            const v = await slidesToVideo([animated[i]!], { ...opts, transition: 'none', onProgress: (p) => setProgress((i + p) / animated.length) });
+            files.push({ name: `${slug(name)}-${String(indices[i]! + 1).padStart(2, '0')}.${v.ext}`, blob: v.blob });
+          }
+          const zip = await zipFiles(files);
+          const fileName = `${slug(name)}-clips.zip`;
+          const saved = (await saveBlob(zip, fileName)) === 'saved' ? [`${fileName} (${formatBytes(zip.size)})`] : [];
+          setResult({ rows: files.map((f) => ({ name: f.name, blob: f.blob, expected: videoSize(preset.width, preset.height), actual: videoSize(preset.width, preset.height), dimsOk: true, sizeOk: true, note: formatBytes(f.blob.size) })), saved });
+        } else if (videoKind === 'gif') {
+          const blob = await slidesToGif(animated, opts);
           const fileName = `${slug(name)}.gif`;
           const size = videoSize(preset.width, preset.height, 540);
           const saved = (await saveBlob(blob, fileName)) === 'saved' ? [`${fileName} (${formatBytes(blob.size)})`] : [];
           setResult({ rows: [{ ...(await verifyImage(fileName, blob, size)), note: 'GIFs are downscaled to 540px wide to keep them small' }], saved });
         } else {
-          const v = await slidesToVideo(slides, opts);
+          const v = await slidesToVideo(animated, opts);
           const fileName = `${slug(name)}.${v.ext}`;
           const saved = (await saveBlob(v.blob, fileName)) === 'saved' ? [`${fileName} (${formatBytes(v.blob.size)})`] : [];
           setResult({ rows: [{ name: fileName, blob: v.blob, expected: videoSize(preset.width, preset.height), actual: { width: v.width, height: v.height }, dimsOk: true, sizeOk: true, note: v.ext === 'webm' ? `This browser has no H.264 encoder, so this is a WebM (${v.codec.toUpperCase()}) video. Instagram/TikTok/LinkedIn expect MP4 — export from Chrome, Edge or Safari for MP4, or use the GIF option.` : `${v.codec.toUpperCase()} MP4 · ${v.duration.toFixed(1)}s` }], saved });
@@ -164,9 +179,17 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <label className="block">
                   <span className="label">Type</span>
-                  <select aria-label="Video type" className="field py-1.5" value={videoKind} onChange={(e) => setVideoKind(e.target.value as 'mp4' | 'gif')}>
+                  <select aria-label="Video type" className="field py-1.5" value={videoKind} onChange={(e) => setVideoKind(e.target.value as 'mp4' | 'gif' | 'clips')}>
                     <option value="mp4">Video (MP4)</option>
                     <option value="gif">Animated GIF</option>
+                    <option value="clips">One animated clip per slide (ZIP)</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="label">Animation</span>
+                  <select aria-label="Animation" className="field py-1.5" value={animation} onChange={(e) => setAnimation(e.target.value as 'mine' | AnimationPreset)}>
+                    {hasOwnAnimation && <option value="mine">As set in the editor</option>}
+                    {ANIMATION_PRESETS.map(([id, label]) => <option key={id} value={id}>{label}</option>)}
                   </select>
                 </label>
                 <label className="block">
@@ -179,7 +202,7 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
                   </select>
                 </label>
                 <label className="col-span-2 block">
-                  <span className="label">Seconds per slide: {hold.toFixed(1)}s · total ≈ {(slides.length * hold + (slides.length - 1) * (transition === 'none' ? 0 : 0.6)).toFixed(0)}s</span>
+                  <span className="label">Hold each slide: {hold.toFixed(1)}s (after its animation) · total ≈ {(slides.reduce((t, sl) => t + hold + (animation === 'none' ? 0 : introDuration(animation === 'mine' ? sl : autoAnimate(sl, animation))), 0) + (slides.length - 1) * (transition === 'none' ? 0 : 0.6)).toFixed(0)}s</span>
                   <input aria-label="Seconds per slide" type="range" min={1} max={8} step={0.5} value={hold} onChange={(e) => setHold(Number(e.target.value))} className="w-full accent-brand-500" />
                 </label>
               </div>
