@@ -22,6 +22,7 @@ interface Props {
   onMore(dir: MoreDirection): void;
   onContinuous(style: 'off' | ContinuousStyle): void;
   onMotion(motion: string | undefined): void;
+  onIllustrations(v: 'none' | 'some' | 'rich' | 'story' | undefined): void;
   onRestyle(prompt: string): void;
   onRegenerateCopy(): void;
   actions: SlideActions;
@@ -42,7 +43,7 @@ const MORE: { dir: MoreDirection; label: string }[] = [
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '').slice(0, 40) || 'carousel';
 
-export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onContinuous, onMotion, onRestyle, onRegenerateCopy, actions }: Props) {
+export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onContinuous, onMotion, onIllustrations, onRestyle, onRegenerateCopy, actions }: Props) {
   const [restyle, setRestyle] = useState('');
   const preset = getPreset(carousel.presetId);
   const displayWidth = preset.width > preset.height ? 380 : 290;
@@ -88,6 +89,16 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onCont
             <option value="style">Style default</option>
             {carousel.theme.motion === 'custom' && <option value="custom">My own</option>}
             {ANIMATION_PRESETS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        </label>
+        <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+          Illustrations
+          <select aria-label="Illustrations" className="rounded border border-zinc-300 bg-white px-1 py-0.5 text-xs dark:border-zinc-700 dark:bg-zinc-900" value={carousel.theme.modifiers?.illustrations ?? 'style'} onChange={(e) => onIllustrations(e.target.value === 'style' ? undefined : (e.target.value as 'none'))} disabled={busy}>
+            <option value="style">Style default</option>
+            <option value="none">None</option>
+            <option value="some">Some slides</option>
+            <option value="rich">Most slides</option>
+            <option value="story">Every slide (story)</option>
           </select>
         </label>
         <button className="btn-ghost ml-auto px-2.5 py-1 text-xs" onClick={onRegenerateCopy} disabled={busy} title="Generate the copy again with the same settings and design">

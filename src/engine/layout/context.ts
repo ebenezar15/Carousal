@@ -36,6 +36,8 @@ export interface Ctx {
   decoration: Density;
   handle: string;
   plan: CarouselPlan;
+  /** Varies generated art between designs (theme.seed, or derived from the style and palette). */
+  seed: number;
   total: number;
   isLandscape: boolean;
 }
@@ -109,6 +111,7 @@ export function makeCtx(plan: CarouselPlan, presetId: string, theme: CarouselThe
     decoration: mod.decoration ?? defaultDensity,
     handle: theme.handle?.trim() ?? '',
     plan,
+    seed: theme.seed ?? [...`${theme.styleId}|${theme.paletteId}`].reduce((h, c) => (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0, 7) % 100000,
     total: plan.slides.length,
     isLandscape: W > H * 1.15,
   };

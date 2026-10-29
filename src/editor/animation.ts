@@ -12,7 +12,10 @@ export const ENTER_OPTIONS: [EnterAnimation, string][] = [
 export const TEXT_ANIM_OPTIONS: [TextAnimation, string][] = [
   ['none', 'None'], ['typewriter', 'Typewriter'], ['word-fade', 'Word by word (fade)'], ['word-rise', 'Word by word (rise)'], ['word-pop', 'Word by word (pop)'], ['word-slide', 'Word by word (slide)'], ['word-drop', 'Word by word (drop)'], ['word-spin', 'Word by word (spin)'], ['highlight-sweep', 'Highlight sweep'],
 ];
-export const LOOP_OPTIONS: [LoopAnimation, string][] = [['none', 'None'], ['float', 'Float'], ['pulse', 'Pulse'], ['wiggle', 'Wiggle'], ['spin', 'Spin'], ['blink', 'Blink']];
+export const LOOP_OPTIONS: [LoopAnimation, string][] = [
+  ['none', 'None'], ['float', 'Float'], ['pulse', 'Pulse'], ['wiggle', 'Wiggle'], ['spin', 'Spin'], ['blink', 'Blink'],
+  ['wave', 'Wave (hand)'], ['sway', 'Sway'], ['bob', 'Bob (on water)'], ['twinkle', 'Twinkle'], ['drift', 'Drift'],
+];
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 export const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
@@ -65,12 +68,17 @@ export function poseAt(a: ElementAnimation, t: number, unit: number): Pose {
     if (a.enter === 'none') pose.opacity = p > 0 || a.text === 'highlight-sweep' ? 1 : 0;
   }
   if (a.loop && a.loop !== 'none' && t >= a.delay + a.duration) {
-    const lt = t - a.delay - a.duration;
+    const lt = t - a.delay - a.duration + (a.phase ?? 0);
     if (a.loop === 'float') pose.dy += Math.sin((lt / 2.4) * Math.PI * 2) * 12 * unit;
     if (a.loop === 'pulse') pose.scale *= 1 + Math.sin((lt / 1.2) * Math.PI * 2) * 0.04;
     if (a.loop === 'wiggle') pose.rotate += Math.sin((lt / 0.9) * Math.PI * 2) * 4;
     if (a.loop === 'spin') pose.rotate += (lt * 45) % 360;
     if (a.loop === 'blink') pose.opacity *= Math.sin((lt / 1.4) * Math.PI * 2) > -0.6 ? 1 : 0.15;
+    if (a.loop === 'wave') pose.rotate += Math.sin((lt / 0.8) * Math.PI * 2) * 16;
+    if (a.loop === 'sway') pose.rotate += Math.sin((lt / 3) * Math.PI * 2) * 6;
+    if (a.loop === 'bob') pose.dy += Math.sin((lt / 1.8) * Math.PI * 2) * 7 * unit;
+    if (a.loop === 'twinkle') pose.opacity *= 0.55 + 0.45 * (0.5 + 0.5 * Math.sin((lt / 1.3) * Math.PI * 2));
+    if (a.loop === 'drift') pose.dx += Math.sin((lt / 7) * Math.PI * 2) * 24 * unit;
   }
   return pose;
 }
@@ -78,12 +86,19 @@ export function poseAt(a: ElementAnimation, t: number, unit: number): Pose {
 /** The slide at time t: animated elements get a pose; others are unchanged. */
 export function frameOf(slide: Slide, t: number, unit = 1): Slide {
   if (!slideHasAnimation(slide)) return slide;
-  return { ...slide, elements: slide.elements.map((el) => (el.anim && isAnimated(el.anim) ? { ...el, pose: poseAt(el.anim, t, unit) } : el)) };
+  // Groups (illustrations) can hold moving parts of their own: an arm that waves, a dove that floats.
+  const pose = (el: SlideElement): SlideElement => {
+    const posed = el.anim && isAnimated(el.anim) ? { ...el, pose: poseAt(el.anim, t, unit) } : el;
+    return posed.kind === 'group' && posed.children.some(animatedDeep) ? { ...posed, children: posed.children.map(pose) } : posed;
+  };
+  return { ...slide, elements: slide.elements.map(pose) };
 }
 
 const isAnimated = (a: ElementAnimation) => a.enter !== 'none' || (a.text && a.text !== 'none') || (a.loop && a.loop !== 'none');
-export const slideHasAnimation = (slide: Slide) => slide.elements.some((e) => e.anim && isAnimated(e.anim));
-const hasLoop = (slide: Slide) => slide.elements.some((e) => e.anim?.loop && e.anim.loop !== 'none');
+const animatedDeep = (e: SlideElement): boolean => Boolean(e.anim && isAnimated(e.anim)) || (e.kind === 'group' && e.children.some(animatedDeep));
+const loopsDeep = (e: SlideElement): boolean => Boolean(e.anim?.loop && e.anim.loop !== 'none') || (e.kind === 'group' && e.children.some(loopsDeep));
+export const slideHasAnimation = (slide: Slide) => slide.elements.some(animatedDeep);
+const hasLoop = (slide: Slide) => slide.elements.some(loopsDeep);
 
 /** Seconds until every entrance on the slide has finished. */
 export function introDuration(slide: Slide): number {
@@ -255,7 +270,17 @@ export function autoAnimate(slide: Slide, preset: AnimationPreset): Slide {
       const anim = animFor(el, preset, el.kind === 'text' ? order++ : order);
       const { anim: _old, ...rest } = el;
       void _old;
-      return (anim ? { ...rest, anim } : rest) as SlideElement;
+      // "No animation" also stills the moving parts inside illustrations.
+      const base = (preset === 'none' && rest.kind === 'group' ? stillDeep(rest as SlideElement) : rest) as SlideElement;
+      // Built-in loops (twinkling stars, a waving arm) survive presets that don't set their own loop.
+      const keep = anim && !anim.loop && el.anim?.loop && preset !== 'none' ? { loop: el.anim.loop, phase: el.anim.phase } : {};
+      return (anim ? { ...base, anim: { ...anim, ...keep } } : base) as SlideElement;
     }),
   };
+}
+
+function stillDeep(el: SlideElement): SlideElement {
+  const { anim: _a, ...rest } = el;
+  void _a;
+  return (rest.kind === 'group' ? { ...rest, children: rest.children.map(stillDeep) } : rest) as SlideElement;
 }

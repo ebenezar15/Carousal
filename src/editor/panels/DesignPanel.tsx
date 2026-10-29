@@ -147,6 +147,12 @@ function BackgroundSection({ theme }: { theme: CarouselTheme }) {
         options={[['style', `Style default (${ANIMATION_PRESETS.find(([p]) => p === getStyle(theme.styleId).motion)?.[1].split(' (')[0] ?? 'Subtle'})`], ...(theme.motion === 'custom' ? [['custom', 'My own (per element)'] as [string, string]] : []), ...ANIMATION_PRESETS]}
         onChange={(v) => v !== 'custom' && void retheme({ ...theme, motion: v === 'style' ? undefined : v })}
       />
+      <Select
+        label="Illustrations"
+        value={m.illustrations ?? 'style'}
+        options={[['style', 'Style default'], ['none', 'None'], ['some', 'Some slides'], ['rich', 'Most slides'], ['story', 'Every slide (story panels)']]}
+        onChange={(v) => set({ illustrations: v === 'style' ? undefined : (v as DesignModifiers['illustrations']) })}
+      />
       <Select label="Decorations" value={m.decoration ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ['minimal', 'Minimal'], ['normal', 'Normal'], ['rich', 'Rich']]} onChange={(v) => set({ decoration: v === 'style' ? undefined : (v as DesignModifiers['decoration']) })} />
     </Section>
   );

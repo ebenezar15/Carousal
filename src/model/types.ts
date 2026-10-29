@@ -8,7 +8,7 @@ export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image
 export type EnterAnimation = 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom' | 'zoom-out' | 'pop' | 'rotate' | 'wipe' | 'drop' | 'unfold' | 'squash';
 /** Word/letter animations for text (typewriter, word by word…). */
 export type TextAnimation = 'none' | 'typewriter' | 'word-fade' | 'word-rise' | 'word-pop' | 'word-slide' | 'word-drop' | 'word-spin' | 'highlight-sweep';
-export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink';
+export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink' | 'wave' | 'sway' | 'bob' | 'twinkle' | 'drift';
 
 /** How an element animates in video/GIF exports and the animation preview (seconds). */
 export interface ElementAnimation {
@@ -18,6 +18,8 @@ export interface ElementAnimation {
   duration: number;
   text?: TextAnimation;
   loop?: LoopAnimation;
+  /** Seconds added to the loop clock, so parts that loop together don't move in lockstep. */
+  phase?: number;
 }
 
 /** Render-only pose computed for one animation frame (never saved). */
@@ -304,6 +306,8 @@ export interface DesignModifiers {
   panoramic?: boolean;
   /** What flows across slide seams when panoramic (continuous) mode is on. */
   continuous?: ContinuousStyle;
+  /** Illustrations (scenes, characters, objects) matched to the content: none, some slides, most slides, or a picture on every slide (story). */
+  illustrations?: 'none' | 'some' | 'rich' | 'story';
 }
 
 export type ContinuousStyle = 'flow' | 'ribbon' | 'path' | 'blocks' | 'word';
@@ -314,6 +318,8 @@ export interface CarouselTheme {
   headingFont: string;
   bodyFont: string;
   modifiers?: DesignModifiers;
+  /** Varies generated art and decorations between designs that share a style (New designs). */
+  seed?: number;
   /** Per-slide layout choice (slide index → layoutCatalog id), set by "new layout". */
   layoutOverrides?: Record<number, string>;
   /** Shown on CTA slides and footers, e.g. "@studio". */

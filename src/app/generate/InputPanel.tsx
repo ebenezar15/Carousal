@@ -3,7 +3,7 @@ import type { GenerateOptions, Tone } from '@/engine';
 import { ACCEPTED_FILE_TYPES, ImportError, importFile, importUrl } from '@/engine/import';
 import { presets } from '@/styles';
 import { SAMPLE_CONTENT } from '../sample';
-import { interpretPrompt, STYLE_PROMPTS } from '@/engine';
+import { FAITH_PROMPTS, interpretPrompt, STYLE_PROMPTS } from '@/engine';
 
 
 const TONES: Tone[] = ['professional', 'playful', 'bold', 'educational'];
@@ -175,7 +175,7 @@ export function DesignPromptField({ value, onChange, id = 'design-prompt' }: { v
         onChange={(e) => onChange(e.target.value)}
       />
       <div className="mt-1.5 flex flex-wrap gap-1" aria-label="Design styles">
-        {STYLE_PROMPTS.map((sp) => (
+        {[...STYLE_PROMPTS, ...FAITH_PROMPTS].map((sp) => (
           <button
             key={sp.label}
             type="button"

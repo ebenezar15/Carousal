@@ -8,4 +8,4 @@ export { normalizePlan } from './normalize';
 export { createClaudeProvider, CLAUDE_MODELS, DEFAULT_CLAUDE_MODEL, DEFAULT_CLAUDE_FAST_MODEL } from './providers/claude';
 export { createOllamaProvider, listOllamaModels, pullOllamaModel, deleteOllamaModel, RECOMMENDED_OLLAMA_MODELS, DEFAULT_OLLAMA_URL, type OllamaModel, type PullProgress } from './providers/ollama';
 export { createOpenAIProvider, listOpenAIModels, OPENAI_PRESETS, getOpenAIPreset, type OpenAIPresetId, type OpenAIModelInfo } from './providers/openai';
-export { interpretPrompt, interpretPromptWithAI, themeFromBrief, applyBriefExtras, needsAI, variationsFromBrief, STYLE_PROMPTS, type DesignBrief, type Interpretation } from './designPrompt';
+export { interpretPrompt, interpretPromptWithAI, themeFromBrief, applyBriefExtras, needsAI, variationsFromBrief, STYLE_PROMPTS, FAITH_PROMPTS, type DesignBrief, type Interpretation } from './designPrompt';

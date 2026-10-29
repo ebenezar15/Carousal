@@ -7,13 +7,15 @@ import type { SlidePlan } from '../schema';
 import type { Box, Ctx } from './context';
 import { ellipse, fitStack, label, line, measureSpec, path, rect, textEl, type TextSpec } from './primitives';
 import { SHAPES } from './shapes';
+import { DIAGRAM_LAYOUTS } from './diagrams';
+import { ILLUSTRATED_LAYOUTS } from './illustrated';
 
 export interface LayoutResult { elements: SlideElement[]; overflow: boolean }
 export type LayoutFn = (ctx: Ctx, s: SlidePlan, index: number) => LayoutResult;
 
 // ---------- text spec helpers ----------
 
-function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
+export function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot: 'headline', text, font: ctx.fonts.heading, weight: ctx.headline.weight, max, min: Math.min(max, ctx.sizes.minHead),
     lineHeight: ctx.headline.lineHeight, color: ctx.pal.text, textCase: ctx.headline.textCase,
@@ -40,7 +42,7 @@ function headlineEffect(ctx: Ctx): Partial<TextSpec> {
   }
 }
 
-function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
+export function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot, text, font: ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.body, min: ctx.sizes.minBody,
     lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8, ...extra,
@@ -57,7 +59,7 @@ function kickerText(ctx: Ctx, index: number): string | null {
   return null;
 }
 
-function kickerSpec(ctx: Ctx, text: string): TextSpec {
+export function kickerSpec(ctx: Ctx, text: string): TextSpec {
   const mono = ctx.style.layout.decorations.some((x) => x === 'code-tag' || x === 'terminal-prompt');
   return {
     slot: 'kicker', text, font: mono ? ctx.fonts.accent : ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.small, min: ctx.sizes.small,
@@ -130,7 +132,7 @@ const listMarker = (ctx: Ctx, layoutId: string): Marker =>
 // ---------- shared compositions ----------
 
 /** Headline (+kicker) on top, then body and/or rows; whole group positioned by valign. */
-function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
+export function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
   const region = opts.region ?? ctx.box;
   const kick = kickerText(ctx, index);
   const specs: TextSpec[] = [];
@@ -555,6 +557,8 @@ export const LAYOUTS: Record<string, LayoutFn> = {
   'cta-centered': ctaCentered,
   'cta-profile': ctaProfile,
   'cta-recap': ctaRecap,
+  ...DIAGRAM_LAYOUTS,
+  ...ILLUSTRATED_LAYOUTS,
 };
 
 /** Layouts that make sense for a role — used by "new layout" and anti-repetition. */

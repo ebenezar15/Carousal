@@ -31,6 +31,7 @@ export interface DesignBrief {
   motion?: string;
   typeScale?: number;
   headlineCase?: 'none' | 'upper';
+  illustrations?: 'none' | 'some' | 'rich' | 'story';
 }
 
 export interface Interpretation {
@@ -44,6 +45,13 @@ export interface Interpretation {
 type Rule = [RegExp, (b: DesignBrief) => void, string];
 
 const STYLE_WORDS: [RegExp, string, string][] = [
+  [/\b(bible stor(y|ies) comic|comic|comics|panels?|graphic novel)\b/, 'bible-comic', 'Bible story comic'],
+  [/\b(storybook|picture book|children'?s|kids|sunday school|illustrated story)\b/, 'illustrated-story', 'Illustrated story'],
+  [/\b(stained[- ]glass|cathedral|jewel tones?)\b/, 'stained-glass', 'Stained glass'],
+  [/\b(parchment|ancient|scroll|old letter|manuscript|sepia)\b/, 'parchment', 'Parchment'],
+  [/\b(night prayer|evening prayer|candle ?light|candles?|vigil|starry)\b/, 'night-prayer', 'Night prayer'],
+  [/\b(scripture|bible verse|verse cards?|psalm|devotional)\b/, 'scripture-serif', 'Scripture'],
+  [/\b(sunday|church|sermon|worship service|welcoming|congregation)\b/, 'sunday-light', 'Sunday light'],
   [/\b(minimal(ist|ism)?|clean|simple|white ?space|understated|quiet)\b/, 'minimalism', 'Minimalism'],
   [/\b(maximal(ist|ism)?|loud|busy|chaotic|more is more|eclectic|clash(ing)?)\b/, 'maximalism', 'Maximalism'],
   [/\b(surreal(ism|ist)?|dream(y|like)?|ethereal|fantasy|magical|otherworldly|cosmic)\b/, 'surreal', 'Surreal'],
@@ -51,7 +59,7 @@ const STYLE_WORDS: [RegExp, string, string][] = [
   [/\b(editorial|magazine|newspaper|news ?print|press|headline news|broadsheet)\b/, 'editorial-bold', 'Editorial'],
   [/\b(paper ?cut|paper|papercraft|craft paper|origami|layered paper|cut[- ]?out)\b/, 'paper-cut', 'Paper'],
   [/\b(clay(morphism)?|plasticine|puffy|squishy|soft 3d|3d|inflated)\b/, 'clay-3d', 'Clay'],
-  [/\b(vector|flat (design|illustration)|illustrat(ed|ion)|geometric shapes?|flat)\b/, 'vector-art', 'Vector art'],
+  [/\b(vector|flat (design|illustration)|geometric shapes?|flat)\b/, 'vector-art', 'Vector art'],
   [/\b(hand ?written|handwriting|bullet journal|journal|notebook|diary|doodles?|sketch(y|ed)?)\b/, 'handwritten-journal', 'Handwritten'],
   [/\b(graffiti|street( art)?|urban|spray( paint)?|hip[- ]?hop|tag(ging)?|mural)\b/, 'graffiti-street', 'Graffiti'],
   [/\b(luxury|luxurious|elegant|premium|high[- ]end|fashion)\b/, 'luxury-serif', 'Luxury'],
@@ -151,6 +159,9 @@ const RULES: Rule[] = [
   [/\b(giant word|big word across)\b/, (b) => (b.continuous = 'word'), 'giant word across slides'],
   [/\b(split shapes|shapes across)\b/, (b) => (b.continuous = 'blocks'), 'shapes split across slides'],
   [/\b(static|no (animation|motion)|still)\b/, (b) => (b.motion = 'none'), 'no animation'],
+  [/\b(no (illustrations?|pictures|drawings|characters)|text only)\b/, (b) => (b.illustrations = 'none'), 'no illustrations'],
+  [/\b(illustrat\w*|characters?|people|pictures|drawings|cartoons?|scenes?|animated characters?)\b/, (b) => (b.illustrations ??= 'rich'), 'illustrations'],
+  [/\b(tell (a|the) story|storytelling|story on every slide|picture on every slide)\b/, (b) => (b.illustrations = 'story'), 'a picture on every slide'],
   [/\b(kinetic|word by word|animated (text|type)|moving type)\b/, (b) => (b.motion = 'kinetic'), 'kinetic type'],
   [/\b(typewriter|typing)\b/, (b) => (b.motion = 'typewriter'), 'typewriter animation'],
   [/\b(bouncy|bounce|lively|energetic|playful motion)\b/, (b) => (b.motion = 'lively'), 'lively motion'],
@@ -286,6 +297,7 @@ export function themeFromBrief(brief: DesignBrief, fallbackStyleId: string, hand
   if (brief.decoration) m.decoration = brief.decoration;
   if (brief.typeScale) m.typeScale = brief.typeScale;
   if (brief.headlineCase) m.headlineCase = brief.headlineCase;
+  if (brief.illustrations) m.illustrations = brief.illustrations;
   if (brief.continuous === 'off') m.panoramic = false;
   else if (brief.continuous) Object.assign(m, { panoramic: true, continuous: brief.continuous });
   const theme: CarouselTheme = {
@@ -371,7 +383,7 @@ export async function interpretPromptWithAI(prompt: string, provider: AIProvider
  * Designs for a plan that follow a design prompt: the first is built straight from the brief; the others
  * are distinct styles (for comparison) that still honor its texture, motion, colors and continuity wishes.
  */
-export function variationsFromBrief(plan: CarouselPlan, brief: DesignBrief, opts: { count: number; tone: Tone; seed?: number; handle?: string }): Variation[] {
+export function variationsFromBrief(plan: CarouselPlan, brief: DesignBrief, opts: { count: number; tone: Tone; seed?: number; handle?: string; recent?: string[] }): Variation[] {
   const base = pickVariations(plan, { ...opts, preferStyleId: brief.styleId });
   const first = themeFromBrief(brief, brief.styleId ?? base[0]!.theme.styleId, opts.handle);
   const others = base.filter((v) => v.theme.styleId !== first.styleId).slice(0, Math.max(0, opts.count - 1));
@@ -393,4 +405,15 @@ export const STYLE_PROMPTS: { label: string; prompt: string }[] = [
   { label: 'Vector art', prompt: 'flat vector illustration, hills and sun, geometric shapes, bright colors' },
   { label: 'Handwritten', prompt: 'handwritten bullet journal, dot grid, doodles, typewriter motion' },
   { label: 'Graffiti', prompt: 'graffiti street art, spray paint drips, dark wall, neon colors' },
+];
+
+/** Faith-focused starting points (Christian carousels). */
+export const FAITH_PROMPTS: { label: string; prompt: string }[] = [
+  { label: 'Scripture', prompt: 'scripture verse cards, classic serif, ivory paper, calm' },
+  { label: 'Sunday', prompt: 'sunday church welcoming, warm light rays, friendly illustrations' },
+  { label: 'Stained glass', prompt: 'stained glass, jewel tones, light rays, dreamy motion' },
+  { label: 'Parchment', prompt: 'parchment scroll, sepia ink, ornaments' },
+  { label: 'Night prayer', prompt: 'night prayer, starry sky, candle glow' },
+  { label: 'Storybook', prompt: 'storybook illustrated story with characters and scenes, playful' },
+  { label: 'Bible comic', prompt: 'bible story comic panels, tell the story with characters' },
 ];

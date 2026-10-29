@@ -365,6 +365,89 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
         back.push(path('splat', sp.d, sp.viewBox, -sz * 0.3, H - sz * 0.75, sz, sz, { fill: index % 2 ? pal.accent : pal.highlight, opacity: 0.9, rotation: Math.round(rnd() * 360) }));
         break;
       }
+      case 'light-rays': {
+        // Soft rays of light from above the top edge (Sunday light, stained glass).
+        const cx = W * (index % 2 ? 0.7 : 0.3);
+        const n = 7;
+        const len = H * 0.95;
+        for (let r = 0; r < n; r++) {
+          const a = (-60 + (120 * r) / (n - 1)) * (Math.PI / 180);
+          const w = W * 0.05;
+          const x2 = cx + Math.sin(a) * len;
+          const y2 = Math.cos(a) * len;
+          const nx = Math.cos(a) * w;
+          const ny = -Math.sin(a) * w;
+          const d = `M${cx} -10 L${(x2 - nx).toFixed(1)} ${(y2 - ny).toFixed(1)} L${(x2 + nx).toFixed(1)} ${(y2 + ny).toFixed(1)} Z`;
+          back.push(path('light-ray', [d], [W, H], 0, 0, W, H, { fill: ctx.dark ? pal.highlight : '#FFFFFF', opacity: ctx.dark ? 0.06 : 0.35 }));
+        }
+        break;
+      }
+      case 'stained-glass': {
+        // Jewel-toned glass panes with dark leading, in two corners (clear of the text box).
+        const rnd = seeded(ctx.seed + index * 13);
+        const colors = [pal.primary, pal.accent, pal.highlight, mix(pal.primary, pal.accent, 0.5)];
+        const lead = ctx.dark ? '#0A0A12' : pal.text;
+        const pane = (cx: number, cy: number, r: number) => {
+          const sides = 5 + Math.floor(rnd() * 3);
+          const pts = Array.from({ length: sides }, (_, n) => {
+            const a = (n / sides) * Math.PI * 2 + rnd() * 0.4;
+            const rr = r * (0.75 + rnd() * 0.35);
+            return `${(cx + Math.cos(a) * rr).toFixed(1)} ${(cy + Math.sin(a) * rr).toFixed(1)}`;
+          });
+          return `M${pts.join(' L')} Z`;
+        };
+        const cell = W * 0.075;
+        const corners: [number, number][] = [[0, 0], [W, H]];
+        corners.forEach(([ox, oy]) => {
+          for (let gx = 0; gx < 3; gx++) for (let gy = 0; gy < 3 - gx; gy++) {
+            const cx = ox === 0 ? cell * (gx + 0.5) * 1.6 : W - cell * (gx + 0.5) * 1.6;
+            const cy = oy === 0 ? cell * (gy + 0.5) * 1.6 : H - cell * (gy + 0.5) * 1.6;
+            if (!clear(cx - cell, cy - cell, cell * 2, cell * 2)) continue;
+            back.push(path('glass-pane', [pane(cx, cy, cell)], [W, H], 0, 0, W, H, { fill: colors[(gx + gy + index) % colors.length], stroke: lead, strokeWidth: Math.round(5 * k), opacity: ctx.dark ? 0.85 : 0.7 }));
+          }
+        });
+        break;
+      }
+      case 'ornament-divider':
+        if (headline && s.role !== 'hook') {
+          // A small symmetric flourish under the headline: line – diamond – line.
+          const w = Math.min(260 * k, headline.width * 0.6);
+          const cx = ctx.align === 'center' ? headline.x + headline.width / 2 : headline.x + w / 2;
+          const y = headline.y + headline.height + Math.round(18 * k);
+          const c = mix(pal.primary, pal.bg, 0.2);
+          back.push(line('ornament', [cx - w / 2, y, cx - 14 * k, y], c, Math.max(1, Math.round(2 * k))));
+          back.push(line('ornament', [cx + 14 * k, y, cx + w / 2, y], c, Math.max(1, Math.round(2 * k))));
+          back.push(path('ornament', ['M10 0 L20 10 L10 20 L0 10 Z'], [20, 20], cx - 9 * k, y - 9 * k, 18 * k, 18 * k, { fill: c }));
+        }
+        break;
+      case 'verse-frame': {
+        // Thin double frame with corner brackets (scripture cards).
+        const inset = Math.round(30 * k);
+        const c = mix(pal.primary, pal.bg, 0.35);
+        back.push(rect('frame', inset, inset, W - 2 * inset, H - 2 * inset, 'transparent', { stroke: c, strokeWidth: Math.max(1, Math.round(2 * k)) }));
+        back.push(rect('frame', inset + 10 * k, inset + 10 * k, W - 2 * inset - 20 * k, H - 2 * inset - 20 * k, 'transparent', { stroke: c, strokeWidth: Math.max(1, Math.round(1 * k)), opacity: 0.6 }));
+        break;
+      }
+      case 'starfield': {
+        const rnd = seeded(ctx.seed + index * 101);
+        for (let n = 0; n < 26; n++) {
+          const x = rnd() * W;
+          const y = rnd() * H * 0.55;
+          const r = (1.5 + rnd() * 3.5) * k;
+          if (!clear(x - r, y - r, 2 * r, 2 * r)) continue;
+          const star = ellipse('star', x, y, r, r, n % 5 === 0 ? pal.highlight : '#FFFFFF', { opacity: 0.5 + rnd() * 0.5 });
+          star.anim = { enter: 'fade', delay: rnd() * 1.5, duration: 0.6, loop: 'twinkle', phase: rnd() * 3 };
+          back.push(star);
+        }
+        break;
+      }
+      case 'candle-glow': {
+        const r = W * 0.45;
+        back.push(rect('candle-glow', W / 2 - r, H - r * 0.9, 2 * r, 2 * r, 'transparent', {
+          radial: { stops: [{ offset: 0, color: withAlpha(pal.highlight, ctx.dark ? 0.32 : 0.25) }, { offset: 1, color: withAlpha(pal.highlight, 0) }], cx: 0.5, cy: 0.5, r: 0.5 },
+        }));
+        break;
+      }
       case 'source-footnote':
         if (s.role === 'stat') back.push(label(ctx, 'source', 'Source: your data', box.x, box.y + box.h - ctx.sizes.small * 1.3, box.w, { color: pal.mutedText, size: Math.round(26 * k) }));
         break;

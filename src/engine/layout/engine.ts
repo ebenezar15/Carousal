@@ -8,6 +8,8 @@ import { chrome } from './chrome';
 import { makeCtx, type Ctx } from './context';
 import { decorate } from './decorations';
 import { LAYOUTS, ROLE_LAYOUTS, type LayoutResult } from './layouts';
+import { diagramFor } from './diagrams';
+import { illustratedFor } from './illustrated';
 import { getStyle } from '@/styles';
 import { autoAnimate, ANIMATION_PRESETS, type AnimationPreset } from '@/editor/animation';
 
@@ -35,6 +37,13 @@ export function chooseLayouts(ctx: Ctx, overrides: Record<number, string> = {}):
     const override = overrides[i];
     if (override && LAYOUTS[override]) {
       chosen.push(override);
+      return;
+    }
+    // Content that is a diagram (a cycle, a process, overlapping ideas…) or a story moment gets a
+    // diagram or illustrated layout; everything else uses the style's own layout for the role.
+    const special = diagramFor(s, ctx) ?? illustratedFor(s, ctx, i);
+    if (special && LAYOUTS[special]) {
+      chosen.push(special);
       return;
     }
     let id = ctx.style.roleLayouts[s.role] ?? 'body-top-left';

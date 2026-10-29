@@ -16,6 +16,7 @@ const TranslateDialog = lazy(() => import('./TranslateDialog').then((m) => ({ de
 import { importProjectFile, PROJECT_EXT } from '@/export/projectFile';
 import { providers } from './runtime';
 import { readLookPrompt } from './lookPrompt';
+import { recentStyles, rememberStyles } from '@/engine/designHistory';
 import { useDocument, useProjects, useRoute, useSettings } from './store';
 import { InputPanel, type InputState } from './generate/InputPanel';
 import { VariationsGrid, type VariationPreview } from './generate/VariationsGrid';
@@ -100,8 +101,12 @@ export function GeneratePage() {
 
   const readPrompt = readLookPrompt;
 
-  const designsFor = (pl: CarouselPlan, it: Interpretation | null, o: { count: number; tone: Tone; seed: number; handle?: string }) =>
-    it ? variationsFromBrief(pl, it.brief, o) : pickVariations(pl, o);
+  const designsFor = (pl: CarouselPlan, it: Interpretation | null, o: { count: number; tone: Tone; seed: number; handle?: string }) => {
+    const opts = { ...o, recent: recentStyles() };
+    const v = it ? variationsFromBrief(pl, it.brief, opts) : pickVariations(pl, opts);
+    rememberStyles(v.map((x) => x.theme.styleId));
+    return v;
+  };
 
   const run = async (job: () => Promise<void>) => {
     setBusy(true);
@@ -175,6 +180,12 @@ export function GeneratePage() {
     act(async (p, pl) => {
       if (motion === 'custom') return;
       await commit(p, pl, { ...p.carousel.theme, motion });
+    });
+  const setIllustrations = (v: 'none' | 'some' | 'rich' | 'story' | undefined) =>
+    act(async (p, pl) => {
+      const modifiers = { ...p.carousel.theme.modifiers, illustrations: v };
+      if (!v) delete modifiers.illustrations;
+      await commit(p, pl, { ...p.carousel.theme, modifiers });
     });
   const restyle = (prompt: string) =>
     act(async (p, pl) => {
@@ -299,6 +310,7 @@ export function GeneratePage() {
               onMore={more}
               onContinuous={setContinuous}
               onMotion={setMotion}
+              onIllustrations={setIllustrations}
               onRestyle={restyle}
               onRegenerateCopy={regenerateCopy}
               actions={slideActions}
