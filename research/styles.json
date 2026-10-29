@@ -739,7 +739,8 @@
           "style": "soft-chevron",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -899,7 +900,8 @@
           "style": "doodle-arrow",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -1702,7 +1704,8 @@
           "style": "soft-chevron",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -1946,7 +1949,8 @@
           "style": "soft-chevron",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -2036,7 +2040,8 @@
           "style": "soft-chevron",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -2117,7 +2122,8 @@
           "style": "big-arrow",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-centered",
@@ -2205,7 +2211,8 @@
           "style": "hand-arrow",
           "position": "bottom-right"
         },
-        "panoramic": false
+        "panoramic": false,
+        "illustrations": "some"
       },
       "roleLayouts": {
         "hook": "hook-giant-type",
@@ -2304,6 +2311,598 @@
         "cta": "cta-centered"
       },
       "motion": "graffiti"
+    },
+    {
+      "id": "scripture-serif",
+      "name": "Scripture",
+      "description": "Reverent verse cards: classic serif, ivory paper, double frame, ornament dividers, generous space for the Word.",
+      "moods": [
+        "minimal",
+        "calm",
+        "editorial",
+        "faith"
+      ],
+      "palettes": [
+        "scripture-ivory",
+        "scripture-sage",
+        "editorial-cream",
+        "night-indigo"
+      ],
+      "fonts": {
+        "heading": "eb-garamond",
+        "body": "cormorant-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "cormorant-garamond",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "playfair-display",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper-grain",
+        "noise": 0.02
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 11,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 600,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "verse-frame",
+          "ornament-divider"
+        ],
+        "slideNumber": {
+          "style": "roman",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "text-continue",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "minimal"
+    },
+    {
+      "id": "stained-glass",
+      "name": "Stained Glass",
+      "description": "Jewel-toned glass panes with dark leading, light streaming down, engraved capitals.",
+      "moods": [
+        "dark",
+        "luxury",
+        "colorful",
+        "faith"
+      ],
+      "palettes": [
+        "jewel-night",
+        "jewel-wine",
+        "night-indigo"
+      ],
+      "fonts": {
+        "heading": "cinzel",
+        "body": "lora"
+      },
+      "altFonts": [
+        {
+          "heading": "marcellus",
+          "body": "lora"
+        },
+        {
+          "heading": "cinzel",
+          "body": "eb-garamond"
+        }
+      ],
+      "background": {
+        "type": "radial-gradient",
+        "center": [
+          0.5,
+          0.0
+        ],
+        "stops": [
+          "surface",
+          "bg"
+        ]
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 10,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.95,
+          "weight": 700,
+          "case": "upper",
+          "tracking": 0.02,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "color",
+        "decorations": [
+          "stained-glass",
+          "light-rays"
+        ],
+        "slideNumber": {
+          "style": "roman",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-card",
+        "body": "body-centered",
+        "list": "list-bullets",
+        "step": "step-timeline",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "dreamy"
+    },
+    {
+      "id": "parchment",
+      "name": "Parchment",
+      "description": "Aged parchment, sepia ink, inscribed capitals and flourishes — like an old letter or scroll.",
+      "moods": [
+        "warm",
+        "editorial",
+        "handdrawn",
+        "faith"
+      ],
+      "palettes": [
+        "parchment-sepia",
+        "kraft-paper",
+        "scripture-ivory"
+      ],
+      "fonts": {
+        "heading": "marcellus",
+        "body": "lora"
+      },
+      "altFonts": [
+        {
+          "heading": "cinzel",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "young-serif",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "kraft"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 10,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": 0.0,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.55
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "ornament-divider",
+          "double-rule"
+        ],
+        "slideNumber": {
+          "style": "roman",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "text-continue",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-split",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "paper"
+    },
+    {
+      "id": "sunday-light",
+      "name": "Sunday Light",
+      "description": "Warm, welcoming church-social look: soft light rays, friendly sans, clear points, gentle illustrations.",
+      "moods": [
+        "warm",
+        "calm",
+        "professional",
+        "faith"
+      ],
+      "palettes": [
+        "sunday-warm",
+        "sunday-sky",
+        "scripture-sage"
+      ],
+      "fonts": {
+        "heading": "plus-jakarta-sans",
+        "body": "inter"
+      },
+      "altFonts": [
+        {
+          "heading": "outfit",
+          "body": "inter"
+        },
+        {
+          "heading": "lexend",
+          "body": "lexend"
+        }
+      ],
+      "background": {
+        "type": "linear-gradient",
+        "angle": 180,
+        "stops": [
+          "bg",
+          "highlight"
+        ]
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 800,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.02
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "highlight",
+        "decorations": [
+          "light-rays"
+        ],
+        "slideNumber": {
+          "style": "pill",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "pill-swipe-text",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-card",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "subtle"
+    },
+    {
+      "id": "illustrated-story",
+      "name": "Illustrated Story",
+      "description": "Picture-book carousel: a friendly illustration on most slides — characters, scenes and symbols drawn for the topic.",
+      "moods": [
+        "playful",
+        "warm",
+        "educational",
+        "faith"
+      ],
+      "palettes": [
+        "storybook-meadow",
+        "storybook-sunset",
+        "sunday-sky",
+        "pastel-peach"
+      ],
+      "fonts": {
+        "heading": "baloo-2",
+        "body": "nunito"
+      },
+      "altFonts": [
+        {
+          "heading": "fredoka",
+          "body": "nunito"
+        },
+        {
+          "heading": "young-serif",
+          "body": "nunito"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 800,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.05
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "highlight",
+        "decorations": [
+          "sparkle"
+        ],
+        "slideNumber": {
+          "style": "circle-badge",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "rich"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-icon-top",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "lively"
+    },
+    {
+      "id": "night-prayer",
+      "name": "Night Prayer",
+      "description": "Quiet night sky, twinkling stars and a warm candle glow; elegant serif for prayers and evening devotions.",
+      "moods": [
+        "dark",
+        "calm",
+        "luxury",
+        "faith"
+      ],
+      "palettes": [
+        "night-indigo",
+        "night-ember",
+        "surreal-dusk"
+      ],
+      "fonts": {
+        "heading": "cormorant-garamond",
+        "body": "karla"
+      },
+      "altFonts": [
+        {
+          "heading": "instrument-serif",
+          "body": "karla"
+        },
+        {
+          "heading": "eb-garamond",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "radial-gradient",
+        "center": [
+          0.5,
+          1.0
+        ],
+        "stops": [
+          "surface",
+          "bg"
+        ]
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 11,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.1,
+          "weight": 600,
+          "case": "sentence",
+          "tracking": 0.0,
+          "lineHeight": 1.05
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.55
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "starfield",
+          "candle-glow"
+        ],
+        "slideNumber": {
+          "style": "dots",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-bullets",
+        "step": "step-timeline",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "dreamy"
+    },
+    {
+      "id": "bible-comic",
+      "name": "Bible Story Comic",
+      "description": "Story told in comic panels: a drawn scene with characters on every slide and a caption box — great for Bible stories and testimonies.",
+      "moods": [
+        "playful",
+        "bold",
+        "educational",
+        "faith"
+      ],
+      "palettes": [
+        "comic-pop",
+        "storybook-sunset",
+        "storybook-meadow"
+      ],
+      "fonts": {
+        "heading": "lilita-one",
+        "body": "nunito"
+      },
+      "altFonts": [
+        {
+          "heading": "luckiest-guy",
+          "body": "nunito"
+        },
+        {
+          "heading": "chewy",
+          "body": "nunito"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "pattern": "halftone-dots",
+        "patternOpacity": 0.12
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 7,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0.01,
+          "lineHeight": 1.0
+        },
+        "body": {
+          "weight": 500,
+          "lineHeight": 1.4
+        },
+        "emphasis": "box",
+        "decorations": [
+          "thick-border"
+        ],
+        "slideNumber": {
+          "style": "boxed-number",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "story"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "lively"
     }
   ]
 }

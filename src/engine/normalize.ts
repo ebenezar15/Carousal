@@ -35,7 +35,8 @@ export function normalizePlan(plan: CarouselPlan, opts: GenerateOptions): Carous
   const seen = new Set<string>();
   let slides = plan.slides.filter((s) => {
     if (!(s.headline.trim() || s.body.trim() || s.bullets.length || s.stat || s.quote)) return false;
-    const key = [s.headline, s.body, ...s.bullets].map((t) => t.toLowerCase().replace(/\s+/g, ' ').trim()).join('|');
+    // Quotes and stats count too: two different verses on headline-less quote slides aren't repeats.
+    const key = [s.headline, s.body, ...s.bullets, s.quote?.text ?? '', s.stat ? `${s.stat.value} ${s.stat.label}` : ''].map((t) => t.toLowerCase().replace(/\s+/g, ' ').trim()).join('|');
     if (seen.has(key)) return false;
     seen.add(key);
     return true;

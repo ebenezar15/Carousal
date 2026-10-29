@@ -730,7 +730,7 @@ const SKIN_FOR_BABY = SKIN_TONES[1]!;
 function sailboatSmall(c: Ctx, x: number, y: number) {
   c.mover('boat', 'bob', [x, y], () => {
     c.add(rrect(x - 2, y - 60, 4, 60, 1), N.woodDark);
-    c.add(`M${x + 4} ${y - 56}Q${x + 34} ${y - 30} ${x + 36} ${y - 6}L${x + 4} ${y - 6}Z`, c.c.light);
+    c.add(`M${x + 4} ${y - 56}Q${x + 34} ${y - 30} ${x + 36} ${y - 6}L${x + 4} ${y - 6}Z`, c.light);
     c.add(`M${x - 40} ${y - 4}L${x + 44} ${y - 4}Q${x + 34} ${y + 12} ${x + 24} ${y + 12}L${x - 28} ${y + 12}Q${x - 36} ${y + 8} ${x - 40} ${y - 4}Z`, c.pal.accent);
   });
 }
