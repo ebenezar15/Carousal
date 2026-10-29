@@ -25,7 +25,15 @@
     "compare-split": "Before/after or A/B in two halves with labels.",
     "cta-centered": "Centered call to action, handle, save/share icons.",
     "cta-profile": "Avatar/logo, handle, follow prompt, secondary action.",
-    "cta-recap": "Short recap list followed by call to action."
+    "cta-recap": "Short recap list followed by call to action.",
+    "diagram-cycle": "3-6 nodes around a circle joined by curved arrows (a rhythm, habit or repeating process); optional center word.",
+    "diagram-flow": "Numbered process boxes joined by arrows: a row on landscape (or 2-3 steps on square), a column on portrait.",
+    "diagram-venn": "2-3 overlapping translucent circles with labels; the shared idea sits in the overlap.",
+    "diagram-pyramid": "Stacked tiers, widest at the bottom, labels inside (priorities, hierarchy, foundation first).",
+    "diagram-tree": "Root node with 2-5 children joined by branches: a row of cards or a vine trunk with alternating branches.",
+    "diagram-journey": "Winding road with numbered milestones and labels alternating sides (a story, journey or timeline).",
+    "diagram-versus": "Two contrasting panels (A vs B, or before → after) with a VS badge or arrow between them.",
+    "diagram-stairs": "Ascending steps with numbered labels and a rising arrow (growth, steps of faith)."
   },
   "styles": [
     {

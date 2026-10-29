@@ -224,7 +224,7 @@ function shortText(s: SlidePlan, from: ('body' | 'emphasis' | 'headline')[]): st
 // ---------- 1. cycle ----------
 
 const cycle: LayoutFn = (ctx, s, i) => {
-  const items = itemsFor(s, 3);
+  const items = itemsFor(s, rawItems(s).length > 4 ? 2 : 3);
   if (items.length < 2 || items.length > 6) return fallback(ctx, s, i);
   const center = shortText(s, ['body', 'emphasis']);
   const f = frame(ctx, s, { side: true, body: center !== s.body.trim().replace(/[.!]$/, '') });
@@ -297,7 +297,7 @@ const cycle: LayoutFn = (ctx, s, i) => {
 // ---------- 2. flow ----------
 
 const flow: LayoutFn = (ctx, s, i) => {
-  const items = itemsFor(s, 5);
+  const items = itemsFor(s, ctx.isLandscape ? 4 : 7);
   if (items.length < 2 || items.length > 6) return fallback(ctx, s, i);
   const f = frame(ctx, s);
   const { region } = f;
@@ -310,7 +310,7 @@ const flow: LayoutFn = (ctx, s, i) => {
   const textColor = ink(ctx, pal.surface);
   const fl = flavor(ctx);
   const slots: Slot[] = [];
-  if ((ctx.isLandscape && n <= 5) || (ctx.W / ctx.H >= 0.95 && n <= 3)) {
+  if (ctx.isLandscape || (ctx.W / ctx.H >= 0.95 && n <= 3)) {
     // Horizontal: cards in a row with arrows between them.
     const ag = Math.round(70 * k);
     const cw = (region.w - (n - 1) * ag) / n;
@@ -332,7 +332,7 @@ const flow: LayoutFn = (ctx, s, i) => {
     return done(f, [...els, ...txt.elements], txt.overflow);
   }
   // Vertical: numbered badges joined by arrows, each with a card holding the step.
-  const gap = Math.round(Math.max(30 * k, Math.min(56 * k, region.h * 0.05)));
+  const gap = Math.round(Math.max(n >= 5 ? 18 * k : 30 * k, Math.min(56 * k, region.h * 0.05)));
   const rowH = Math.min((region.h - (n - 1) * gap) / n, 200 * k);
   const total = n * rowH + (n - 1) * gap;
   const y0 = region.y + (region.h - total) / 2;
@@ -351,10 +351,10 @@ const flow: LayoutFn = (ctx, s, i) => {
       if (b - a >= 18 * k) els.push(line('diagram-arrow', [bx, a, bx, b], stroke, sw, { arrowEnd: true }));
     }
     const padX = Math.round(30 * k);
-    const padY = Math.round(Math.min(18 * k, rowH * 0.1));
+    const padY = Math.round(Math.min(18 * k, rowH * 0.08));
     slots.push({ it, box: { x: Math.round(cardX + padX), y: Math.round(y + padY), w: Math.round(cardW - 2 * padX), h: Math.round(rowH - 2 * padY) }, color: textColor, align: 'left' });
   });
-  const txt = fitNodes(ctx, slots, Math.round(Math.min(46 * k, rowH * 0.36)));
+  const txt = fitNodes(ctx, slots, Math.round(Math.min(46 * k, rowH * 0.44)));
   return done(f, [...els, ...txt.elements], txt.overflow);
 };
 
@@ -483,7 +483,8 @@ const tree: LayoutFn = (ctx, s, i) => {
   if (items.length < 2 || items.length > 6) return fallback(ctx, s, i);
   // "The fruit of the Spirit" → root "The Spirit".
   const ofPart = /\bof\s+(.+)$/i.exec(s.headline.trim())?.[1]?.replace(/[.!?]$/, '') ?? '';
-  let root = shortText(s, ['emphasis', 'headline']) || (words(ofPart).length <= 3 ? capFirst(ofPart) : '');
+  const keyword = /\b((?:the|his|my|your)\s+)?(vine|tree|fruits?|branch(?:es)?|roots?)\b/i.exec(s.headline)?.[0] ?? '';
+  let root = shortText(s, ['emphasis', 'headline']) || (ofPart && words(ofPart).length <= 3 ? capFirst(ofPart) : capFirst(keyword));
   let rootDetail = '';
   if (!root && items.length >= 3) {
     root = items[0]!.label;
@@ -588,12 +589,15 @@ const journey: LayoutFn = (ctx, s, i) => {
     els.push(pen.el('diagram-link', { stroke: road, strokeWidth: roadW }));
     pts.forEach(([x, y], j) => {
       const up = y < cy;
-      const lw = Math.min(colW * 1.8, region.w) - 16 * k;
-      const lx = Math.max(region.x, Math.min(region.x + region.w - lw, x - lw / 2));
+      // Labels on one side are two columns apart; edge labels are clipped (not shifted) so they never meet.
+      const half = colW * 0.92 - 8 * k;
+      const lx = Math.max(region.x, x - half);
+      const rx = Math.min(region.x + region.w, x + half);
+      const align = lx > x - half ? 'left' : rx < x + half ? 'right' : 'center';
       const box = up
-        ? { x: Math.round(lx), y: region.y, w: Math.round(lw), h: Math.round(y - dr - 22 * k - region.y) }
-        : { x: Math.round(lx), y: Math.round(y + dr + 22 * k), w: Math.round(lw), h: Math.round(region.y + region.h - (y + dr + 22 * k)) };
-      slots.push({ it: items[j]!, box, color: pal.text, valign: up ? 'bottom' : 'top', detailColor: contrast(pal.mutedText, pal.bg) >= 4.5 ? pal.mutedText : pal.text });
+        ? { x: Math.round(lx), y: region.y, w: Math.round(rx - lx), h: Math.round(y - dr - 22 * k - region.y) }
+        : { x: Math.round(lx), y: Math.round(y + dr + 22 * k), w: Math.round(rx - lx), h: Math.round(region.y + region.h - (y + dr + 22 * k)) };
+      slots.push({ it: items[j]!, box, color: pal.text, align, valign: up ? 'bottom' : 'top', detailColor: contrast(pal.mutedText, pal.bg) >= 4.5 ? pal.mutedText : pal.text });
     });
   } else {
     const rowH = region.h / n;
@@ -612,12 +616,15 @@ const journey: LayoutFn = (ctx, s, i) => {
     pts.forEach(([x, y], j) => {
       const left = x < cx;
       const g = dr + 26 * k;
-      const lh = Math.min(rowH * 1.9, region.h);
-      const ly = Math.max(region.y, Math.min(region.y + region.h - lh, y - lh / 2));
+      // Same-side labels are two rows apart; first/last labels are clipped at the region, not shifted.
+      const half = rowH * 0.95 - 4 * k;
+      const ly = Math.max(region.y, y - half);
+      const lb = Math.min(region.y + region.h, y + half);
+      const valign = ly > y - half ? 'top' : lb < y + half ? 'bottom' : 'middle';
       const box = left
-        ? { x: region.x, y: Math.round(ly), w: Math.round(x - g - region.x), h: Math.round(lh) }
-        : { x: Math.round(x + g), y: Math.round(ly), w: Math.round(region.x + region.w - x - g), h: Math.round(lh) };
-      slots.push({ it: items[j]!, box, color: pal.text, align: left ? 'right' : 'left', detailColor: contrast(pal.mutedText, pal.bg) >= 4.5 ? pal.mutedText : pal.text });
+        ? { x: region.x, y: Math.round(ly), w: Math.round(x - g - region.x), h: Math.round(lb - ly) }
+        : { x: Math.round(x + g), y: Math.round(ly), w: Math.round(region.x + region.w - x - g), h: Math.round(lb - ly) };
+      slots.push({ it: items[j]!, box, color: pal.text, align: left ? 'right' : 'left', valign, detailColor: contrast(pal.mutedText, pal.bg) >= 4.5 ? pal.mutedText : pal.text });
     });
   }
   // A thin center line makes the path read as a road.

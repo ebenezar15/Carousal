@@ -564,13 +564,13 @@ export const LAYOUTS: Record<string, LayoutFn> = {
 /** Layouts that make sense for a role — used by "new layout" and anti-repetition. */
 export const ROLE_LAYOUTS: Record<SlidePlan['role'], string[]> = {
   hook: ['hook-giant-type', 'hook-centered', 'hook-split', 'hook-number'],
-  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card'],
-  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top'],
+  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-journey'],
+  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-venn', 'diagram-tree'],
+  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card', 'diagram-flow', 'diagram-cycle', 'diagram-tree', 'diagram-pyramid', 'diagram-stairs'],
+  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top', 'diagram-flow', 'diagram-stairs', 'diagram-journey'],
   stat: ['stat-hero', 'stat-chart', 'body-card'],
   quote: ['quote-big-marks', 'quote-card', 'body-centered'],
-  comparison: ['compare-split', 'body-card', 'list-bullets'],
-  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card'],
+  comparison: ['compare-split', 'body-card', 'list-bullets', 'diagram-versus'],
+  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card', 'diagram-cycle', 'diagram-pyramid', 'diagram-venn'],
   cta: ['cta-centered', 'cta-profile', 'cta-recap'],
 };

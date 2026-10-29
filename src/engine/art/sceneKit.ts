@@ -126,9 +126,8 @@ export function sky(c: Ctx, night = false) {
     return;
   }
   c.add(rrect(0, 0, 1000, 600), pal.softer);
-  // Gentle horizon glow bands.
-  c.add(rrect(0, 260, 1000, 340), pal.highlight, 0.12);
-  c.add(rrect(0, 340, 1000, 260), pal.highlight, 0.12);
+  // Gentle horizon glow: stacked translucent bands read as a soft gradient.
+  for (let i = 0; i < 6; i++) c.add(rrect(0, 150 + i * 45, 1000, 450 - i * 45), pal.highlight, 0.05);
 }
 
 export function sun(c: Ctx, x: number, y: number, r: number, color = c.pal.highlight, move = true) {
@@ -175,7 +174,8 @@ export function moon(c: Ctx, x: number, y: number, r: number) {
   );
 }
 
-export function clouds(c: Ctx, n: number, y0: number, y1: number, color = c.pal.surface, op = 0.95, avoid?: [number, number]) {
+export function clouds(c: Ctx, n: number, y0: number, y1: number, color = c.light, op = 0.95, avoid?: [number, number]) {
+  if (c.isDark) op = Math.min(op, 0.22);
   const xs: number[] = [];
   for (let i = 0; i < n; i++) {
     let x = 0;
@@ -187,10 +187,7 @@ export function clouds(c: Ctx, n: number, y0: number, y1: number, color = c.pal.
     const y = c.r.range(y0, y1);
     const w = c.r.range(110, 180);
     const seed = c.r.int(0, 9);
-    c.mover(`cloud-${i}`, 'drift', [x, y], () => {
-      c.add(cloud(x, y, w, seed), color, op);
-      c.shade(rrect(x - w / 2, y + w * 0.15 - 6, w, w * 0.08 + 6, 4), 0.05);
-    }, i * 1.3);
+    c.mover(`cloud-${i}`, 'drift', [x, y], () => c.add(cloud(x, y, w, seed), color, op), i * 1.3);
   }
 }
 
@@ -254,12 +251,15 @@ export function waterBands(c: Ctx, y: number, color = c.pal.primary) {
 }
 
 /** Short horizontal wave dashes on water (movers that bob). */
-export function waveDashes(c: Ctx, n: number, y0: number, y1: number, color = c.light, op = 0.45) {
+export function waveDashes(c: Ctx, n: number, y0: number, y1: number, color = c.light, op = 0.45, move = true) {
   for (let i = 0; i < n; i++) {
     const x = c.r.range(30, 970);
     const y = c.r.range(y0, y1);
     const w = c.r.range(30, 70) * (0.6 + (y - y0) / Math.max(1, y1 - y0));
-    c.mover(`wave-${i}`, 'bob', [x, y], () => c.add(capsule([x - w / 2, y], [x + w / 2, y], 3), color, op), (i * 0.45) % 2);
+    const draw = () => c.add(capsule([x - w / 2, y], [x + w / 2, y], 3), color, op);
+    // Movers render above everything, so keep dashes static when people may stand in front of them.
+    if (move) c.mover(`wave-${i}`, 'bob', [x, y], draw, (i * 0.45) % 2);
+    else draw();
   }
 }
 
