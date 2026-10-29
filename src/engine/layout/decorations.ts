@@ -21,7 +21,7 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
   // across a plain or undecorated carousel when the user turns them on.
   if (ctx.decoration === 'none') return { back: isPanoramic(ctx) ? panoramicSlice(ctx, index) : back, front };
   // Text, icons and charts that decorations must never cover.
-  const obstacles = content.filter((e) => e.kind === 'text' || e.kind === 'chart' || e.kind === 'table' || e.kind === 'image' || /icon|avatar|metric/.test(e.slot ?? ''));
+  const obstacles = content.filter((e) => e.kind === 'text' || e.kind === 'chart' || e.kind === 'table' || e.kind === 'image' || /icon|avatar|metric|illustration|art-backdrop|panel-/.test(e.slot ?? ''));
   const clear = (x: number, y: number, w: number, h: number) => !obstacles.some((o) => x < o.x + o.width && o.x < x + w && y < o.y + o.height && o.y < y + h);
   let ids = [...ctx.style.layout.decorations];
   if (ctx.decoration === 'minimal') ids = ids.slice(0, 1);

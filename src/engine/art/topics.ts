@@ -91,8 +91,11 @@ const first = <T,>(table: [RegExp, T][], text: string): [T, string] | null => {
 
 /** Every scene that matches the slide, best first (callers skip ones already used in the carousel). */
 export function scenesFor(s: SlidePlan): SceneKind[] {
-  const t = textOf(s);
-  return SCENES.filter(([re]) => re.test(t)).map(([, k]) => k);
+  // The headline says what the slide is about; the body and hints only break ties.
+  const head = ` ${s.headline.toLowerCase()} ${s.quote?.text.toLowerCase() ?? ''} `;
+  const all = textOf(s);
+  const fromHead = SCENES.filter(([re]) => re.test(head)).map(([, k]) => k);
+  return [...fromHead, ...SCENES.filter(([re, k]) => !fromHead.includes(k) && re.test(all)).map(([, k]) => k)];
 }
 
 /**
@@ -101,15 +104,19 @@ export function scenesFor(s: SlidePlan): SceneKind[] {
  */
 export function artFor(s: SlidePlan, avoid: SceneKind[] = []): ArtChoice | null {
   const t = textOf(s);
+  const head = ` ${s.headline.toLowerCase()} `;
   const hint = s.layoutHint.toLowerCase();
-  const pose = first(POSES, t);
+  const pose = first(POSES, head) ?? first(POSES, t);
   const scene = scenesFor(s).find((k) => !avoid.includes(k));
-  const prop = first(PROPS, t);
+  const prop = first(PROPS, head) ?? first(PROPS, t);
   // Story moments (hooks, quotes, CTAs, or a hint asking for a scene) get a whole scene; a person doing
   // something (praying, reading, worshipping) gets a character; otherwise a symbolic object.
   if (scene && (['hook', 'cta', 'quote', 'intro'].includes(s.role) || /scene|story|illustrat/.test(hint) || !pose)) {
-    return { kind: 'scene', scene, pose: pose?.[0], people: pose ? 1 : 0, why: `“${first(SCENES, t)![1]}”` };
+    return { kind: 'scene', scene, pose: pose?.[0], people: pose ? 1 : 0, why: scene };
   }
+  // A symbol named in the headline ("The Holy Spirit" → dove) beats a pose only hinted at in the body.
+  const headProp = first(PROPS, head);
+  if (headProp && !first(POSES, head)) return { kind: 'prop', prop: headProp[0], why: `“${headProp[1]}”` };
   if (pose) return { kind: 'character', pose: pose[0], prop: prop?.[0], why: `“${pose[1]}”` };
   if (prop) return { kind: 'prop', prop: prop[0], why: `“${prop[1]}”` };
   return null;

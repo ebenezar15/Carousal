@@ -122,7 +122,6 @@ export function sky(c: Ctx, night = false) {
       c.add(rrect(0, 0, 1000, 600), pal.primary);
       c.add(rrect(0, 0, 1000, 600), pal.ink, 0.55);
     }
-    c.add(rrect(0, 300, 1000, 300), pal.primary, 0.12);
     return;
   }
   c.add(rrect(0, 0, 1000, 600), pal.softer);

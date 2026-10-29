@@ -69,5 +69,6 @@ Lord, be my shepherd today. Amen.`, defaultOptions);
     const faith = ['scripture-serif', 'stained-glass', 'parchment', 'sunday-light', 'illustrated-story', 'night-prayer', 'bible-comic'];
     const picks = pickVariations(devotional, { count: 4, tone: 'educational', seed: 0 }).map((v) => v.theme.styleId);
     expect(picks.filter((id) => faith.includes(id)).length).toBeGreaterThanOrEqual(2);
+    expect(faith).toContain(picks[0]);
   });
 });

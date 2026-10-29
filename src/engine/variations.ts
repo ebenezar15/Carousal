@@ -51,7 +51,9 @@ function contentBoost(s: StyleSystem, plan: CarouselPlan): number {
   if (count('quote') >= 2 && s.id === 'quote-card') b += 1;
   if (s.id === 'tweet-style') b -= 0.6; // niche look; still eligible
   // Faith content leads with the faith styles (Scripture, Stained glass, Storybook…), mixed with others.
-  if (s.moods.includes('faith')) b += isFaithContent(plan) ? 1.6 : -1.2;
+  if (s.moods.includes('faith')) b += isFaithContent(plan) ? 3 : -1.2;
+  // Data styles only lead when there are numbers to show.
+  if (s.moods.includes('data') && count('stat') === 0) b -= 1.2;
   return b;
 }
 
