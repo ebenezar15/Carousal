@@ -2,7 +2,7 @@
 // Each one puts the headline on top (or beside it on landscape canvases) and draws the diagram in the
 // rest of the safe box. Every label is fitted inside its own shape, so labels never collide.
 import type { PathElement, SlideElement, TextElement } from '@/model/types';
-import { contrast, mix, pickReadable } from '@/styles/color';
+import { contrast, hexToRgb, mix, pickReadable } from '@/styles/color';
 import type { SlidePlan } from '../schema';
 import type { Box, Ctx } from './context';
 import { bodySpec, headSpec, LAYOUTS, type LayoutFn, type LayoutResult } from './layouts';
@@ -161,7 +161,7 @@ function fitNodes(ctx: Ctx, slots: Slot[], size: number): { elements: TextElemen
   const run = (sz: number) =>
     slots.map((sl) => {
       const specs = [labelSpec(ctx, sl.it.label, sz, sl.color)];
-      if (sl.it.detail) specs.push(detailSpec(ctx, sl.it.detail, Math.round(sz * 0.7), sl.detailColor ?? sl.color));
+      if (sl.it.detail) specs.push(detailSpec(ctx, sl.it.detail, Math.round(sz * 0.74), sl.detailColor ?? sl.color));
       let r = fitStack(specs, sl.box, sl.valign ?? 'middle', sl.align ?? 'center');
       if (r.overflow && specs.length > 1) {
         const solo = fitStack([specs[0]!], sl.box, sl.valign ?? 'middle', sl.align ?? 'center');
@@ -237,7 +237,7 @@ const cycle: LayoutFn = (ctx, s, i) => {
   const sin = Math.sin(Math.PI / n);
   const start = n === 2 ? Math.PI : -Math.PI / 2;
   const ang = (j: number) => start + (j * 2 * Math.PI) / n;
-  let rn = Math.min(half * 0.36, (half * sin) / (1.25 + sin), 210 * k);
+  let rn = Math.min(half * 0.33, (half * sin) / (1.25 + sin), 210 * k);
   let rx = 0;
   let ry = 0;
   const pos = (t: number): [number, number] => [cx + rx * Math.cos(t), cy + ry * Math.sin(t)];
@@ -310,7 +310,7 @@ const flow: LayoutFn = (ctx, s, i) => {
   const textColor = ink(ctx, pal.surface);
   const fl = flavor(ctx);
   const slots: Slot[] = [];
-  if (n <= 4 && ctx.W / ctx.H >= 0.95) {
+  if ((ctx.isLandscape && n <= 5) || (ctx.W / ctx.H >= 0.95 && n <= 3)) {
     // Horizontal: cards in a row with arrows between them.
     const ag = Math.round(70 * k);
     const cw = (region.w - (n - 1) * ag) / n;
@@ -360,6 +360,27 @@ const flow: LayoutFn = (ctx, s, i) => {
 
 // ---------- 3. venn ----------
 
+const saturation = (hex: string) => {
+  const c = hexToRgb(hex);
+  const hi = Math.max(...c);
+  return hi === 0 ? 0 : (hi - Math.min(...c)) / hi;
+};
+
+/** Three distinct, colorful circle colors from the palette (neutral grays/blacks make muddy overlaps). */
+function vennColors(ctx: Ctx): string[] {
+  const { pal } = ctx;
+  const pool = [pal.primary, pal.accent, pal.highlight, mix(pal.primary, pal.accent, 0.5), mix(pal.primary, pal.highlight, 0.5)];
+  const out: string[] = [];
+  for (const c of pool) {
+    if (saturation(c) < 0.25 || contrast(c, pal.bg) < 1.25) continue;
+    if (out.some((o) => contrast(o, c) < 1.25 && Math.abs(saturation(o) - saturation(c)) < 0.2 && hexToRgb(o).every((v, n) => Math.abs(v - hexToRgb(c)[n]!) < 60))) continue;
+    out.push(c);
+  }
+  const fallbacks = [pal.primary, mix(pal.primary, pal.text, 0.45), mix(pal.primary, pal.bg, 0.45)];
+  while (out.length < 3) out.push(fallbacks[out.length]!);
+  return out;
+}
+
 const venn: LayoutFn = (ctx, s, i) => {
   const items = itemsFor(s, 2);
   if (items.length < 2 || items.length > 3) return fallback(ctx, s, i);
@@ -370,9 +391,7 @@ const venn: LayoutFn = (ctx, s, i) => {
   const n = items.length;
   const cx = region.x + region.w / 2;
   const cy = region.y + region.h / 2;
-  const colors = [pal.primary, pal.accent, pal.highlight];
-  if (contrast(colors[1]!, colors[0]!) < 1.3) colors[1] = mix(pal.primary, pal.text, 0.45);
-  if (contrast(colors[2]!, pal.bg) < 1.3 || contrast(colors[2]!, colors[0]!) < 1.3) colors[2] = mix(pal.accent, pal.text, 0.35);
+  const colors = vennColors(ctx);
   let r: number;
   let centers: [number, number][];
   let labelBoxes: Box[];
@@ -408,8 +427,8 @@ const venn: LayoutFn = (ctx, s, i) => {
   const slots: Slot[] = items.map((it, j) => ({ it, box: labelBoxes[j]!, color: textOk(op) ? pal.text : ink(ctx, over([colors[j]!], op)) }));
   const txt = fitNodes(ctx, slots, Math.round(Math.min(50 * k, r * 0.2)));
   els.push(...txt.elements);
-  if (center) {
-    const cw = n === 2 ? r * 0.62 : r * 0.62;
+  if (center && !items.some((it) => it.label.toLowerCase() === center.toLowerCase())) {
+    const cw = r * 0.62;
     const ch = n === 2 ? r * 0.7 : r * 0.36;
     const ccy = n === 2 ? cy : cy + r * 0.15;
     const col = textOk(op) ? pal.text : ink(ctx, over(colors.slice(0, n), op));
@@ -462,7 +481,9 @@ const pyramid: LayoutFn = (ctx, s, i) => {
 const tree: LayoutFn = (ctx, s, i) => {
   let items = itemsFor(s, 3);
   if (items.length < 2 || items.length > 6) return fallback(ctx, s, i);
-  let root = shortText(s, ['emphasis', 'headline']);
+  // "The fruit of the Spirit" → root "The Spirit".
+  const ofPart = /\bof\s+(.+)$/i.exec(s.headline.trim())?.[1]?.replace(/[.!?]$/, '') ?? '';
+  let root = shortText(s, ['emphasis', 'headline']) || (words(ofPart).length <= 3 ? capFirst(ofPart) : '');
   let rootDetail = '';
   if (!root && items.length >= 3) {
     root = items[0]!.label;
@@ -485,7 +506,7 @@ const tree: LayoutFn = (ctx, s, i) => {
   const rootY = region.y;
   const rootFill = pal.primary;
   const fl = flavor(ctx);
-  const rowMode = n <= 3 || (region.w / region.h > 1.5 && n <= 5);
+  const rowMode = n <= 3 ? (region.w - (n - 1) * 28 * k) / n >= 200 * k : region.w / region.h > 1.5 && (region.w - (n - 1) * 28 * k) / n >= 260 * k;
   const links: SlideElement[] = [];
   if (rowMode) {
     const gap = Math.round(28 * k);
@@ -507,9 +528,9 @@ const tree: LayoutFn = (ctx, s, i) => {
     // Vine: a trunk down the middle, branches alternating left and right.
     const top = rootY + rootH + Math.round(30 * k);
     const rowH = (region.y + region.h - top) / n;
-    const trunkGap = Math.round(36 * k);
+    const trunkGap = Math.round(Math.min(80 * k, region.w * 0.08));
     const pw = (region.w - 2 * trunkGap) / 2;
-    const ph = Math.min(rowH * 1.7, 180 * k);
+    const ph = Math.min(rowH * 1.5, 170 * k);
     const lastY = top + rowH * (n - 0.5);
     links.push(line('diagram-link', [rcx, rootY + rootH, rcx, lastY], stroke, sw));
     items.forEach((it, j) => {
@@ -576,7 +597,7 @@ const journey: LayoutFn = (ctx, s, i) => {
     });
   } else {
     const rowH = region.h / n;
-    const A = Math.min(region.w * 0.11, 100 * k);
+    const A = Math.min(region.w * 0.13, 130 * k);
     const cx = region.x + region.w / 2;
     dr = Math.min(rowH * 0.3, 42 * k);
     for (let j = 0; j < n; j++) pts.push([cx + (j % 2 === 0 ? -A : A), region.y + rowH * (j + 0.5)]);
@@ -606,7 +627,7 @@ const journey: LayoutFn = (ctx, s, i) => {
     els.push(ellipse('diagram-node', x, y, dr, dr, pal.primary, { stroke: pal.bg, strokeWidth: Math.round(6 * k) }));
     if (dr >= 22 * k) els.push(...badgeText(ctx, String(j + 1), x, y, dr, onP));
   });
-  const txt = fitNodes(ctx, slots, Math.round(44 * k));
+  const txt = fitNodes(ctx, slots, Math.round(52 * k));
   return done(f, [...els, ...txt.elements], txt.overflow);
 };
 
@@ -718,12 +739,16 @@ const stairs: LayoutFn = (ctx, s, i) => {
       slots.push({ it, box: { x: Math.round(x + pad + numW + 14 * k), y: Math.round(y + vpad), w: Math.round(w - 2 * pad - numW - 14 * k), h: Math.round(bh - 2 * vpad) }, color: ink(ctx, fill), align: 'left' });
     });
     // A rising arrow in the empty space left of the steps.
+    // The steps' top-left corners are collinear; the arrow runs parallel to them, shifted left.
     if (n >= 3 && dx >= 50 * k) {
-      const x1 = region.x + dx * 0.25;
-      const y1 = bottom - bh - g - bh * 0.2;
-      const x2 = region.x + (n - 1) * dx - dx * 0.35;
-      const y2 = bottom - (n - 1) * (bh + g) - bh * 0.1;
-      if (x2 - x1 > 40 * k) els.push(line('diagram-arrow', [x1, y1, x2, y2], lineColor(ctx), Math.max(3, Math.round(6 * k)), { arrowEnd: true }));
+      const m = dx * 0.45;
+      const corner = (j: number): [number, number] => [region.x + j * dx - m, bottom - (j + 1) * bh - j * g];
+      const [ax, ay] = corner(1);
+      const [bx, by] = corner(n - 1);
+      const t0 = 0.55;
+      const x1 = ax - (bx - ax) / (n - 2) * t0;
+      const y1 = ay - (by - ay) / (n - 2) * t0;
+      els.push(line('diagram-arrow', [x1, y1, bx, by - bh * 0.15], lineColor(ctx), Math.max(3, Math.round(6 * k)), { arrowEnd: true }));
     }
   }
   const txt = fitNodes(ctx, slots, Math.round(44 * k));
