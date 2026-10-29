@@ -1,5 +1,5 @@
 import { Ellipse, Group, Line, Path, Rect } from 'react-konva';
-import type { GroupElement, PathElement, Shadow, SlideElement } from '@/model/types';
+import type { GroupElement, PathElement, Shadow, ShapeElement, SlideElement } from '@/model/types';
 import { RichText } from './RichText';
 import { ImageNode } from './ImageNode';
 import { ChartNode } from './Chart';
@@ -9,6 +9,23 @@ export const shadowProps = (s?: Shadow) =>
   s ? { shadowColor: s.color, shadowBlur: s.blur, shadowOffsetX: s.offsetX, shadowOffsetY: s.offsetY, shadowOpacity: s.opacity } : {};
 
 const fillOrNone = (f?: string) => (f && f !== 'transparent' ? f : undefined);
+
+/** Radial gradient fill for rects/ellipses (ellipses draw around their center, rects from the corner). */
+function radialProps(el: ShapeElement, centered = false) {
+  if (!el.radial) return {};
+  const r = Math.max(el.width, el.height) * (el.radial.r ?? 0.75);
+  const cx = (el.radial.cx ?? 0.35) * el.width - (centered ? el.width / 2 : 0);
+  const cy = (el.radial.cy ?? 0.3) * el.height - (centered ? el.height / 2 : 0);
+  return {
+    fill: undefined,
+    fillPriority: 'radial-gradient',
+    fillRadialGradientStartPoint: { x: cx, y: cy },
+    fillRadialGradientEndPoint: { x: cx, y: cy },
+    fillRadialGradientStartRadius: 0,
+    fillRadialGradientEndRadius: r,
+    fillRadialGradientColorStops: el.radial.stops.flatMap((s) => [s.offset, s.color]),
+  };
+}
 
 /**
  * Every element is a Group placed at its center with offset = half size, so rotation pivots on the
@@ -31,8 +48,8 @@ export function ElementNode({ el, interactive }: { el: SlideElement; interactive
       offsetX={el.width / 2}
       offsetY={el.height / 2}
       rotation={el.rotation + (p?.rotate ?? 0)}
-      scaleX={p?.scale ?? 1}
-      scaleY={p?.scale ?? 1}
+      scaleX={(p?.scale ?? 1) * (p?.sx ?? 1)}
+      scaleY={(p?.scale ?? 1) * (p?.sy ?? 1)}
       opacity={el.opacity * (p?.opacity ?? 1)}
       listening={interactive ?? false}
       draggable={interactive && !el.locked}
@@ -50,9 +67,9 @@ function ElementBody({ el, interactive }: { el: SlideElement; interactive?: bool
     case 'text':
       return <RichText el={el} />;
     case 'rect':
-      return <Rect width={el.width} height={el.height} fill={fillOrNone(el.fill)} stroke={el.stroke} strokeWidth={el.strokeWidth} cornerRadius={el.cornerRadius} dash={el.dash} {...shadowProps(el.shadow)} />;
+      return <Rect width={el.width} height={el.height} fill={fillOrNone(el.fill)} stroke={el.stroke} strokeWidth={el.strokeWidth} cornerRadius={el.cornerRadius} dash={el.dash} {...shadowProps(el.shadow)} {...radialProps(el)} />;
     case 'ellipse':
-      return <Ellipse x={el.width / 2} y={el.height / 2} radiusX={el.width / 2} radiusY={el.height / 2} fill={fillOrNone(el.fill)} stroke={el.stroke} strokeWidth={el.strokeWidth} dash={el.dash} {...shadowProps(el.shadow)} />;
+      return <Ellipse x={el.width / 2} y={el.height / 2} radiusX={el.width / 2} radiusY={el.height / 2} fill={fillOrNone(el.fill)} stroke={el.stroke} strokeWidth={el.strokeWidth} dash={el.dash} {...shadowProps(el.shadow)} {...radialProps(el, true)} />;
     case 'line':
       return <LineNode el={el} />;
     case 'path':
@@ -121,6 +138,8 @@ function PathNode({ el }: { el: PathElement }) {
           strokeWidth={(el.strokeWidth ?? 0) / ((sx + sy) / 2)}
           lineCap="round"
           lineJoin="round"
+          // Shadows are in output pixels; Konva scales them with the node, so undo the viewBox scale.
+          {...shadowProps(el.shadow && { ...el.shadow, blur: el.shadow.blur / ((sx + sy) / 2), offsetX: el.shadow.offsetX / sx, offsetY: el.shadow.offsetY / sy })}
         />
       ))}
     </>

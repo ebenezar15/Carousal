@@ -13,7 +13,7 @@ export const undo = () => useDocument.temporal.getState().undo();
 export const redo = () => useDocument.temporal.getState().redo();
 
 export function deleteSelection() {
-  const ids = ed().selection;
+  const ids = ed().selection.filter((id) => !slideEls().find((e) => e.id === id)?.locked);
   if (!ids.length) return;
   doc().apply((d) => ops.removeElements(d, ed().slideIndex, ids));
   ed().select([]);

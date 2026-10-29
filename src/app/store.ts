@@ -9,6 +9,8 @@ import { projectsRepo, settingsRepo } from '@/storage/repo';
 import { DEFAULT_CLAUDE_FAST_MODEL, DEFAULT_CLAUDE_MODEL, DEFAULT_OLLAMA_URL, type OpenAIPresetId, type ProviderPreference } from '@/engine';
 
 export interface Settings {
+  /** Design prompts: 'auto' = built-in reading first, AI only for words it doesn't know; 'always'; 'never'. */
+  designAI: 'auto' | 'always' | 'never';
   provider: ProviderPreference;
   claudeModel: string;
   /** Model for quick tasks (translation, captions, headline ideas). */
@@ -42,6 +44,7 @@ export const defaultSettings: Settings = {
   openaiFastModel: '',
   scriptFonts: {},
   theme: 'system',
+  designAI: 'auto',
 };
 
 interface SettingsState {
@@ -135,6 +138,11 @@ export const useDocument = create<DocumentState>()(
         const { carousel, plan } = get();
         if (!carousel) return;
         const next = fn({ carousel, plan: plan ?? { title: '', language: 'en', paletteMood: 'minimal', slides: carousel.slides.map(() => ({ role: 'body', headline: '', body: '', bullets: [], stat: null, quote: null, emphasis: [], layoutHint: '', iconKeywords: [] })), caption: '', hashtags: [] } });
+        // Operations that change nothing (renaming to the same name, reordering with nothing selected)
+        // don't create empty undo steps.
+        const samePlan = !plan || next.plan === plan;
+        if (next.carousel === carousel && samePlan) return;
+        if (!gesture.active && samePlan && JSON.stringify(next.carousel) === JSON.stringify(carousel)) return;
         const t = useDocument.temporal.getState();
         if (gesture.active && gesture.recorded) {
           t.pause();

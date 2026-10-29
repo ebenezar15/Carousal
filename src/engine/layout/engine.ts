@@ -8,6 +8,21 @@ import { chrome } from './chrome';
 import { makeCtx, type Ctx } from './context';
 import { decorate } from './decorations';
 import { LAYOUTS, ROLE_LAYOUTS, type LayoutResult } from './layouts';
+import { diagramFor } from './diagrams';
+import { illustratedFor } from './illustrated';
+import { getStyle } from '@/styles';
+import { autoAnimate, ANIMATION_PRESETS, type AnimationPreset } from '@/editor/animation';
+
+/** The motion preset a theme resolves to ('custom' and unknown ids → null = leave animations alone). */
+export function themeMotion(theme: CarouselTheme): AnimationPreset | null {
+  const id = theme.motion ?? getStyle(theme.styleId).motion ?? 'subtle';
+  return ANIMATION_PRESETS.some(([p]) => p === id) ? (id as AnimationPreset) : null;
+}
+
+const animateSlide = (slide: Slide, theme: CarouselTheme): Slide => {
+  const m = themeMotion(theme);
+  return m ? autoAnimate(slide, m) : slide;
+};
 
 export interface BuildInput {
   plan: CarouselPlan;
@@ -22,6 +37,13 @@ export function chooseLayouts(ctx: Ctx, overrides: Record<number, string> = {}):
     const override = overrides[i];
     if (override && LAYOUTS[override]) {
       chosen.push(override);
+      return;
+    }
+    // Content that is a diagram (a cycle, a process, overlapping ideas…) or a story moment gets a
+    // diagram or illustrated layout; everything else uses the style's own layout for the role.
+    const special = diagramFor(s, ctx) ?? illustratedFor(s, ctx, i);
+    if (special && LAYOUTS[special]) {
+      chosen.push(special);
       return;
     }
     let id = ctx.style.roleLayouts[s.role] ?? 'body-top-left';
@@ -89,7 +111,7 @@ export function buildCarousel(input: BuildInput): Carousel {
     id: newId('car_'),
     presetId: input.presetId,
     theme: input.theme,
-    slides: input.plan.slides.map((s, i) => buildSlide(ctx, s, i, layouts[i]!)),
+    slides: input.plan.slides.map((s, i) => animateSlide(buildSlide(ctx, s, i, layouts[i]!), input.theme)),
   };
 }
 
@@ -97,7 +119,7 @@ export function buildCarousel(input: BuildInput): Carousel {
 export function rebuildSlide(plan: CarouselPlan, presetId: string, theme: CarouselTheme, index: number): Slide {
   const ctx = Object.assign(makeCtx(plan, presetId, theme), { watermark: theme.watermark });
   const layouts = chooseLayouts(ctx, theme.layoutOverrides);
-  return buildSlide(ctx, plan.slides[index]!, index, layouts[index]!);
+  return animateSlide(buildSlide(ctx, plan.slides[index]!, index, layouts[index]!), theme);
 }
 
 /** Brand watermark (logo and/or handle) in a corner of every slide. */

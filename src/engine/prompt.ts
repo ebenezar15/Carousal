@@ -19,7 +19,8 @@ Structure:
 - Slide 1 is the hook, slide 2 an intro (problem or promise), the second-to-last can be a summary, the last slide is a cta.
 - Middle slides use body, list, step, stat, quote or comparison. Vary roles; don't use the same role more than 3 times in a row.
 - One idea per slide. Each slide must make sense on its own.
-- Keep the author's facts, numbers and voice. Never invent statistics, quotes or sources. Use "stat" only for numbers present in the input; use "quote" only for real quotes from the input.
+- Keep the author's facts, numbers and voice. Never invent statistics, quotes or sources.
+- Faith content: quote Scripture word for word as given in the input (never paraphrase inside quotation marks or invent verses), put the reference (e.g. "John 3:16") in quote.attribution, and keep the author's tradition and tone. A verse can span 2-4 slides (verse, context, meaning, how to live it); a prayer works as one short line per slide. Use "stat" only for numbers present in the input; use "quote" only for real quotes from the input.
 
 Roles and word limits:
 ${roleLines}
@@ -35,7 +36,11 @@ CTA rules: ${patterns.ctaRules.join('; ')}.
 Fields:
 - emphasis: 1-2 words copied exactly from that slide's headline that deserve visual emphasis.
 - iconKeywords: 0-2 simple nouns for an icon search (e.g. "clock", "chart").
-- layoutHint: a few words, e.g. "big number", "checklist", "split before/after".
+- layoutHint: a few words. Use these words when they fit, because the layout engine reacts to them:
+  "cycle" (repeating rhythm), "flow" (process), "venn" (overlapping ideas), "pyramid" (foundation/priorities),
+  "tree" (branches, fruit, mind map), "journey" (story or timeline), "versus" (contrast A vs B), "stairs" (growth steps),
+  "scene: <what to picture>" (a story moment to illustrate, e.g. "scene: storm at sea"), "prayer", "verse".
+- iconKeywords: 0-2 concrete nouns that could be drawn (e.g. "dove", "lamp", "sheep", "cross", "seed", "chart").
 - For body slides put the explanation in body; for list/summary use bullets and leave body short or empty.
 - stat: {value, label} on stat slides, otherwise null. quote: {text, attribution} on quote slides, otherwise null.
 - caption: a 1-3 sentence post caption in the same language. hashtags: 3-8 relevant hashtags without spaces.

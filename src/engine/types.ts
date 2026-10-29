@@ -33,6 +33,8 @@ export interface CompletionRequest {
    * cheaper/faster model for it (Settings → "Model for quick tasks").
    */
   tier?: 'quality' | 'fast';
+  /** Output ceiling for this task (small for headlines/captions); providers have sensible defaults. */
+  maxTokens?: number;
 }
 
 export type ProviderId = 'claude' | 'ollama' | 'openai' | 'rules';

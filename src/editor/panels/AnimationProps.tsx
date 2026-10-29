@@ -2,7 +2,8 @@
 // preview). Animations play in the preview and in video/GIF/clip exports; still images are unaffected.
 import { lazy, Suspense, useState } from 'react';
 import type { ElementAnimation, SlideElement } from '@/model/types';
-import { useDocument } from '@/app/store';
+import { beginGesture, endGesture, useDocument } from '@/app/store';
+import { themeMotion } from '@/engine/layout';
 import { ANIMATION_PRESETS, ENTER_OPTIONS, LOOP_OPTIONS, TEXT_ANIM_OPTIONS, autoAnimate, slideHasAnimation, type AnimationPreset } from '../animation';
 import { useEditor } from '../store';
 import { IconButton, Row, Section, Select, Slider } from './fields';
@@ -11,8 +12,17 @@ const AnimationPreview = lazy(() => import('../AnimationPreview').then((m) => ({
 
 const DEFAULT: ElementAnimation = { enter: 'fade', delay: 0, duration: 0.6 };
 
-export function ElementAnimationProps({ el, set }: { el: SlideElement; set(patch: Partial<SlideElement>): void }) {
+/** Hand-tuned animations are kept when the theme changes (theme.motion = 'custom'); one undo step. */
+function setCustom(set: (patch: Partial<SlideElement>) => void, patch: Partial<SlideElement>) {
+  beginGesture();
+  set(patch);
+  useDocument.getState().apply((d) => (d.carousel.theme.motion === 'custom' ? d : { ...d, carousel: { ...d.carousel, theme: { ...d.carousel.theme, motion: 'custom' } } }));
+  endGesture();
+}
+
+export function ElementAnimationProps({ el, set: setEl }: { el: SlideElement; set(patch: Partial<SlideElement>): void }) {
   const a = el.anim;
+  const set = (patch: Partial<SlideElement>) => setCustom(setEl, patch);
   const update = (patch: Partial<ElementAnimation>) => set({ anim: { ...DEFAULT, ...a, ...patch } });
   return (
     <Section title="Animation" defaultOpen={Boolean(a)}>
@@ -35,9 +45,14 @@ export function SlideAnimationProps() {
   const carousel = useDocument((s) => s.carousel)!;
   const apply = useDocument((s) => s.apply);
   const slideIndex = useEditor((s) => s.slideIndex);
-  const [preset, setPreset] = useState<AnimationPreset>('subtle');
+  const [preset, setPreset] = useState<AnimationPreset>(() => themeMotion(carousel.theme) ?? 'subtle');
   const animated = slideHasAnimation(carousel.slides[slideIndex]!);
-  const run = (all: boolean) => apply((d) => ({ ...d, carousel: { ...d.carousel, slides: d.carousel.slides.map((s, i) => (all || i === slideIndex ? autoAnimate(s, preset) : s)) } }));
+  // All slides → the preset becomes the carousel's motion (kept on theme changes); one slide → custom.
+  const run = (all: boolean) =>
+    apply((d) => ({
+      ...d,
+      carousel: { ...d.carousel, theme: { ...d.carousel.theme, motion: all ? preset : 'custom' }, slides: d.carousel.slides.map((s, i) => (all || i === slideIndex ? autoAnimate(s, preset) : s)) },
+    }));
   return (
     <Section title="Animation" defaultOpen={animated}>
       <Select label="Animation style" value={preset} options={ANIMATION_PRESETS} onChange={(v) => setPreset(v as AnimationPreset)} />

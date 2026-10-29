@@ -48,6 +48,23 @@ export function SettingsPage() {
         </div>
       </section>
 
+      <section className="card space-y-3 p-5" aria-label="Saving AI credits">
+        <h2 className="font-semibold">Saving AI credits</h2>
+        <ul className="list-disc space-y-1 pl-5 text-xs text-zinc-600 dark:text-zinc-400">
+          <li>Designs, layouts, textures, motion, “Make it …” buttons and offline translation never use AI.</li>
+          <li>The same text with the same settings reuses the copy already written; translations and headline ideas are remembered.</li>
+          <li>Small jobs (translation, captions, headline ideas, slide rewrites, reading design prompts) use the cheaper quick-task model.</li>
+        </ul>
+        <div>
+          <label className="label" htmlFor="design-ai">Reading “Describe the look” prompts</label>
+          <select id="design-ai" className="field" value={settings.designAI} onChange={(e) => update({ designAI: e.target.value as typeof settings.designAI })}>
+            <option value="auto">Built-in first; AI only for words it doesn't know (recommended)</option>
+            <option value="always">Always ask the AI (cached per prompt)</option>
+            <option value="never">Never use AI (fully offline)</option>
+          </select>
+        </div>
+      </section>
+
       <section className="card space-y-3 p-5">
         <h2 className="font-semibold">Claude</h2>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -64,7 +81,7 @@ export function SettingsPage() {
             </select>
           </div>
         </div>
-        <p className="text-xs text-zinc-500">Quick tasks are translation, captions and headline ideas. Prompts are cached between calls, so repeated work costs less.</p>
+        <p className="text-xs text-zinc-500">Quick tasks are translation, captions, headline ideas, slide rewrites and design prompts. Haiku is about 40× cheaper than Opus and handles these well.</p>
         <div>
           <label className="label" htmlFor="key">API key {hasKey && <span className="ml-1 text-emerald-600">● saved</span>}</label>
           <div className="flex gap-2">

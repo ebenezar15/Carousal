@@ -29,7 +29,8 @@ test('generates design variations offline, regenerates, persists and exports exa
   expect(await slides.count()).toBeGreaterThanOrEqual(5);
   await expect(slides.first()).toHaveAttribute('data-role', 'hook');
   await expect(slides.last()).toHaveAttribute('data-role', 'cta');
-  await expect(page.getByRole('status').filter({ hasText: 'built-in rules' })).toBeVisible();
+  // Auto mode with no AI set up quietly uses the built-in rules (no warning), and says so.
+  await expect(page.getByTestId('generated-by')).toContainText('Built-in rules');
 
   // 5 distinct designs side by side.
   const variations = page.getByTestId('variation');

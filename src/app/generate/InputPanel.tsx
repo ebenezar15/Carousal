@@ -3,6 +3,7 @@ import type { GenerateOptions, Tone } from '@/engine';
 import { ACCEPTED_FILE_TYPES, ImportError, importFile, importUrl } from '@/engine/import';
 import { presets } from '@/styles';
 import { SAMPLE_CONTENT } from '../sample';
+import { FAITH_PROMPTS, interpretPrompt, STYLE_PROMPTS } from '@/engine';
 
 
 const TONES: Tone[] = ['professional', 'playful', 'bold', 'educational'];
@@ -13,6 +14,8 @@ export const LANGUAGES: [string, string][] = [
 
 export interface InputState {
   text: string;
+  /** Optional free-text description of the look ("dreamy clay shapes, pastel, bouncy motion"). */
+  designPrompt: string;
   presetId: string;
   opts: GenerateOptions;
   variationCount: number;
@@ -103,6 +106,8 @@ export function InputPanel({ value, onChange, onGenerate, busy }: Props) {
         {importMsg && <p role="status" className={`mt-2 text-xs ${importMsg.kind === 'ok' ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400'}`}>{importMsg.text}</p>}
       </div>
 
+      <DesignPromptField value={value.designPrompt} onChange={(designPrompt) => set({ designPrompt })} />
+
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
           <label className="label" htmlFor="preset">Platform</label>
@@ -153,5 +158,36 @@ export function InputPanel({ value, onChange, onGenerate, busy }: Props) {
         {busy ? 'Generating…' : 'Generate carousel'}
       </button>
     </section>
+  );
+}
+
+/** "Describe the look": free text plus one-click starting points; shows what was understood (offline). */
+export function DesignPromptField({ value, onChange, id = 'design-prompt' }: { value: string; onChange(v: string): void; id?: string }) {
+  const understood = value.trim() ? interpretPrompt(value).understood : [];
+  return (
+    <div>
+      <label className="label" htmlFor={id}>Describe the look <span className="font-normal text-zinc-400">(optional)</span></label>
+      <textarea
+        id={id}
+        className="field h-16 resize-y text-sm"
+        placeholder="e.g. dreamy pastel clay shapes, rounded type, bouncy motion, continuous ribbon"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      <div className="mt-1.5 flex flex-wrap gap-1" aria-label="Design styles">
+        {[...STYLE_PROMPTS, ...FAITH_PROMPTS].map((sp) => (
+          <button
+            key={sp.label}
+            type="button"
+            className={`rounded-full border px-2 py-0.5 text-[11px] ${value === sp.prompt ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100' : 'border-zinc-300 text-zinc-600 hover:border-brand-500 dark:border-zinc-700 dark:text-zinc-400'}`}
+            onClick={() => onChange(value === sp.prompt ? '' : sp.prompt)}
+            aria-pressed={value === sp.prompt}
+          >
+            {sp.label}
+          </button>
+        ))}
+      </div>
+      {understood.length > 0 && <p className="mt-1 text-[11px] text-zinc-500" data-testid="design-understood">Understood: {understood.join(' · ')}</p>}
+    </div>
   );
 }

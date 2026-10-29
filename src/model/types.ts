@@ -5,10 +5,10 @@ import type { SlideRole } from '@/styles/types';
 
 export type ElementKind = 'text' | 'rect' | 'ellipse' | 'line' | 'path' | 'image' | 'group' | 'chart' | 'table' | 'qr';
 
-export type EnterAnimation = 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom' | 'pop' | 'rotate' | 'wipe' | 'drop';
+export type EnterAnimation = 'none' | 'fade' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom' | 'zoom-out' | 'pop' | 'rotate' | 'wipe' | 'drop' | 'unfold' | 'squash';
 /** Word/letter animations for text (typewriter, word by word…). */
-export type TextAnimation = 'none' | 'typewriter' | 'word-fade' | 'word-rise' | 'word-pop' | 'word-slide' | 'highlight-sweep';
-export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink';
+export type TextAnimation = 'none' | 'typewriter' | 'word-fade' | 'word-rise' | 'word-pop' | 'word-slide' | 'word-drop' | 'word-spin' | 'highlight-sweep';
+export type LoopAnimation = 'none' | 'float' | 'pulse' | 'wiggle' | 'spin' | 'blink' | 'wave' | 'sway' | 'bob' | 'twinkle' | 'drift';
 
 /** How an element animates in video/GIF exports and the animation preview (seconds). */
 export interface ElementAnimation {
@@ -18,6 +18,8 @@ export interface ElementAnimation {
   duration: number;
   text?: TextAnimation;
   loop?: LoopAnimation;
+  /** Seconds added to the loop clock, so parts that loop together don't move in lockstep. */
+  phase?: number;
 }
 
 /** Render-only pose computed for one animation frame (never saved). */
@@ -25,6 +27,9 @@ export interface Pose {
   dx: number;
   dy: number;
   scale: number;
+  /** Extra horizontal / vertical stretch on top of `scale` (squash, unfold). */
+  sx?: number;
+  sy?: number;
   rotate: number;
   opacity: number;
   /** 0..1 horizontal reveal (wipe). */
@@ -107,6 +112,8 @@ export interface TextElement extends ElementBase {
   extrude?: { depth: number; color: string; angle: number };
   /** RGB-split glitch: two offset copies in contrasting colors behind the text. */
   glitch?: { colors: [string, string]; offset: number };
+  /** Text color before an effect (neon, outline) recolored it; restored when the effect changes. */
+  fxBaseFill?: string;
   /** Echo / stacked outline copies behind the text (`step` px apart vertically). */
   echo?: { count: number; step: number; color: string };
 }
@@ -119,6 +126,8 @@ export interface ShapeElement extends ElementBase {
   cornerRadius?: number;
   shadow?: Shadow;
   dash?: number[];
+  /** Radial gradient fill (center → edge), e.g. lit spheres and clay shapes; overrides `fill`. */
+  radial?: { stops: GradientStop[]; cx?: number; cy?: number; /** Radius as a fraction of the larger side (default 0.75). */ r?: number };
 }
 
 export interface LineElement extends ElementBase {
@@ -139,6 +148,7 @@ export interface PathElement extends ElementBase {
   stroke?: string;
   /** Output pixels (not scaled with the viewBox). */
   strokeWidth?: number;
+  shadow?: Shadow;
 }
 
 export interface ImageFilters {
@@ -296,6 +306,8 @@ export interface DesignModifiers {
   panoramic?: boolean;
   /** What flows across slide seams when panoramic (continuous) mode is on. */
   continuous?: ContinuousStyle;
+  /** Illustrations (scenes, characters, objects) matched to the content: none, some slides, most slides, or a picture on every slide (story). */
+  illustrations?: 'none' | 'some' | 'rich' | 'story';
 }
 
 export type ContinuousStyle = 'flow' | 'ribbon' | 'path' | 'blocks' | 'word';
@@ -306,6 +318,8 @@ export interface CarouselTheme {
   headingFont: string;
   bodyFont: string;
   modifiers?: DesignModifiers;
+  /** Varies generated art and decorations between designs that share a style (New designs). */
+  seed?: number;
   /** Per-slide layout choice (slide index → layoutCatalog id), set by "new layout". */
   layoutOverrides?: Record<number, string>;
   /** Shown on CTA slides and footers, e.g. "@studio". */
@@ -315,6 +329,11 @@ export interface CarouselTheme {
   /** Brand-kit colors mapped onto palette roles; overrides `paletteId`'s colors. */
   customPalette?: import('@/styles/types').PaletteColors;
   brandKitId?: string;
+  /**
+   * Motion (editor/animation.ts preset id) applied to every generated slide: undefined = the style's own
+   * motion, 'none' = static, 'custom' = keep the animations the user set per element.
+   */
+  motion?: string;
   /** Small logo/handle mark on every slide. */
   watermark?: { text?: string; logoSrc?: string; position: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right'; opacity: number };
 }
@@ -338,6 +357,8 @@ export interface Project {
   /** Design variations offered for this content; `carousel.theme` is the chosen one (possibly tweaked). */
   variations?: CarouselTheme[];
   variationSeed?: number;
+  /** "Describe the look" prompt the designs were made from (kept for "New designs"). */
+  designPrompt?: string;
   /** Generation settings, so "regenerate" reuses them. */
   settings?: { presetId: string; tone: string; audience: string; language: string; slideCount: number | 'auto'; variationCount: number };
   carousel: Carousel;

@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { useDocument, useProjects, useRoute } from '@/app/store';
+import { useSaveStatus } from '@/app/autosave';
 import { getPreset } from '@/styles';
-import { renderSlide } from '@/export/render';
 const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ default: m.ExportDialog })));
 const TranslateDialog = lazy(() => import('@/app/TranslateDialog').then((m) => ({ default: m.TranslateDialog })));
 import { EditorCanvas } from './EditorCanvas';
@@ -21,36 +21,6 @@ import { imageElement, storeImage } from './assets';
 
 const TABS: [LeftTab, string][] = [['slides', 'Slides'], ['layers', 'Layers'], ['insert', 'Insert'], ['design', 'Design'], ['templates', 'Templates'], ['check', 'Check'], ['caption', 'Caption']];
 
-/** Debounced autosave of the open document back into its project. */
-function useAutosave() {
-  const timer = useRef<number | undefined>(undefined);
-  const [saved, setSaved] = useState<'saved' | 'saving'>('saved');
-  useEffect(
-    () =>
-      useDocument.subscribe((s, prev) => {
-        if (s.carousel === prev.carousel && s.plan === prev.plan) return;
-        setSaved('saving');
-        window.clearTimeout(timer.current);
-        timer.current = window.setTimeout(async () => {
-          const { current, save } = useProjects.getState();
-          const { carousel, plan } = useDocument.getState();
-          if (!current || !carousel) return;
-          let thumbnail = current.thumbnail;
-          try {
-            const p = getPreset(carousel.presetId);
-            if (carousel.slides[0]) thumbnail = await renderSlide(carousel.slides[0], p.width, p.height, { pixelRatio: 240 / p.width, mime: 'image/jpeg', quality: 0.8 });
-          } catch {
-            /* keep old thumbnail */
-          }
-          await save({ ...current, carousel, plan: plan ?? current.plan, thumbnail });
-          setSaved('saved');
-        }, 700);
-      }),
-    [],
-  );
-  return saved;
-}
-
 export function EditorPage() {
   const carousel = useDocument((s) => s.carousel);
   const current = useProjects((s) => s.current);
@@ -59,7 +29,7 @@ export function EditorPage() {
   const ed = useEditor();
   const canUndo = useStore(useDocument.temporal, (t) => t.pastStates.length > 0);
   const canRedo = useStore(useDocument.temporal, (t) => t.futureStates.length > 0);
-  const saved = useAutosave();
+  const saved = useSaveStatus((s) => s.status);
   const plan = useDocument((s) => s.plan);
   const [exporting, setExporting] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -93,7 +63,7 @@ export function EditorPage() {
     <div className="flex h-[calc(100vh-3.5rem)] flex-col" data-testid="editor">
       <div className="flex flex-wrap items-center gap-1 border-b border-zinc-200 bg-white px-3 py-1.5 dark:border-zinc-800 dark:bg-zinc-950" role="toolbar" aria-label="Editor">
         <button className="btn-ghost px-2 py-1 text-xs lg:hidden" aria-label="Toggle panels" aria-expanded={drawer === 'left'} onClick={() => setDrawer((d) => (d === 'left' ? null : 'left'))}>☰</button>
-        <input aria-label="Project name" className="w-56 rounded px-2 py-1 text-sm font-medium hover:bg-zinc-100 focus:bg-white focus:outline-brand-500 dark:hover:bg-zinc-800 dark:focus:bg-zinc-900" value={current.name} onChange={(e) => void save({ ...current, name: e.target.value })} />
+        <ProjectName key={current.id} />
         <span className="mr-2 text-[11px] text-zinc-400" role="status">{saved === 'saving' ? 'Saving…' : 'Saved'}</span>
         <button className="btn-ghost px-2 py-1" onClick={A.undo} disabled={!canUndo} title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
         <button className="btn-ghost px-2 py-1" onClick={A.redo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
@@ -159,5 +129,33 @@ export function EditorPage() {
         </aside>
       </div>
     </div>
+  );
+}
+
+/** Project name field: types freely (local state) and saves after a pause or on blur. */
+function ProjectName() {
+  const name = useProjects((s) => s.current?.name ?? '');
+  const [value, setValue] = useState(name);
+  const timer = useRef<number | undefined>(undefined);
+  const commit = (v: string) => {
+    window.clearTimeout(timer.current);
+    const { current, save } = useProjects.getState();
+    const trimmed = v.trim() || 'Untitled carousel';
+    if (current && trimmed !== current.name) void save({ ...current, name: trimmed });
+  };
+  return (
+    <input
+      aria-label="Project name"
+      className="w-56 rounded px-2 py-1 text-sm font-medium hover:bg-zinc-100 focus:bg-white focus:outline-brand-500 dark:hover:bg-zinc-800 dark:focus:bg-zinc-900"
+      value={value}
+      onChange={(e) => {
+        const v = e.target.value;
+        setValue(v);
+        window.clearTimeout(timer.current);
+        timer.current = window.setTimeout(() => commit(v), 600);
+      }}
+      onBlur={() => commit(value)}
+      onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+    />
   );
 }

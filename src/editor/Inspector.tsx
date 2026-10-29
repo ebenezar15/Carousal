@@ -23,7 +23,9 @@ export function Inspector() {
     );
   const el = selected[0]!;
   const multi = selected.length > 1;
-  const set = (patch: Partial<SlideElement>) => apply((d) => updateElements(d, slideIndex, selection, patch));
+  // Resizing text from the fields refits it like a canvas resize does (no mid-word breaks or overflow).
+  const set = (patch: Partial<SlideElement>) =>
+    apply((d) => updateElements(d, slideIndex, selection, (e) => (e.kind === 'text' && ('width' in patch || 'height' in patch) ? patchText(e, patch as Partial<TextElement>, true) : ({ ...e, ...patch } as SlideElement))));
   const setText = (patch: Partial<TextElement>, refit = false) => apply((d) => updateElements(d, slideIndex, [el.id], (e) => patchText(e as TextElement, patch, refit)));
   return (
     <div data-testid="inspector">

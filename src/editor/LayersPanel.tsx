@@ -44,22 +44,32 @@ export function LayersPanel() {
                   autoFocus
                   aria-label="Layer name"
                   className="min-w-0 flex-1 rounded border border-brand-500 bg-white px-1 dark:bg-zinc-900"
-                  defaultValue={describe(e)}
+                  defaultValue={e.name ?? ''}
+                  placeholder={describe(e)}
                   onBlur={(ev) => {
-                    set(e.id, { name: ev.target.value });
+                    // Escape cancels; an unchanged (or emptied) name keeps/clears the custom name only.
+                    if (ev.target.dataset.cancel !== '1') {
+                      const v = ev.target.value.trim();
+                      if (v !== (e.name ?? '')) set(e.id, { name: v || undefined });
+                    }
                     setRenaming(null);
                   }}
-                  onKeyDown={(ev) => ev.key === 'Enter' && (ev.target as HTMLInputElement).blur()}
+                  onKeyDown={(ev) => {
+                    ev.stopPropagation();
+                    const t = ev.target as HTMLInputElement;
+                    if (ev.key === 'Escape') t.dataset.cancel = '1';
+                    if (ev.key === 'Enter' || ev.key === 'Escape') t.blur();
+                  }}
                 />
               ) : (
                 <span className={`min-w-0 flex-1 truncate ${e.hidden ? 'opacity-40' : ''}`} onDoubleClick={() => setRenaming(e.id)}>
                   {describe(e)}
                 </span>
               )}
-              <button className={`px-1 ${e.locked ? 'text-amber-600' : 'text-zinc-400 opacity-0 group-hover:opacity-100'}`} onClick={(ev) => { ev.stopPropagation(); set(e.id, { locked: !e.locked }); }} aria-label={e.locked ? 'Unlock layer' : 'Lock layer'} title={e.locked ? 'Unlock' : 'Lock'}>
+              <button className={`px-1 ${e.locked ? 'text-amber-600' : 'text-zinc-400 opacity-40 group-hover:opacity-100'}`} onClick={(ev) => { ev.stopPropagation(); set(e.id, { locked: !e.locked }); }} aria-label={e.locked ? 'Unlock layer' : 'Lock layer'} title={e.locked ? 'Unlock' : 'Lock'}>
                 {e.locked ? '🔒' : '🔓'}
               </button>
-              <button className={`px-1 ${e.hidden ? 'text-zinc-600' : 'text-zinc-400 opacity-0 group-hover:opacity-100'}`} onClick={(ev) => { ev.stopPropagation(); set(e.id, { hidden: !e.hidden }); }} aria-label={e.hidden ? 'Show layer' : 'Hide layer'} title={e.hidden ? 'Show' : 'Hide'}>
+              <button className={`px-1 ${e.hidden ? 'text-zinc-600' : 'text-zinc-400 opacity-40 group-hover:opacity-100'}`} onClick={(ev) => { ev.stopPropagation(); set(e.id, { hidden: !e.hidden }); }} aria-label={e.hidden ? 'Show layer' : 'Hide layer'} title={e.hidden ? 'Show' : 'Hide'}>
                 {e.hidden ? '◌' : '●'}
               </button>
             </li>

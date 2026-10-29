@@ -9,13 +9,14 @@ import { z } from 'zod';
 import type { Project, TextElement, SlideElement, TextSpan } from '@/model/types';
 import type { CarouselPlan } from '../schema';
 import type { AIProvider } from '../types';
-import { completeJson, parseWith } from '../generate';
+import { completeJson } from '../generate';
 import { pickEmphasis } from '../text';
 import { applyCase, emphasisFont, fitFontSize, isComplexScript, layoutElement, refitText } from '../layout/textLayout';
 import { ensureSlideFonts } from '@/styles/slideFonts';
 import { newId } from '@/model/id';
 import { decodeTags, encodeTags, reconcile, stripTags, tagProblems, type Decoded } from './tags';
 import { isRtl, languageLabel, nativeLabel } from './languages';
+import { isRtlText } from '@/styles/scriptFonts';
 
 // ---- collecting the text --------------------------------------------------------------------------
 
@@ -162,11 +163,23 @@ export function batchUnits<T extends { source: string }>(units: T[], maxChars: n
   return batches;
 }
 
-async function pool<T>(items: T[], limit: number, fn: (item: T) => Promise<void>): Promise<void> {
+/**
+ * Runs `fn` over items with at most `limit` in flight. A failure stops new work from starting (no more
+ * credits spent) but keeps every result already finished; the first error is returned, not thrown.
+ */
+async function pool<T>(items: T[], limit: number, fn: (item: T) => Promise<void>, signal?: AbortSignal): Promise<unknown> {
   let next = 0;
+  let failure: unknown = null;
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (next < items.length) await fn(items[next++]!);
+    while (next < items.length && failure === null && !signal?.aborted) {
+      try {
+        await fn(items[next++]!);
+      } catch (e) {
+        failure ??= e;
+      }
+    }
   }));
+  return failure;
 }
 
 /** Translation through any AI provider (Claude, Ollama, OpenAI-compatible) as batched JSON requests. */
@@ -182,35 +195,38 @@ export function aiTranslator(provider: AIProvider): Translator {
       let done = 0;
       opts.onProgress?.(0, units.length);
       const sourceLine = opts.sourceLang && opts.sourceLang !== 'auto' ? `Source language: ${languageLabel(opts.sourceLang)} (${opts.sourceLang}).` : 'Detect the source language.';
-      await pool(batches, local ? 1 : 3, async (batch) => {
-        const ids = new Set(batch.map((u) => u.id));
-        const sources = new Map(batch.map((u) => [u.id, u.source]));
-        let attempts = 0;
-        const validate = (text: string) => {
-          attempts++;
-          const r = parseWith(TranslationSchema, text);
-          if (!r.ok) return r;
-          const got = new Map(r.value.items.filter((i) => ids.has(i.id)).map((i) => [i.id, i.text]));
-          const missing = [...ids].filter((id) => !got.get(id)?.trim());
-          if (missing.length) return { ok: false as const, error: `missing items: ${missing.join(', ')}` };
-          // Tag slips are worth one repair, but never worth failing the batch: styling falls back instead.
-          const problems = attempts < 2 ? [...got].map(([id, t]) => [id, tagProblems(sources.get(id)!, t)] as const).filter(([, p]) => p) : [];
-          if (problems.length) return { ok: false as const, error: problems.map(([id, p]) => `${id}: ${p}`).join('\n') };
-          return { ok: true as const, value: got };
-        };
+      const ask = async (items: Pick<Unit, 'id' | 'source'>[]) => {
         const { value } = await completeJson(
           provider,
           TRANSLATE_SYSTEM,
-          { role: 'user', content: `Target language: ${languageLabel(target)} (${target}). ${sourceLine}\n\n${JSON.stringify({ items: batch.map((u) => ({ id: u.id, text: u.source })) })}` },
-          TranslationSchema as unknown as z.ZodType<Map<string, string>>,
-          validate,
+          { role: 'user', content: `Target language: ${languageLabel(target)} (${target}). ${sourceLine}\n\n${JSON.stringify({ items: items.map((u) => ({ id: u.id, text: u.source })) })}` },
+          TranslationSchema,
+          undefined,
           opts.signal,
           'fast',
         );
-        value.forEach((t, id) => out.set(id, t));
+        const ids = new Set(items.map((u) => u.id));
+        return new Map(value.items.filter((i) => ids.has(i.id) && i.text.trim()).map((i) => [i.id, i.text]));
+      };
+      const failure = await pool(batches, local ? 1 : 3, async (batch) => {
+        const got = await ask(batch);
+        // Only the lines that came back missing or with broken style tags are asked again (one small call),
+        // instead of repeating the whole batch and the model's previous answer.
+        const retry = batch.filter((u) => !got.has(u.id) || tagProblems(u.source, got.get(u.id)!));
+        if (retry.length && !opts.signal?.aborted) {
+          const again = await ask(retry).catch(() => new Map<string, string>());
+          for (const u of retry) {
+            const t = again.get(u.id);
+            if (t && (!got.has(u.id) || !tagProblems(u.source, t))) got.set(u.id, t);
+          }
+        }
+        got.forEach((t, id) => out.set(id, t));
         done += batch.length;
         opts.onProgress?.(done, units.length);
-      });
+      }, opts.signal);
+      if (opts.signal?.aborted) throw new DOMException('Translation cancelled', 'AbortError');
+      // Keep what finished; only fail outright when nothing came back at all.
+      if (failure && out.size === 0) throw failure;
       return out;
     },
   };
@@ -313,7 +329,8 @@ export async function translateUnits(units: Unit[], target: string, translator: 
       }
     }
   } catch (e) {
-    if ((e as Error).name === 'AbortError') throw e;
+    // SDKs name their abort errors differently: the signal is the reliable check.
+    if (opts.signal?.aborted || (e as Error).name === 'AbortError') throw new DOMException('Translation cancelled', 'AbortError');
     run.error = (e as Error).message;
     for (const u of todo) if (!results.has(u.id)) {
       results.set(u.id, { tagged: u.source, origin: 'failed' });
@@ -381,7 +398,8 @@ export async function applyTranslation(project: Project, units: Unit[], accepted
   copy.carousel.slides = copy.carousel.slides.map((s) => ({
     ...s,
     elements: mapText(s.elements, (el) => {
-      const flipped: TextElement = rtl && el.align !== 'center' ? { ...el, align: el.align === 'left' ? 'right' : 'left' } : el;
+      // Only boxes that now hold right-to-left words flip; counters like "01 / 09" stay where they were.
+      const flipped: TextElement = rtl && el.align !== 'center' && isRtlText(el.text) ? { ...el, align: el.align === 'left' ? 'right' : 'left' } : el;
       return fitTranslated(flipped);
     }),
   }));

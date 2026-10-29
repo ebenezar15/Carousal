@@ -7,22 +7,42 @@ import type { SlidePlan } from '../schema';
 import type { Box, Ctx } from './context';
 import { ellipse, fitStack, label, line, measureSpec, path, rect, textEl, type TextSpec } from './primitives';
 import { SHAPES } from './shapes';
+import { DIAGRAM_LAYOUTS } from './diagrams';
+import { ILLUSTRATED_LAYOUTS } from './illustrated';
 
 export interface LayoutResult { elements: SlideElement[]; overflow: boolean }
 export type LayoutFn = (ctx: Ctx, s: SlidePlan, index: number) => LayoutResult;
 
 // ---------- text spec helpers ----------
 
-function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
+export function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot: 'headline', text, font: ctx.fonts.heading, weight: ctx.headline.weight, max, min: Math.min(max, ctx.sizes.minHead),
     lineHeight: ctx.headline.lineHeight, color: ctx.pal.text, textCase: ctx.headline.textCase,
     letterSpacing: ctx.headline.tracking * max, emphasis: s.emphasis.length ? { ...ctx.emphasis, words: s.emphasis } : undefined,
-    gapAfter: 0.42, rotation: ctx.headline.rotateDeg, ...extra,
+    gapAfter: 0.42, rotation: ctx.headline.rotateDeg, ...headlineEffect(ctx), ...extra,
   };
 }
 
-function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
+/** Style-specific headline treatment (styles.json layout.headline.effect). */
+function headlineEffect(ctx: Ctx): Partial<TextSpec> {
+  const { k, pal } = ctx;
+  if (ctx.mod.decoration === 'none') return {};
+  switch (ctx.style.layout.headline.effect) {
+    case 'spray': // Graffiti: a soft spray-paint glow around the letters.
+      return { shadow: { color: pal.primary, blur: Math.round(26 * k), offsetX: 0, offsetY: 0, opacity: ctx.dark ? 0.9 : 0.55 } };
+    case 'clay': // Puffy clay letters: a short soft shadow underneath.
+      return { shadow: { color: '#000000', blur: Math.round(10 * k), offsetX: 0, offsetY: Math.round(6 * k), opacity: 0.18 } };
+    case 'paper': // Cut-paper letters lifted off the page.
+      return { shadow: { color: '#000000', blur: Math.round(6 * k), offsetX: Math.round(3 * k), offsetY: Math.round(5 * k), opacity: 0.2 } };
+    case 'offset': // Maximalist hard offset shadow in the accent color.
+      return { shadow: { color: pal.accent, blur: 0, offsetX: Math.round(6 * k), offsetY: Math.round(6 * k), opacity: 0.9 } };
+    default:
+      return {};
+  }
+}
+
+export function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot, text, font: ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.body, min: ctx.sizes.minBody,
     lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8, ...extra,
@@ -39,7 +59,7 @@ function kickerText(ctx: Ctx, index: number): string | null {
   return null;
 }
 
-function kickerSpec(ctx: Ctx, text: string): TextSpec {
+export function kickerSpec(ctx: Ctx, text: string): TextSpec {
   const mono = ctx.style.layout.decorations.some((x) => x === 'code-tag' || x === 'terminal-prompt');
   return {
     slot: 'kicker', text, font: mono ? ctx.fonts.accent : ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.small, min: ctx.sizes.small,
@@ -112,7 +132,7 @@ const listMarker = (ctx: Ctx, layoutId: string): Marker =>
 // ---------- shared compositions ----------
 
 /** Headline (+kicker) on top, then body and/or rows; whole group positioned by valign. */
-function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
+export function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
   const region = opts.region ?? ctx.box;
   const kick = kickerText(ctx, index);
   const specs: TextSpec[] = [];
@@ -168,7 +188,12 @@ const hookSplit: LayoutFn = (ctx, s) => {
   const splitY = Math.round(H * 0.58);
   const els: SlideElement[] = [rect('split-block', 0, 0, W, splitY, pal.primary)];
   const headRegion = { x: ctx.box.x, y: ctx.box.y, w: ctx.box.w, h: splitY - ctx.box.y - Math.round(48 * ctx.k) };
-  const em = s.emphasis.length ? { ...ctx.emphasis, words: s.emphasis, ...(ctx.emphasis.style === 'color' ? { color: pal.bg } : {}) } : undefined;
+  // The headline sits on the primary block: an emphasis color that vanishes there (e.g. italic in the
+  // primary color) switches to a readable one.
+  const onBlock = (c: string) => (contrast(c, pal.primary) >= 3 ? c : contrast(pal.bg, pal.primary) >= 3 ? pal.bg : ctx.onPrimary);
+  const em = s.emphasis.length
+    ? { ...ctx.emphasis, words: s.emphasis, ...(ctx.emphasis.style === 'color' ? { color: onBlock(pal.bg) } : ctx.emphasis.style === 'highlight' || ctx.emphasis.style === 'box' ? {} : { color: onBlock(ctx.emphasis.color) }) }
+    : undefined;
   const head = fitStack([headSpec(ctx, s, s.headline, ctx.sizes.hook, { color: ctx.onPrimary, emphasis: contrast(ctx.onPrimary, pal.primary) >= 4.5 ? em : undefined })], headRegion, 'bottom', 'left');
   els.push(...head.elements);
   const sub = fitStack([bodySpec(ctx, s.body, 'subline', { max: Math.round(50 * ctx.k), color: pal.text })], { x: ctx.box.x, y: splitY + Math.round(56 * ctx.k), w: ctx.box.w, h: H - margin.bottom - splitY - Math.round(140 * ctx.k) }, 'top', 'left');
@@ -242,14 +267,22 @@ const bodyCard: LayoutFn = (ctx, s, i) => {
   const cardH = Math.min(box.h, cBottom - cTop + 2 * pad + chromeH);
   const cardY = box.y + (box.h - cardH) / 2;
   shift(content.elements, cardY + pad + chromeH - cTop);
-  const radius = brutal ? 0 : Math.round(36 * k);
+  const clay = decos.includes('clay-card');
+  const paper = decos.includes('paper-layers');
+  const radius = brutal ? 0 : clay ? Math.round(64 * k) : paper ? Math.round(10 * k) : Math.round(36 * k);
   const fill = glass ? (ctx.dark ? '#FFFFFF' : '#FFFFFF') : pal.surface;
   const card = rect('card', box.x, cardY, box.w, cardH, fill, {
     cornerRadius: radius,
     opacity: glass ? (ctx.dark ? 0.12 : 0.55) : 1,
     stroke: brutal ? pal.text : glass ? '#FFFFFF' : undefined,
     strokeWidth: brutal ? Math.round(5 * k) : glass ? Math.max(1, 2 * k) : undefined,
-    shadow: brutal ? undefined : { color: '#000000', blur: 40 * k, offsetX: 0, offsetY: 14 * k, opacity: ctx.dark ? 0.35 : 0.1 },
+    shadow: brutal
+      ? undefined
+      : clay
+        ? { color: mix(pal.primary, '#000000', 0.35), blur: 60 * k, offsetX: 0, offsetY: 26 * k, opacity: ctx.dark ? 0.45 : 0.22 }
+        : paper
+          ? { color: '#000000', blur: 18 * k, offsetX: 6 * k, offsetY: 10 * k, opacity: ctx.dark ? 0.4 : 0.18 }
+          : { color: '#000000', blur: 40 * k, offsetX: 0, offsetY: 14 * k, opacity: ctx.dark ? 0.35 : 0.1 },
   });
   const els: SlideElement[] = [];
   if (brutal) els.push(rect('card-shadow', box.x + 16 * k, cardY + 16 * k, box.w, cardH, pal.text));
@@ -524,18 +557,20 @@ export const LAYOUTS: Record<string, LayoutFn> = {
   'cta-centered': ctaCentered,
   'cta-profile': ctaProfile,
   'cta-recap': ctaRecap,
+  ...DIAGRAM_LAYOUTS,
+  ...ILLUSTRATED_LAYOUTS,
 };
 
 /** Layouts that make sense for a role — used by "new layout" and anti-repetition. */
 export const ROLE_LAYOUTS: Record<SlidePlan['role'], string[]> = {
   hook: ['hook-giant-type', 'hook-centered', 'hook-split', 'hook-number'],
-  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card'],
-  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top'],
+  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-journey'],
+  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-venn', 'diagram-tree'],
+  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card', 'diagram-flow', 'diagram-cycle', 'diagram-tree', 'diagram-pyramid', 'diagram-stairs'],
+  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top', 'diagram-flow', 'diagram-stairs', 'diagram-journey'],
   stat: ['stat-hero', 'stat-chart', 'body-card'],
   quote: ['quote-big-marks', 'quote-card', 'body-centered'],
-  comparison: ['compare-split', 'body-card', 'list-bullets'],
-  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card'],
+  comparison: ['compare-split', 'body-card', 'list-bullets', 'diagram-versus'],
+  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card', 'diagram-cycle', 'diagram-pyramid', 'diagram-venn'],
   cta: ['cta-centered', 'cta-profile', 'cta-recap'],
 };

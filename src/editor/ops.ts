@@ -4,6 +4,10 @@ import { newId } from '@/model/id';
 import type { Carousel, CarouselTheme, GroupElement, Slide, SlideElement, TextElement } from '@/model/types';
 import { emptySlide, type CarouselPlan, type SlidePlan } from '@/engine/schema';
 import { buildCarousel } from '@/engine/layout/engine';
+import { makeCtx } from '@/engine/layout/context';
+import { chrome } from '@/engine/layout/chrome';
+import { isPanoramic } from '@/engine/layout/backgrounds';
+import { panoramicSlice } from '@/engine/layout/decorations';
 
 export interface Doc { carousel: Carousel; plan: CarouselPlan }
 
@@ -199,22 +203,57 @@ export function addSlide(doc: Doc, afterIndex: number, slide?: Slide, planSlide?
   slides.splice(afterIndex + 1, 0, slide ?? blankSlide(ref));
   const ps = [...doc.plan.slides];
   ps.splice(afterIndex + 1, 0, planSlide ?? emptySlide('body', ''));
-  return { carousel: { ...doc.carousel, slides }, plan: { ...doc.plan, slides: ps } };
+  // Per-slide layout choices move with their slides.
+  const overrides = shiftOverrides(doc.carousel.theme.layoutOverrides, (i) => (i > afterIndex ? i + 1 : i));
+  return refreshSequence({ carousel: { ...doc.carousel, theme: { ...doc.carousel.theme, layoutOverrides: overrides }, slides }, plan: { ...doc.plan, slides: ps } });
 }
 
 export function duplicateSlide(doc: Doc, index: number): Doc {
   const s = doc.carousel.slides[index]!;
-  const copy: Slide = { ...structuredClone(s), id: newId('sl_'), elements: s.elements.map((e) => ({ ...cloneElement(e), slot: e.slot })), manual: true };
-  return addSlide(doc, index, copy, structuredClone(doc.plan.slides[index]!));
+  // The copy keeps its plan entry, so it follows theme changes like the original (unless that was hand-made).
+  const copy: Slide = { ...structuredClone(s), id: newId('sl_'), elements: s.elements.map((e) => ({ ...cloneElement(e), slot: e.slot })) };
+  const next = addSlide(doc, index, copy, structuredClone(doc.plan.slides[index]!));
+  const o = doc.carousel.theme.layoutOverrides?.[index];
+  return o ? { ...next, carousel: { ...next.carousel, theme: { ...next.carousel.theme, layoutOverrides: { ...next.carousel.theme.layoutOverrides, [index + 1]: o } } } } : next;
+}
+
+const CHROME_SLOT = /^(slide-number|progress-|swipe-)/;
+const PANORAMA_SLOT = /^(panorama-|seam-|route-stop)/;
+
+/**
+ * After slides are added, removed or reordered: renumbers slide counters and masthead issue numbers,
+ * re-slices continuous (panoramic) backgrounds and drawings, and moves the swipe cue off the new last
+ * slide. Hand-made slides are left alone.
+ */
+export function refreshSequence(doc: Doc): Doc {
+  let ctx: ReturnType<typeof makeCtx>;
+  try {
+    ctx = makeCtx(doc.plan, doc.carousel.presetId, doc.carousel.theme);
+  } catch {
+    return doc;
+  }
+  const total = doc.carousel.slides.length;
+  const pano = isPanoramic(ctx);
+  const slides = doc.carousel.slides.map((s, i) => {
+    const background = s.background.span ? { ...s.background, span: { index: i, count: total } } : s.background;
+    if (s.manual) return { ...s, background };
+    const hadChrome = s.elements.some((e) => e.slot && CHROME_SLOT.test(e.slot));
+    let elements = s.elements.filter((e) => !(e.slot && (CHROME_SLOT.test(e.slot) || PANORAMA_SLOT.test(e.slot))));
+    if (pano) elements = [...panoramicSlice(ctx, i), ...elements];
+    elements = elements.map((e) => (e.slot === 'masthead-issue' && e.kind === 'text' ? { ...e, text: `No. ${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}` } : e));
+    if (hadChrome) elements = [...elements, ...chrome(ctx, i)];
+    return { ...s, background, elements };
+  });
+  return { ...doc, carousel: { ...doc.carousel, slides } };
 }
 
 export function deleteSlide(doc: Doc, index: number): Doc {
   if (doc.carousel.slides.length <= 1) return doc;
   const overrides = shiftOverrides(doc.carousel.theme.layoutOverrides, (i) => (i === index ? null : i > index ? i - 1 : i));
-  return {
+  return refreshSequence({
     carousel: { ...doc.carousel, theme: { ...doc.carousel.theme, layoutOverrides: overrides }, slides: doc.carousel.slides.filter((_, i) => i !== index) },
     plan: { ...doc.plan, slides: doc.plan.slides.filter((_, i) => i !== index) },
-  };
+  });
 }
 
 export function moveSlide(doc: Doc, from: number, to: number): Doc {
@@ -227,10 +266,10 @@ export function moveSlide(doc: Doc, from: number, to: number): Doc {
   };
   const order = move([...doc.carousel.slides.keys()]);
   const overrides = shiftOverrides(doc.carousel.theme.layoutOverrides, (i) => order.indexOf(i));
-  return {
+  return refreshSequence({
     carousel: { ...doc.carousel, theme: { ...doc.carousel.theme, layoutOverrides: overrides }, slides: move(doc.carousel.slides) },
     plan: { ...doc.plan, slides: move(doc.plan.slides) },
-  };
+  });
 }
 
 function shiftOverrides(o: Record<number, string> | undefined, map: (i: number) => number | null) {
@@ -300,6 +339,8 @@ export function continueAcross(doc: Doc, slideIndex: number, id: string, directi
   const el = doc.carousel.slides[slideIndex]?.elements.find((e) => e.id === id);
   if (!el || target < 0 || target >= doc.carousel.slides.length) return doc;
   const copy = cloneElement(el, direction === 'next' ? -slideWidth : slideWidth, 0);
+  // Already continued there? Don't stack a second copy.
+  if (doc.carousel.slides[target]!.elements.some((e) => e.kind === copy.kind && e.x === copy.x && e.y === copy.y && e.width === copy.width && e.height === copy.height)) return doc;
   return addElements(doc, target, [{ ...copy, name: `${el.name ?? el.kind} (continued)` }]);
 }
 
@@ -310,7 +351,9 @@ export function applyTheme(doc: Doc, theme: CarouselTheme, presetId = doc.carous
     if (!old) return s;
     if (old.manual) return old;
     const userEls = old.elements.filter((e) => !e.slot);
-    // Animations set on generated elements carry over to the rebuilt element in the same slot.
+    // The new theme's motion animates the rebuilt slide; animations the user tuned by hand ('custom')
+    // carry over to the rebuilt element in the same slot.
+    if (theme.motion !== 'custom') return { ...s, id: old.id, elements: [...s.elements, ...userEls] };
     const animBySlot = new Map<string, NonNullable<SlideElement['anim']>[]>();
     old.elements.forEach((e) => e.slot && e.anim && animBySlot.set(e.slot, [...(animBySlot.get(e.slot) ?? []), e.anim]));
     const seen = new Map<string, number>();

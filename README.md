@@ -82,6 +82,42 @@ Troubleshooting:
 - *No models installed* means you still need to run `ollama pull …`.
 - Small models occasionally produce invalid JSON. The app sends the errors back to the model (up to 2 repair attempts), then falls back to the rules.
 
+## Design styles, prompts and motion
+
+**35 style systems**, each a complete look: typography (fonts, weight, case, tracking, tilt), palettes, background, motifs, slide layouts and a matching **motion**. The 10 newest:
+
+| Style | Typography | Carousel look | Motion |
+|---|---|---|---|
+| Minimalism | Light Albert Sans, wide margins | Stone/fog palettes, hairline divider, nothing else | Slow, quiet fades |
+| Maximalism | Dela Gothic One caps + Bricolage Grotesque | Zigzag pattern, confetti shapes, starburst, sticker, thick frame, offset shadow | Word drops, pops, spins and wiggles |
+| Surreal | Instrument Serif with italic emphasis | Mesh gradient, glossy floating spheres, arched portal, stars | Words fade in, shapes drift and float |
+| Swiss design | Tight 800-weight Inter | Visible column grid, red circle, vertical edge label | Sharp slides and ruled wipes |
+| Editorial | DM Serif Display + Newsreader, italic accents | Newspaper masthead with issue number, double rules, paper grain | Word rise, ruled wipes |
+| Paper | Young Serif with a lifted shadow | Layered paper-cut hills with real shadows, cut-out sun, paper texture | Layers slide up, panels unfold |
+| Clay | Rounded Fredoka with a soft shadow | Puffy lit pastel shapes, pillowy cards with deep soft shadows | Squash and stretch, gentle float |
+| Vector art | Geometric Outfit | Flat hills, sun and clouds on covers; geometric clusters | Draw-on lines, pops, word slides |
+| Handwritten | Gochi Hand + Caveat | Dot-grid journal page, red margin line, tape, paper clip, doodles | Text written on, doodles drawn |
+| Graffiti | Sedgwick Ave Display caps, tilted | Spray drips, soft spray halo, paint splats, concrete wall | Spray-on zoom, drips unfold, wiggles |
+
+**Describe the look.** Type what you want on the Generate page (or *Design → Describe the look* in the editor, or the *Restyle* box above the slides), e.g. “dreamy pastel clay shapes, rounded type, bouncy motion, ribbon across slides”, or click one of the 10 style chips. It understands styles, colors (names or a hex code), dark/light, fonts (serif, rounded, handwritten…), textures, patterns, background, decoration amount, continuous slides and motion — offline, for free. An AI model is asked only when the prompt uses words the built-in reader doesn't know (one quick, cached call); change this in **Settings → Saving AI credits**.
+
+**Motion.** Every design animates in its style's motion by default (it shows in the preview and in video/GIF/clip exports; still images are unaffected). Change it with the **Motion** selector on the Generate page or in *Design → Background*, or fine-tune any element in the editor (hand-tuned animations are kept when you change the theme).
+
+## Diagrams, illustrations and Christian carousels
+
+**Diagrams.** Points on a slide become a diagram when that tells the story better: **cycle** (rhythms and habits), **flow** (a process), **venn** (overlapping ideas, e.g. *Faith · Hope · Love*), **pyramid** (foundations, priorities), **tree** (vine and branches, fruit), **journey** (a story or timeline), **versus** (*Law vs Grace*, before → after) and **stairs** (steps of growth). They're chosen from the slide's words and the AI's layout hint, never on two slides in a row; *↻ Layout* cycles through them.
+
+**Illustrations.** Original drawn art matched to each slide's words, generated in the app (works offline):
+- **Characters** in 12 poses — praying, reading, worshipping, kneeling, waving, walking, sitting, thinking, welcoming, carrying, pointing, standing — with diverse skin tones, hair and clothes; adults and children.
+- **21 scenes:** hill with a cross, empty tomb, shepherd and sheep, storm at sea, calm sea, tree by the river, field of seeds, garden, desert, night sky, sunrise, road, mountains, rainbow, church, table with bread and cup, open door, lighthouse, well, manger, city.
+- **32 symbols:** Bible, cross, dove, candle, lamp, heart, bread, cup, crown, sheep, star, anchor, key, seed, fish, flame, scroll, olive branch and more.
+- They **move** in animations (an arm waves, a dove floats, stars twinkle, a boat bobs, a candle flickers), never repeat within a carousel, and change with every *New designs* press.
+- Choose how many under **Illustrations** (above the slides or in *Design → Background*): none, some slides, most slides, or **every slide as story panels**.
+
+**Christian styles:** Scripture (verse cards), Stained Glass, Parchment, Sunday Light, Illustrated Story, Night Prayer and Bible Story Comic. Christian content (Bible references, faith words) is offered these first. The built-in writer recognises verses with their reference (“…” — John 3:16, Psalm 23:1 — …, … (1 Cor 13:4 NIV)) and prayers; AI models are told to quote Scripture word for word. Tip: most modern translations (NIV, ESV…) are copyrighted — the KJV and WEB are public domain.
+
+**Endless designs.** Every *New designs* press remixes styles with freshly generated palettes (always contrast-checked), other font pairings, alternative layouts, textures and new art, and styles you've seen recently step back — so designs keep changing.
+
 ## Backgrounds, graphics, text effects and animation
 
 **Backgrounds.** Set these for all slides in **Design → Background**, or for one slide in the slide panel.
@@ -142,7 +178,10 @@ The same pattern covers Devanagari, Bengali, Telugu, Kannada, Malayalam, Gujarat
 
 - **Translation memory:** every accepted translation is stored on the device. The same text is never sent to a model twice; re-running or reusing lines costs nothing. Clear it in Settings.
 - **Batching and deduplication:** a carousel is translated in a few batched requests. Text that repeats across slides, the plan and the caption is sent once.
-- **Quick-task model:** translation, captions and headline ideas use a cheaper model, set per provider in Settings. For Claude the default is Haiku 5.5, which runs at low effort.
+- **Quick-task model:** translation, captions, headline ideas, slide rewrites and design prompts use a cheaper model, set per provider in Settings. For Claude the default is Haiku 5.5, which runs at low effort.
+- **No repeat spending:** generating the same text with the same settings reuses the copy already written (use *↻ Regenerate copy* for a new version); headline ideas and design-prompt readings are cached; translations are remembered as soon as they arrive.
+- **Small requests:** one-slide jobs send a short task prompt (not the whole carousel-writing prompt), every call has an output cap sized to the task, a failed translation batch keeps the others and stops the rest, and only missing lines are asked again.
+- **Design is free:** styles, layouts, textures, motion, “Make it …” buttons and most design prompts never use AI.
 - **Prompt caching (Claude):** system prompts are cached, so repeat calls within 5 minutes read them at a fraction of the price.
 - **Ollama:**
   - The model stays loaded for 30 minutes between calls.

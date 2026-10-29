@@ -12,6 +12,7 @@ import {
 import { translationMemory } from '@/storage/translationMemory';
 import { providers } from './runtime';
 import { useSettings } from './store';
+import { useEscape } from './useEscape';
 
 type Engine = 'ai' | 'browser' | 'manual';
 type Step = { kind: 'setup' } | { kind: 'working'; done: number; total: number } | { kind: 'review'; run: TranslateRun } | { kind: 'saving' };
@@ -33,6 +34,10 @@ export function TranslateDialog({ project, onClose, onCreated }: { project: Proj
   const [onlyFailed, setOnlyFailed] = useState(false);
   const [error, setError] = useState('');
   const abort = useRef<AbortController | null>(null);
+  useEscape(() => {
+    abort.current?.abort();
+    onClose();
+  });
   const lang = customCode.trim() || target;
 
   // Which engines can run right now (AI provider per Settings; the browser's built-in translator).
@@ -75,11 +80,14 @@ export function TranslateDialog({ project, onClose, onCreated }: { project: Proj
         signal: abort.current.signal,
         onProgress: (done, total) => setStep({ kind: 'working', done, total }),
       });
+      // Machine translations are remembered right away, so going Back and translating again is free.
+      const fresh = units.filter((u) => run.results.get(u.id)?.origin === 'translator');
+      if (fresh.length) void translationMemory.store(lang, memoryPairs(fresh, new Map(fresh.map((u) => [u.id, { tagged: run.results.get(u.id)!.tagged, text: stripTags(run.results.get(u.id)!.tagged) }]))));
       setEdits(Object.fromEntries(units.map((u) => [u.id, stripTags(run.results.get(u.id)?.tagged ?? u.source)])));
       setOnlyFailed(run.failed > 0);
       setStep({ kind: 'review', run });
     } catch (e) {
-      if ((e as Error).name === 'AbortError') setStep({ kind: 'setup' });
+      if (abort.current?.signal.aborted || (e as Error).name === 'AbortError') setStep({ kind: 'setup' });
       else {
         setError((e as Error).message);
         setStep({ kind: 'setup' });

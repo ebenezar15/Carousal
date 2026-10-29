@@ -104,10 +104,15 @@ describe('generatePlan provider selection', () => {
     expect(r.notice).toBeUndefined();
   });
 
-  it('falls back to rules with a notice when the provider is unavailable', async () => {
-    const r = await generatePlan(ARTICLE, defaultOptions, 'auto', [fakeProvider([], false)]);
+  it('falls back to rules with a notice when the chosen provider is unavailable', async () => {
+    const r = await generatePlan(ARTICLE, defaultOptions, 'ollama', [fakeProvider([], false)]);
     expect(r.provider).toBe('rules');
     expect(r.notice).toMatch(/unavailable.*built-in rules/);
+  });
+  it('uses the rules quietly in Auto mode when no AI is set up', async () => {
+    const r = await generatePlan(ARTICLE, defaultOptions, 'auto', [fakeProvider([], false)]);
+    expect(r.provider).toBe('rules');
+    expect(r.notice).toBeUndefined();
   });
 
   it('falls back to rules when the provider errors', async () => {

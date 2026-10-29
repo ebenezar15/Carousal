@@ -5,6 +5,11 @@ import { findFont, fonts as allFonts, getPalette, getStyle, palettes, styles, ty
 import type { CarouselTheme, DesignModifiers } from '@/model/types';
 import type { CarouselPlan } from './schema';
 import type { Tone } from './types';
+import { generatePalette } from '@/styles/generatePalette';
+import { pairings } from '@/styles';
+import { ROLE_LAYOUTS } from './layout/layouts';
+import { SCRIPTURE_REF } from './art/topics';
+import type { TextureKind } from '@/model/types';
 
 export interface Variation { theme: CarouselTheme; label: string }
 
@@ -29,6 +34,14 @@ function rng(seed: number) {
 const bgKind = (s: StyleSystem) => (s.layout.panoramic ? 'panoramic' : s.background.type);
 const overlap = (a: string[], b: string[]) => a.filter((x) => b.includes(x)).length;
 
+const FAITH_WORDS = /\b(god|jesus|christ|lord|holy spirit|bible|scripture|gospel|prayer|pray|faith|church|psalm|grace|worship|sermon|amen|devotional|salvation|heaven)\b/i;
+
+/** Christian content (scripture references or faith vocabulary on several slides). */
+export function isFaithContent(plan: CarouselPlan): boolean {
+  const text = plan.slides.map((s) => `${s.headline} ${s.body} ${s.bullets.join(' ')} ${s.quote?.text ?? ''} ${s.quote?.attribution ?? ''}`);
+  return text.some((t) => SCRIPTURE_REF.test(t)) || text.filter((t) => FAITH_WORDS.test(t)).length >= Math.min(3, Math.ceil(plan.slides.length / 3));
+}
+
 function contentBoost(s: StyleSystem, plan: CarouselPlan): number {
   const roles = plan.slides.map((x) => x.role);
   const count = (r: string) => roles.filter((x) => x === r).length;
@@ -37,15 +50,62 @@ function contentBoost(s: StyleSystem, plan: CarouselPlan): number {
   if (count('stat') >= 1 && s.moods.includes('data')) b += 1;
   if (count('quote') >= 2 && s.id === 'quote-card') b += 1;
   if (s.id === 'tweet-style') b -= 0.6; // niche look; still eligible
+  // Faith content leads with the faith styles (Scripture, Stained glass, Storybook…), mixed with others.
+  if (s.moods.includes('faith')) b += isFaithContent(plan) ? 3 : -1.2;
+  // Data styles only lead when there are numbers to show.
+  if (s.moods.includes('data') && count('stat') === 0) b -= 1.2;
   return b;
 }
 
-export function pickVariations(plan: CarouselPlan, opts: { count: number; tone: Tone; seed?: number; preferStyleId?: string; handle?: string }): Variation[] {
+/**
+ * Variations of `theme` for "New designs" beyond the first set: generated palettes, other font
+ * pairings, per-slide layout alternatives, textures and decoration amounts. Each seed gives a new
+ * combination, so the supply of designs never runs out and rarely repeats.
+ */
+export function remix(theme: CarouselTheme, plan: CarouselPlan, rand: () => number, wantDark: boolean, mood?: string): CarouselTheme {
+  const style = getStyle(theme.styleId);
+  const next: CarouselTheme = { ...theme, modifiers: { ...theme.modifiers } };
+  const m = next.modifiers!;
+  if (rand() < 0.45) {
+    const g = generatePalette(Math.floor(rand() * 360), wantDark ? 'dark' : 'light', rand, mood);
+    next.customPalette = g.colors;
+    next.label = `${style.name} · ${g.name}`;
+  }
+  if (rand() < 0.4) {
+    const groupOf = (id: string) => allFonts.find((f) => f.id === id)?.group;
+    const fits = pairings.filter((p) => findFont(p.heading) && findFont(p.body) && (p.mood.some((x) => style.moods.includes(x)) || groupOf(p.heading) === groupOf(style.fonts.heading)));
+    const p = fits[Math.floor(rand() * fits.length)];
+    if (p) {
+      next.headingFont = p.heading;
+      next.bodyFont = p.body;
+    }
+  }
+  const overrides: Record<number, string> = {};
+  plan.slides.forEach((s, i) => {
+    if (s.role === 'hook' || s.role === 'cta' || rand() > 0.35) return;
+    const alts = ROLE_LAYOUTS[s.role];
+    overrides[i] = alts[Math.floor(rand() * alts.length)]!;
+  });
+  if (Object.keys(overrides).length) next.layoutOverrides = overrides;
+  const textures: TextureKind[] = ['paper', 'linen', 'watercolor', 'kraft', 'canvas', 'riso', 'stucco', 'crumpled'];
+  if (rand() < 0.3) m.texture = textures[Math.floor(rand() * textures.length)];
+  const r = rand();
+  if (r < 0.15) m.decoration = 'rich';
+  else if (r < 0.25) m.decoration = 'minimal';
+  m.typeScale = Math.round((0.92 + rand() * 0.2) * 100) / 100;
+  next.seed = Math.floor(rand() * 1e6);
+  if (!next.label) next.label = `${style.name} · ${getPalette(next.paletteId).name}`;
+  return next;
+}
+
+export function pickVariations(plan: CarouselPlan, opts: { count: number; tone: Tone; seed?: number; preferStyleId?: string; handle?: string; recent?: string[] }): Variation[] {
   const rand = rng((opts.seed ?? 0) * 7919 + 17);
   const wanted = [...TONE_MOODS[opts.tone], plan.paletteMood];
   const scored = styles.map((s) => {
     const pm = s.palettes.flatMap((p) => getPalette(p).moods);
-    return { s, base: overlap(s.moods, wanted) * 1.2 + Math.min(2, overlap(pm, wanted)) * 0.4 + contentBoost(s, plan) + rand() * 1.6 };
+    // Styles shown recently (across projects) step back so designs keep changing.
+    const recency = opts.recent ? opts.recent.slice(0, 12).filter((r) => r === s.id).length : 0;
+    return { s, base: overlap(s.moods, wanted) * 1.2 + Math.min(2, overlap(pm, wanted)) * 0.4 + contentBoost(s, plan) + rand() * 1.6 - recency * 0.9 };
   });
 
   const picked: { s: StyleSystem; dark: boolean; heading: string; paletteId: string }[] = [];
@@ -86,9 +146,11 @@ export function pickVariations(plan: CarouselPlan, opts: { count: number; tone: 
   return picked.map(({ s, paletteId }, i) => {
     const pairs = [s.fonts, ...s.altFonts].filter((f) => findFont(f.heading) && findFont(f.body));
     const f = pairs.find((x) => x.heading === picked[i]!.heading) ?? s.fonts;
-    const theme: CarouselTheme = { styleId: s.id, paletteId, headingFont: f.heading, bodyFont: f.body, handle: opts.handle };
+    let theme: CarouselTheme = { styleId: s.id, paletteId, headingFont: f.heading, bodyFont: f.body, handle: opts.handle };
     theme.label = `${s.name} · ${getPalette(paletteId).name}`;
-    return { theme, label: theme.label };
+    // "New designs" (seed > 0) remixes every pick, so each press is a fresh set.
+    if ((opts.seed ?? 0) > 0) theme = remix(theme, plan, rand, getPalette(paletteId).scheme === 'dark', wanted[0]);
+    return { theme, label: theme.label! };
   });
 }
 
