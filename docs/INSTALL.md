@@ -16,16 +16,16 @@ CarouselForge runs on **Windows 10/11, macOS 11+ and Linux** (64-bit). Everythin
 ## 1. Download the installer
 
 1. Open **<https://github.com/ebenezar15/Carousal/releases>**.
-2. Open the newest release (e.g. **CarouselForge v0.3.0**) and scroll to **Assets**.
+2. Open the newest release (e.g. **CarouselForge v0.4.0**) and scroll to **Assets**.
 3. Download the file for your computer:
 
 | Your computer | File to download |
 |---|---|
-| Windows | `CarouselForge_0.3.0_x64-setup.exe` (or the `.msi`) |
-| Mac, Apple silicon or Intel | `CarouselForge_0.3.0_universal.dmg` |
-| Linux: Ubuntu, Debian, Mint | `CarouselForge_0.3.0_amd64.deb` |
-| Linux: any other distribution | `CarouselForge_0.3.0_amd64.AppImage` |
-| Linux: Fedora, openSUSE | `CarouselForge-0.3.0-1.x86_64.rpm` |
+| Windows | `CarouselForge_0.4.0_x64-setup.exe` (or the `.msi`) |
+| Mac, Apple silicon or Intel | `CarouselForge_0.4.0_universal.dmg` |
+| Linux: Ubuntu, Debian, Mint | `CarouselForge_0.4.0_amd64.deb` |
+| Linux: any other distribution | `CarouselForge_0.4.0_amd64.AppImage` |
+| Linux: Fedora, openSUSE | `CarouselForge-0.4.0-1.x86_64.rpm` |
 
 > A release can start as a **draft** that only the repository owner can see. If you're the owner and the release shows *Draft*, you can still download the files, then click **Edit → Publish release** to share it.
 
@@ -35,14 +35,14 @@ The installers aren't code-signed yet, so Windows and macOS show a warning the f
 
 ### Windows
 
-1. Double-click **`CarouselForge_0.3.0_x64-setup.exe`**.
+1. Double-click **`CarouselForge_0.4.0_x64-setup.exe`**.
 2. If **"Windows protected your PC"** appears, click **More info → Run anyway**.
 3. Follow the installer (Next → Install → Finish). It may install Microsoft Edge WebView2 if it's missing; this is a normal Windows component.
 4. Start **CarouselForge** from the Start menu.
 
 ### macOS
 
-1. Double-click **`CarouselForge_0.3.0_universal.dmg`**.
+1. Double-click **`CarouselForge_0.4.0_universal.dmg`**.
 2. Drag **CarouselForge** onto the **Applications** folder.
 3. Open **Applications**, **right-click** CarouselForge and choose **Open**, then **Open** again. You only do this once; after that it opens normally.
    - On macOS 15 and later, if there's no *Open* button: go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to CarouselForge.
@@ -51,19 +51,19 @@ The installers aren't code-signed yet, so Windows and macOS show a warning the f
 
 **Ubuntu / Debian / Mint (.deb):**
 ```bash
-sudo apt install ./CarouselForge_0.3.0_amd64.deb
+sudo apt install ./CarouselForge_0.4.0_amd64.deb
 ```
 Then start CarouselForge from your applications menu.
 
 **Any distribution (.AppImage):**
 ```bash
-chmod +x CarouselForge_0.3.0_amd64.AppImage
-./CarouselForge_0.3.0_amd64.AppImage
+chmod +x CarouselForge_0.4.0_amd64.AppImage
+./CarouselForge_0.4.0_amd64.AppImage
 ```
 
 **Fedora / openSUSE (.rpm):**
 ```bash
-sudo dnf install ./CarouselForge-0.3.0-1.x86_64.rpm
+sudo dnf install ./CarouselForge-0.4.0-1.x86_64.rpm
 ```
 
 ## 3. First launch
@@ -124,15 +124,18 @@ Translations you accept are remembered, so translating the same text again is in
 
 **Tamil font:** Tamil text uses modern-script fonts that match each design. To use one Tamil font everywhere (for example Mukta Malar), choose it in **Settings → Fonts for other languages**.
 
-## 6½. Make it yours: textures, graphics, effects, animation
+## 6½. Make it yours: styles, prompts, textures, graphics, effects, animation
 
+- **Pick a design style or describe it:** before you click **Generate carousel**, type the look you want in **Describe the look**, e.g. *“graffiti, dark wall, neon pink”* or *“clay, pastel, bouncy motion”*. You can also click one of the style chips: Minimalism, Maximalism, Surreal, Swiss, Editorial, Paper, Clay, Vector art, Handwritten or Graffiti. The first design follows your description, and the others offer different styles with the same wishes. This works offline and uses no AI credits for normal design words.
+- **Restyle later:** type a new description in the **Restyle** box above the slides and click **Apply look**. In the editor, use **Design → Describe the look**.
+- **Motion:** every style animates in its own way. Change it with **Motion** above the slides, or choose *No animation*.
 - **Plain or textured backgrounds:** click **Plain** or **Textured** above the slides, or open **Design → Background** in the editor.
 - **Slides that flow into each other:** pick a style under **Continuous slides**, such as Ribbon, Journey path or Giant word.
 - **Graphics and text graphics:** in the editor's **Insert** tab, click any doodle, sparkle, sticker or title.
 - **Text effects:** select a text box and pick an effect such as Neon glow, 3D extrude or Glitch.
 - **Animation:**
-  1. With nothing selected, open **Animation** in the right panel.
-  2. Pick a style and click **All slides**.
+  1. With nothing selected, open **Animation** in the right panel (each style already has its own motion).
+  2. To change it, pick another style and click **All slides**.
   3. Press **▶ Preview** to watch it.
   4. Export it from **Export → Video / GIF**, or choose **One animated clip per slide** to post a video carousel.
 

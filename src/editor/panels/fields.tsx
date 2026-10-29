@@ -18,7 +18,25 @@ export function Row({ children }: { children: ReactNode }) {
   return <div className="grid grid-cols-2 gap-2">{children}</div>;
 }
 
+/**
+ * Number input that keeps what you type until it makes sense: values are applied live only when they're
+ * valid and in range (so typing "12" into a field with min 8 doesn't jump to 82), clamped on blur/Enter,
+ * and a whole editing session is one undo step.
+ */
 export function NumberField({ label, value, onChange, step = 1, min, max, suffix }: { label: string; value: number; onChange(v: number): void; step?: number; min?: number; max?: number; suffix?: string }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const shown = Number.isFinite(value) ? String(Math.round(value * 100) / 100) : '0';
+  const inRange = (v: number) => (min === undefined || v >= min) && (max === undefined || v <= max);
+  const commit = () => {
+    if (draft !== null) {
+      const v = Number(draft);
+      if (draft.trim() !== '' && Number.isFinite(v)) {
+        const c = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, v));
+        if (c !== value) onChange(c);
+      }
+    }
+    setDraft(null);
+  };
   return (
     <label className="block">
       <span className="mb-0.5 block text-[11px] text-zinc-500">{label}</span>
@@ -27,13 +45,23 @@ export function NumberField({ label, value, onChange, step = 1, min, max, suffix
           type="number"
           aria-label={label}
           className="w-full min-w-0 bg-transparent px-2 py-1 text-xs outline-none"
-          value={Number.isFinite(value) ? Math.round(value * 100) / 100 : 0}
+          value={draft ?? shown}
           step={step}
           min={min}
           max={max}
+          onFocus={() => beginGesture()}
+          onBlur={() => {
+            commit();
+            endGesture();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') commit();
+            if (e.key === 'Escape') setDraft(null);
+          }}
           onChange={(e) => {
+            setDraft(e.target.value);
             const v = Number(e.target.value);
-            if (Number.isFinite(v)) onChange(min !== undefined || max !== undefined ? Math.min(max ?? Infinity, Math.max(min ?? -Infinity, v)) : v);
+            if (e.target.value.trim() !== '' && Number.isFinite(v) && inRange(v) && v !== value) onChange(v);
           }}
         />
         {suffix && <span className="pr-2 text-[10px] text-zinc-400">{suffix}</span>}

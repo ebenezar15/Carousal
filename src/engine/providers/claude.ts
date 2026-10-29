@@ -44,7 +44,7 @@ export function createClaudeProvider(getModel: () => string, getFastModel: () =>
       const response = await client.beta.messages.create(
         {
           model,
-          max_tokens: 16000,
+          max_tokens: req.maxTokens ?? (fast ? 8192 : 16000),
           // The system prompt is identical across calls of a kind (plans, rewrites, translation batches),
           // so it is cached: repeat calls within 5 minutes read it at a fraction of the input price.
           system: [{ type: 'text', text: req.system, cache_control: { type: 'ephemeral' } }],

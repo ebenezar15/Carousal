@@ -101,7 +101,7 @@ export function createOllamaProvider(getConfig: () => { baseUrl: string; model: 
           stream: false,
           format: 'json',
           keep_alive: OLLAMA_KEEP_ALIVE,
-          options: { ...OLLAMA_OPTIONS, num_ctx: contextFor(promptTokens, OLLAMA_OPTIONS.num_predict) },
+          options: { ...OLLAMA_OPTIONS, ...(req.maxTokens ? { num_predict: Math.min(OLLAMA_OPTIONS.num_predict, req.maxTokens) } : {}), num_ctx: contextFor(promptTokens, req.maxTokens ? Math.min(OLLAMA_OPTIONS.num_predict, req.maxTokens) : OLLAMA_OPTIONS.num_predict) },
           messages: [{ role: 'system', content: system }, ...req.messages],
         }),
       });

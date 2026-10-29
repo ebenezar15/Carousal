@@ -101,6 +101,7 @@ test('.carousel project file round-trips through delete + open', async ({ page }
   expect(file.name).toMatch(/\.carousel$/);
   expect(Object.keys(unzipSync(file.bytes))).toContain('project.json');
   await page.getByRole('button', { name: 'Close export' }).click();
+  page.once('dialog', (d) => void d.accept()); // "Delete …? This can't be undone."
   await page.getByTestId('project-list').getByRole('button', { name: `Delete ${title}` }).click({ force: true });
   await expect(page.getByTestId('project-list').getByRole('button', { name: title, exact: true })).toHaveCount(0);
   await page.getByLabel('Open project file').setInputFiles({ name: file.name, mimeType: 'application/zip', buffer: Buffer.from(file.bytes) });

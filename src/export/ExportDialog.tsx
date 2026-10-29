@@ -11,6 +11,8 @@ import { slidesToGif, slidesToVideo, videoSize, type Transition } from './video'
 import { ANIMATION_PRESETS, autoAnimate, introDuration, slideHasAnimation, type AnimationPreset } from '@/editor/animation';
 import { exportProjectFile, PROJECT_EXT } from './projectFile';
 import { formatBytes, saveBlob } from './save';
+import { altTextFor } from '@/engine/caption';
+import { useEscape } from '@/app/useEscape';
 
 type Mode = 'images' | 'zip' | 'pdf' | 'video' | 'project';
 
@@ -34,6 +36,13 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
   const [result, setResult] = useState<Result | null>(null);
   const abort = useRef<AbortController | null>(null);
   const webp = useMemo(() => webpEncodeSupported(), []);
+  // Closing the dialog (✕, Escape, or leaving the page) stops a running export.
+  const close = () => {
+    abort.current?.abort();
+    onClose();
+  };
+  useEscape(close);
+  useEffect(() => () => abort.current?.abort(), []);
   const [a11y, setA11y] = useState<{ errors: number; warnings: number } | null>(null);
   useEffect(() => {
     let alive = true;
@@ -50,7 +59,12 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
   const expected = { width: preset.width * scale, height: preset.height * scale };
   const maxMB = preset.maxFileSizeMB;
   const name = project.name;
+  // PDF pages are PNG or JPG only (WebP chosen for images falls back to PNG here).
+  const pageFormat: ImageFormat = mode === 'pdf' && format === 'webp' ? 'png' : format;
   const ext = format;
+  const stopIfAborted = () => {
+    if (abort.current?.signal.aborted) throw new DOMException('Export cancelled', 'AbortError');
+  };
 
   const run = async () => {
     setError('');
@@ -62,13 +76,18 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
         setBusy('Rendering slides…');
         const rows: Verified[] = [];
         for (const [n, i] of indices.entries()) {
+          stopIfAborted();
           const blob = await slideToBlob(carousel.slides[i]!, preset, { format, scale, quality });
           rows.push(await verifyImage(slideFileName(name, i, ext), blob, expected, maxMB));
           setProgress((n + 1) / indices.length);
         }
         const saved: string[] = [];
         if (mode === 'zip') {
-          const extras = plan ? [{ name: 'caption.txt', blob: textFile(`${plan.caption}\n\n${plan.hashtags.join(' ')}\n${project.altText?.length ? `\n--- Alt text ---\n${project.altText.map((a) => a).join('\n')}\n` : ''}`) }] : [];
+          // Caption, hashtags and alt text (the offline alt text when the caption writer wasn't used).
+          const alt = project.altText?.length ? project.altText : plan ? altTextFor(plan) : [];
+          const captionText = plan ? [plan.caption, plan.hashtags.join(' ')].filter((x) => x.trim()).join('\n\n') : '';
+          const extras = plan ? [{ name: 'caption.txt', blob: textFile(`${captionText}${alt.length ? `\n\n--- Alt text (one line per slide) ---\n${alt.map((a, i) => `${i + 1}. ${a}`).join('\n')}` : ''}\n`.trimStart()) }] : [];
+          stopIfAborted();
           const zip = await zipFiles([...rows.map((r) => ({ name: r.name, blob: r.blob })), ...extras]);
           const zipName = `${slug(name)}.zip`;
           if ((await saveBlob(zip, zipName)) === 'saved') saved.push(`${zipName} (${formatBytes(zip.size)})`);
@@ -79,9 +98,10 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
       } else if (mode === 'pdf') {
         setBusy('Building PDF…');
         const blob = await slidesToPdf(slides, {
-          width: preset.width, height: preset.height, scale, imageFormat: format === 'png' ? 'png' : 'jpg', quality,
-          title: name, author: carousel.theme.handle, subject: plan?.caption, keywords: plan?.hashtags, onProgress: (d, t) => setProgress(d / t),
+          width: preset.width, height: preset.height, scale, imageFormat: pageFormat === 'png' ? 'png' : 'jpg', quality,
+          title: name, author: carousel.theme.handle, subject: plan?.caption, keywords: plan?.hashtags, onProgress: (d, t) => (stopIfAborted(), setProgress(d / t)),
         });
+        stopIfAborted();
         const pages = await pdfPageSizes(blob);
         const ok = pages.every((p) => Math.round(p.width) === preset.width && Math.round(p.height) === preset.height);
         const fileName = `${slug(name)}.pdf`;
@@ -97,14 +117,23 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
         if (videoKind === 'clips') {
           // One short animated clip per slide, for carousels that mix videos (Instagram, TikTok, LinkedIn).
           const files: { name: string; blob: Blob }[] = [];
+          const made: Awaited<ReturnType<typeof slidesToVideo>>[] = [];
           for (let i = 0; i < animated.length; i++) {
             const v = await slidesToVideo([animated[i]!], { ...opts, transition: 'none', onProgress: (p) => setProgress((i + p) / animated.length) });
+            made.push(v);
             files.push({ name: `${slug(name)}-${String(indices[i]! + 1).padStart(2, '0')}.${v.ext}`, blob: v.blob });
           }
           const zip = await zipFiles(files);
           const fileName = `${slug(name)}-clips.zip`;
           const saved = (await saveBlob(zip, fileName)) === 'saved' ? [`${fileName} (${formatBytes(zip.size)})`] : [];
-          setResult({ rows: files.map((f) => ({ name: f.name, blob: f.blob, expected: videoSize(preset.width, preset.height), actual: videoSize(preset.width, preset.height), dimsOk: true, sizeOk: true, note: formatBytes(f.blob.size) })), saved });
+          const want = videoSize(preset.width, preset.height);
+          setResult({
+            rows: files.map((f, i) => {
+              const v = made[i]!;
+              return { name: f.name, blob: f.blob, expected: want, actual: { width: v.width, height: v.height }, dimsOk: v.width === want.width && v.height === want.height, sizeOk: true, note: `${formatBytes(f.blob.size)}${v.ext === 'webm' ? ' · WebM (this browser has no MP4 encoder; use Chrome, Edge or Safari for MP4)' : ''}` };
+            }),
+            saved,
+          });
         } else if (videoKind === 'gif') {
           const blob = await slidesToGif(animated, opts);
           const fileName = `${slug(name)}.gif`;
@@ -115,7 +144,8 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
           const v = await slidesToVideo(animated, opts);
           const fileName = `${slug(name)}.${v.ext}`;
           const saved = (await saveBlob(v.blob, fileName)) === 'saved' ? [`${fileName} (${formatBytes(v.blob.size)})`] : [];
-          setResult({ rows: [{ name: fileName, blob: v.blob, expected: videoSize(preset.width, preset.height), actual: { width: v.width, height: v.height }, dimsOk: true, sizeOk: true, note: v.ext === 'webm' ? `This browser has no H.264 encoder, so this is a WebM (${v.codec.toUpperCase()}) video. Instagram/TikTok/LinkedIn expect MP4 — export from Chrome, Edge or Safari for MP4, or use the GIF option.` : `${v.codec.toUpperCase()} MP4 · ${v.duration.toFixed(1)}s` }], saved });
+          const want = videoSize(preset.width, preset.height);
+          setResult({ rows: [{ name: fileName, blob: v.blob, expected: want, actual: { width: v.width, height: v.height }, dimsOk: v.width === want.width && v.height === want.height, sizeOk: true, note: v.ext === 'webm' ? `This browser has no H.264 encoder, so this is a WebM (${v.codec.toUpperCase()}) video. Instagram/TikTok/LinkedIn expect MP4 — export from Chrome, Edge or Safari for MP4, or use the GIF option.` : `${v.codec.toUpperCase()} MP4 · ${v.duration.toFixed(1)}s` }], saved });
         }
       } else {
         setBusy('Packing project…');
@@ -137,7 +167,7 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
       <div className="card flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-3 dark:border-zinc-800">
           <h2 className="font-semibold">Export “{name}”</h2>
-          <button className="btn-ghost px-2 py-1" onClick={onClose} aria-label="Close export">✕</button>
+          <button className="btn-ghost px-2 py-1" onClick={close} aria-label="Close export">✕</button>
         </div>
         <div className="grid min-h-0 flex-1 gap-5 overflow-y-auto p-5 md:grid-cols-[1fr_260px]">
           <div className="space-y-4">
@@ -153,7 +183,7 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <label className="block">
                   <span className="label">{mode === 'pdf' ? 'Page images' : 'Format'}</span>
-                  <select aria-label="Image format" className="field py-1.5" value={format} onChange={(e) => setFormat(e.target.value as ImageFormat)}>
+                  <select aria-label="Image format" className="field py-1.5" value={pageFormat} onChange={(e) => setFormat(e.target.value as ImageFormat)}>
                     <option value="png">PNG (lossless)</option>
                     <option value="jpg">JPG (smaller)</option>
                     {mode !== 'pdf' && <option value="webp" disabled={!webp}>WebP{webp ? '' : ' (not supported here)'}</option>}
@@ -166,7 +196,7 @@ export function ExportDialog({ project, carousel, plan, onClose, initialSlide }:
                     <option value={2}>2× · {preset.width * 2}×{preset.height * 2}</option>
                   </select>
                 </label>
-                {format !== 'png' && (
+                {pageFormat !== 'png' && (
                   <label className="col-span-2 block">
                     <span className="label">Quality {Math.round(quality * 100)}%</span>
                     <input aria-label="Quality" type="range" min={0.5} max={1} step={0.01} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="w-full accent-brand-500" />

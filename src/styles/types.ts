@@ -70,6 +70,8 @@ export interface StyleSystem {
     [k: string]: unknown;
   };
   roleLayouts: Record<SlideRole, string>;
+  /** Motion preset (editor/animation.ts ANIMATION_PRESETS) that suits this style. */
+  motion?: string;
 }
 
 export interface RoleRule {

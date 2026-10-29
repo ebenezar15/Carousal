@@ -52,3 +52,51 @@ export function starburst(points = 12, inner = 0.78): ShapeDef {
   }
   return { d: [`M${pts.join(' L')} Z`], viewBox: [100, 100], mode: 'fill' };
 }
+
+/** Small deterministic PRNG for decorations (same slide → same shapes, so re-layouts don't jump). */
+export function seeded(seed: number): () => number {
+  let a = (seed * 2654435761) >>> 0 || 1;
+  return () => {
+    a ^= a << 13;
+    a ^= a >>> 17;
+    a ^= a << 5;
+    return (a >>> 0) / 4294967296;
+  };
+}
+
+/** Irregular paint splat (viewBox 100) with a few droplets around it. */
+export function splat(rand: () => number, spikes = 18): ShapeDef {
+  const pts: string[] = [];
+  for (let i = 0; i < spikes * 2; i++) {
+    const r = i % 2 === 0 ? 30 + rand() * 18 : 20 + rand() * 8;
+    const a = (Math.PI * i) / spikes;
+    pts.push(`${(50 + r * Math.cos(a)).toFixed(1)} ${(50 + r * Math.sin(a)).toFixed(1)}`);
+  }
+  const drops = Array.from({ length: 4 }, () => {
+    const a = rand() * Math.PI * 2;
+    const r = 2 + rand() * 3.5;
+    const cx = 50 + Math.cos(a) * (42 + rand() * 6);
+    const cy = 50 + Math.sin(a) * (42 + rand() * 6);
+    return `M${(cx - r).toFixed(1)} ${cy.toFixed(1)}a${r.toFixed(1)} ${r.toFixed(1)} 0 1 0 ${(2 * r).toFixed(1)} 0a${r.toFixed(1)} ${r.toFixed(1)} 0 1 0 ${(-2 * r).toFixed(1)} 0Z`;
+  });
+  return { d: [`M${pts.join(' L')} Z`, ...drops], viewBox: [100, 100], mode: 'fill' };
+}
+
+/** A band of wavy "cut paper" (or hills) `w` wide and `h` tall: wavy top edge, flat bottom (viewBox w × h). */
+export function hills(w: number, h: number, amp: number, wavelength: number, phase: number): ShapeDef {
+  const top = amp;
+  const pts: string[] = [`M0 ${h}`, `L0 ${(top + Math.sin(phase) * amp).toFixed(1)}`];
+  for (let x = 0; x <= w; x += w / 48) pts.push(`L${x.toFixed(1)} ${(top + Math.sin(phase + (x / wavelength) * Math.PI * 2) * amp).toFixed(1)}`);
+  pts.push(`L${w} ${h}`, 'Z');
+  return { d: [pts.join(' ')], viewBox: [w, h], mode: 'fill' };
+}
+
+export const EXTRA_SHAPES = {
+  triangle: { d: ['M50 4L96 92H4Z'], viewBox: [100, 100], mode: 'fill' },
+  halfCircle: { d: ['M0 50A50 50 0 0 1 100 50Z'], viewBox: [100, 50], mode: 'fill' },
+  plus: { d: ['M38 0h24v38h38v24H62v38H38V62H0V38h38Z'], viewBox: [100, 100], mode: 'fill' },
+  arch: { d: ['M4 196V80A76 76 0 0 1 156 80V196Z'], viewBox: [160, 200], mode: 'stroke' },
+  paperClip: { d: ['M14 40V118a18 18 0 0 0 36 0V22a12 12 0 0 0-24 0V104'], viewBox: [64, 140], mode: 'stroke' },
+  cloud: { d: ['M20 60a18 18 0 0 1 4-35.5A26 26 0 0 1 74 22a20 20 0 0 1 6 38Z'], viewBox: [100, 64], mode: 'fill' },
+  zigzagLine: { d: ['M0 10l10-10 10 10 10-10 10 10 10-10 10 10'], viewBox: [70, 10], mode: 'stroke' },
+} satisfies Record<string, ShapeDef>;

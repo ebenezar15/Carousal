@@ -1,5 +1,6 @@
 // No-AI fallback: turns raw text/markdown into a CarouselPlan with deterministic rules derived
 // from research/design-patterns.json. Always available, fully offline.
+import { detectLanguage, phrasesFor } from './phrases';
 import { patterns } from '@/styles';
 import { emptySlide, type CarouselPlan, type SlidePlan } from './schema';
 import { clampWords, packSentences, pickEmphasis, sentences, stripMarkdown, wordCount } from './text';
@@ -154,18 +155,19 @@ export function planFromText(input: string, opts: GenerateOptions): CarouselPlan
     pendingHeading = null;
   }
 
-  // Hook subline fallback: promise the payoff.
-  if (!hook.body && content.length >= 3) hook.body = `${content.length} ideas worth saving`;
+  const language = opts.language === 'auto' ? detectLanguage(input) : opts.language;
+  const words = phrasesFor(language);
   hook.emphasis = pickEmphasis(hook.headline);
   content.forEach((s) => { if (!s.emphasis.length) s.emphasis = pickEmphasis(s.headline); });
 
-  const cta = emptySlide('cta', 'Found this useful?', 'Save it for later and share it with someone who needs it.');
-  cta.emphasis = ['useful'];
+  const cta = emptySlide('cta', words.ctaHeadline, words.ctaBody);
+  cta.emphasis = pickEmphasis(words.ctaHeadline);
+  const fallbackSubline = !hook.body;
 
-  return normalizePlan(
+  const plan = normalizePlan(
     {
       title,
-      language: opts.language === 'auto' ? 'en' : opts.language,
+      language,
       paletteMood: opts.tone === 'playful' ? 'playful' : opts.tone === 'bold' ? 'bold' : 'professional',
       slides: [hook, ...content, cta],
       caption: clampWords(title, 20),
@@ -173,4 +175,9 @@ export function planFromText(input: string, opts: GenerateOptions): CarouselPlan
     },
     opts,
   );
+  // Hook subline fallback: promise the payoff, counted after trimming to the platform's slide limit.
+  const middle = plan.slides.filter((s) => s.role !== 'hook' && s.role !== 'cta').length;
+  const first = plan.slides[0];
+  if (fallbackSubline && first?.role === 'hook' && middle >= 3) first.body = words.ideas.replace('{n}', String(middle));
+  return plan;
 }

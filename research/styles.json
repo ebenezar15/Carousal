@@ -105,7 +105,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "swiss"
     },
     {
       "id": "bold-gradient",
@@ -186,7 +187,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-profile"
-      }
+      },
+      "motion": "lively"
     },
     {
       "id": "editorial-magazine",
@@ -264,7 +266,8 @@
         "comparison": "compare-split",
         "summary": "list-numbered-rows",
         "cta": "cta-recap"
-      }
+      },
+      "motion": "editorial"
     },
     {
       "id": "brutalist",
@@ -339,7 +342,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "maximal"
     },
     {
       "id": "glassmorphism",
@@ -420,7 +424,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-profile"
-      }
+      },
+      "motion": "dreamy"
     },
     {
       "id": "neo-pop",
@@ -498,7 +503,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "maximal"
     },
     {
       "id": "corporate-clean",
@@ -573,7 +579,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-profile"
-      }
+      },
+      "motion": "subtle"
     },
     {
       "id": "dark-tech",
@@ -651,7 +658,8 @@
         "comparison": "compare-split",
         "summary": "list-numbered-rows",
         "cta": "cta-recap"
-      }
+      },
+      "motion": "typewriter"
     },
     {
       "id": "pastel-soft",
@@ -736,7 +744,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "clay"
     },
     {
       "id": "retro-print",
@@ -815,7 +824,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "lively"
     },
     {
       "id": "hand-drawn-notes",
@@ -894,7 +904,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "handwritten"
     },
     {
       "id": "data-infographic",
@@ -972,7 +983,8 @@
         "comparison": "compare-split",
         "summary": "list-numbered-rows",
         "cta": "cta-recap"
-      }
+      },
+      "motion": "subtle"
     },
     {
       "id": "quote-card",
@@ -1048,7 +1060,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "editorial"
     },
     {
       "id": "tweet-style",
@@ -1122,7 +1135,8 @@
         "comparison": "hook-tweet",
         "summary": "cta-recap",
         "cta": "cta-profile"
-      }
+      },
+      "motion": "subtle"
     },
     {
       "id": "step-tutorial",
@@ -1197,7 +1211,8 @@
         "comparison": "compare-split",
         "summary": "list-numbered-rows",
         "cta": "cta-recap"
-      }
+      },
+      "motion": "vector"
     },
     {
       "id": "luxury-serif",
@@ -1274,7 +1289,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "minimal"
     },
     {
       "id": "panoramic-flow",
@@ -1357,7 +1373,8 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "lively"
     },
     {
       "id": "neo-retro-grid",
@@ -1439,7 +1456,846 @@
         "comparison": "compare-split",
         "summary": "cta-recap",
         "cta": "cta-centered"
-      }
+      },
+      "motion": "kinetic"
+    },
+    {
+      "id": "minimalism",
+      "name": "Minimalism",
+      "description": "Generous white space, one quiet accent, light-weight type and almost nothing else.",
+      "moods": [
+        "minimal",
+        "calm",
+        "professional"
+      ],
+      "palettes": [
+        "minimal-stone",
+        "nordic-fog",
+        "mono-graphite",
+        "paper-ink"
+      ],
+      "fonts": {
+        "heading": "albert-sans",
+        "body": "albert-sans"
+      },
+      "altFonts": [
+        {
+          "heading": "dm-sans",
+          "body": "dm-sans"
+        },
+        {
+          "heading": "manrope",
+          "body": "inter"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 12,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.85,
+          "weight": 500,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.55
+        },
+        "emphasis": "color",
+        "decorations": [
+          "whitespace",
+          "hairline-divider"
+        ],
+        "slideNumber": {
+          "style": "small-caps-fraction",
+          "position": "bottom-left"
+        },
+        "swipeCue": {
+          "style": "hairline-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "minimal"
+    },
+    {
+      "id": "maximalism",
+      "name": "Maximalism",
+      "description": "More is more: loud color clashes, stacked heavy type, patterns, stickers and confetti shapes.",
+      "moods": [
+        "bold",
+        "colorful",
+        "playful",
+        "energetic"
+      ],
+      "palettes": [
+        "maximal-carnival",
+        "maximal-night",
+        "neo-pop-pink",
+        "gradient-candy"
+      ],
+      "fonts": {
+        "heading": "dela-gothic-one",
+        "body": "bricolage-grotesque"
+      },
+      "altFonts": [
+        {
+          "heading": "shrikhand",
+          "body": "bricolage-grotesque"
+        },
+        {
+          "heading": "bricolage-grotesque",
+          "body": "rubik"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "pattern": "zigzag",
+        "patternOpacity": 0.15
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 7,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.15,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0,
+          "lineHeight": 0.98,
+          "rotateDeg": -2,
+          "effect": "offset"
+        },
+        "body": {
+          "weight": 500,
+          "lineHeight": 1.4
+        },
+        "emphasis": "box",
+        "decorations": [
+          "confetti-shapes",
+          "starburst",
+          "sticker-tag",
+          "thick-border"
+        ],
+        "slideNumber": {
+          "style": "circle-badge",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-card",
+        "body": "body-card",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "maximal"
+    },
+    {
+      "id": "surreal",
+      "name": "Surreal",
+      "description": "Dreamlike gradients, floating lit spheres, an arched portal and a soft serif with an italic twist.",
+      "moods": [
+        "calm",
+        "luxury",
+        "playful",
+        "soft"
+      ],
+      "palettes": [
+        "surreal-dream",
+        "surreal-dusk",
+        "glass-aurora",
+        "pastel-lilac"
+      ],
+      "fonts": {
+        "heading": "instrument-serif",
+        "body": "dm-sans",
+        "accent": "instrument-serif"
+      },
+      "altFonts": [
+        {
+          "heading": "fraunces",
+          "body": "inter"
+        },
+        {
+          "heading": "cormorant-garamond",
+          "body": "karla"
+        }
+      ],
+      "background": {
+        "type": "mesh-gradient",
+        "spanAcrossSlides": true
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 10,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.0
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "floating-orbs",
+          "arch-portal",
+          "tiny-stars"
+        ],
+        "slideNumber": {
+          "style": "dots",
+          "position": "bottom-left"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-bullets",
+        "step": "step-timeline",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "dreamy"
+    },
+    {
+      "id": "swiss-poster",
+      "name": "Swiss Design",
+      "description": "International Typographic Style: visible column grid, huge tight grotesk, a red circle and flush-left text.",
+      "moods": [
+        "minimal",
+        "bold",
+        "professional"
+      ],
+      "palettes": [
+        "swiss-poster",
+        "swiss-red",
+        "mono-graphite"
+      ],
+      "fonts": {
+        "heading": "inter",
+        "body": "inter"
+      },
+      "altFonts": [
+        {
+          "heading": "work-sans",
+          "body": "work-sans"
+        },
+        {
+          "heading": "public-sans",
+          "body": "public-sans"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 7,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.25,
+          "weight": 800,
+          "case": "sentence",
+          "tracking": -0.05,
+          "lineHeight": 0.92
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.4
+        },
+        "emphasis": "color",
+        "decorations": [
+          "swiss-grid",
+          "giant-circle",
+          "vertical-label"
+        ],
+        "slideNumber": {
+          "style": "fraction",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "arrow-line",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "swiss"
+    },
+    {
+      "id": "editorial-bold",
+      "name": "Editorial",
+      "description": "Newspaper masthead, display serif headlines, italic emphasis, double rules and paper grain.",
+      "moods": [
+        "editorial",
+        "professional",
+        "minimal"
+      ],
+      "palettes": [
+        "editorial-newsprint",
+        "editorial-cream",
+        "editorial-noir"
+      ],
+      "fonts": {
+        "heading": "dm-serif-display",
+        "body": "newsreader"
+      },
+      "altFonts": [
+        {
+          "heading": "instrument-serif",
+          "body": "source-serif-4"
+        },
+        {
+          "heading": "playfair-display",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper-grain",
+        "noise": 0.03
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.02
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "masthead",
+          "double-rule"
+        ],
+        "slideNumber": {
+          "style": "none",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "text-continue",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-split",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "paper-cut",
+      "name": "Paper",
+      "description": "Layered paper-cut hills with real drop shadows, a cut-out sun and soft paper texture.",
+      "moods": [
+        "warm",
+        "playful",
+        "calm",
+        "handdrawn"
+      ],
+      "palettes": [
+        "paper-sunset",
+        "paper-ocean",
+        "kraft-paper",
+        "pastel-peach"
+      ],
+      "fonts": {
+        "heading": "young-serif",
+        "body": "nunito"
+      },
+      "altFonts": [
+        {
+          "heading": "fraunces",
+          "body": "nunito"
+        },
+        {
+          "heading": "baloo-2",
+          "body": "quicksand"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper"
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.05,
+          "effect": "paper"
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "highlight",
+        "decorations": [
+          "paper-layers",
+          "paper-sun"
+        ],
+        "slideNumber": {
+          "style": "pill",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-card",
+        "body": "body-card",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "paper"
+    },
+    {
+      "id": "clay-3d",
+      "name": "Clay",
+      "description": "Puffy claymorphism: rounded type, soft pastel shapes lit from the top-left, pillowy cards with deep soft shadows.",
+      "moods": [
+        "pastel",
+        "playful",
+        "soft",
+        "calm"
+      ],
+      "palettes": [
+        "clay-lilac",
+        "clay-peach",
+        "pastel-mint",
+        "pastel-sky"
+      ],
+      "fonts": {
+        "heading": "fredoka",
+        "body": "nunito"
+      },
+      "altFonts": [
+        {
+          "heading": "baloo-2",
+          "body": "quicksand"
+        },
+        {
+          "heading": "lilita-one",
+          "body": "nunito"
+        }
+      ],
+      "background": {
+        "type": "radial-gradient",
+        "center": [
+          0.3,
+          0.2
+        ],
+        "stops": [
+          "highlight",
+          "bg"
+        ]
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.02,
+          "effect": "clay"
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "box",
+        "decorations": [
+          "clay-blobs",
+          "clay-card"
+        ],
+        "slideNumber": {
+          "style": "pill",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-card",
+        "body": "body-card",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "clay"
+    },
+    {
+      "id": "vector-art",
+      "name": "Vector Art",
+      "description": "Flat vector illustration: rolling hills, sun and clouds, geometric shapes, bold geometric sans.",
+      "moods": [
+        "colorful",
+        "playful",
+        "educational",
+        "professional"
+      ],
+      "palettes": [
+        "vector-sky",
+        "vector-forest",
+        "citrus-fresh",
+        "tutorial-teal"
+      ],
+      "fonts": {
+        "heading": "outfit",
+        "body": "dm-sans"
+      },
+      "altFonts": [
+        {
+          "heading": "poppins",
+          "body": "inter"
+        },
+        {
+          "heading": "lexend",
+          "body": "lexend"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 800,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.0
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "underline",
+        "decorations": [
+          "vector-scene",
+          "geo-shapes"
+        ],
+        "slideNumber": {
+          "style": "circle-badge",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-icon-top",
+        "body": "body-top-left",
+        "list": "list-bullets",
+        "step": "step-timeline",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "vector"
+    },
+    {
+      "id": "handwritten-journal",
+      "name": "Handwritten",
+      "description": "Bullet-journal page: dot grid, red margin line, felt-tip handwriting, tape, paper clip and doodles.",
+      "moods": [
+        "handdrawn",
+        "playful",
+        "educational",
+        "warm"
+      ],
+      "palettes": [
+        "journal-cream",
+        "notes-paper",
+        "kraft-paper"
+      ],
+      "fonts": {
+        "heading": "gochi-hand",
+        "body": "gochi-hand",
+        "accent": "caveat"
+      },
+      "altFonts": [
+        {
+          "heading": "caveat",
+          "body": "patrick-hand"
+        },
+        {
+          "heading": "kalam",
+          "body": "kalam"
+        }
+      ],
+      "background": {
+        "type": "pattern",
+        "pattern": "dot-grid",
+        "patternOpacity": 0.18
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 10,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.1,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": 0,
+          "lineHeight": 1.1,
+          "rotateDeg": -1.5
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.4
+        },
+        "emphasis": "marker",
+        "decorations": [
+          "margin-line",
+          "tape-corner",
+          "paper-clip",
+          "doodle-arrow",
+          "underline-squiggle",
+          "scribble-circle"
+        ],
+        "slideNumber": {
+          "style": "handwritten",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "hand-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "handwritten"
+    },
+    {
+      "id": "graffiti-street",
+      "name": "Graffiti",
+      "description": "Street wall: spray-painted marker lettering with glow, paint drips, splats and a concrete texture.",
+      "moods": [
+        "bold",
+        "energetic",
+        "brutalist",
+        "dark"
+      ],
+      "palettes": [
+        "graffiti-wall",
+        "graffiti-concrete",
+        "brutal-acid"
+      ],
+      "fonts": {
+        "heading": "sedgwick-ave-display",
+        "body": "space-grotesk"
+      },
+      "altFonts": [
+        {
+          "heading": "rubik-wet-paint",
+          "body": "rubik"
+        },
+        {
+          "heading": "permanent-marker",
+          "body": "space-grotesk"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "concrete"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.2,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0,
+          "lineHeight": 0.98,
+          "rotateDeg": -3,
+          "effect": "spray"
+        },
+        "body": {
+          "weight": 500,
+          "lineHeight": 1.4
+        },
+        "emphasis": "color",
+        "decorations": [
+          "spray-drips",
+          "spray-halo",
+          "paint-splat"
+        ],
+        "slideNumber": {
+          "style": "boxed-number",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "cta-recap",
+        "cta": "cta-centered"
+      },
+      "motion": "graffiti"
     }
   ]
 }
