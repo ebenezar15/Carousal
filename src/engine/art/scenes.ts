@@ -36,7 +36,7 @@ export const SCENE_LIST: SceneKind[] = [
 ];
 
 /** Where people stand: [x, groundY, height] candidates in preference order. */
-type Slot = [number, number, number];
+type Slot = [number, number, number, number?];
 
 interface SceneCtx extends Ctx {
   people: CharacterSpec[];
@@ -58,7 +58,8 @@ function placePeople(c: SceneCtx, slots: Slot[], now = false) {
   chosen.sort((a, b) => a.s[1] - b.s[1]);
   for (const { s, p } of chosen) {
     const half = (s[2] * 0.36) / (p.child ? 1.5 : 1);
-    c.person(p, Math.max(half, Math.min(1000 - half, s[0])), s[1], s[2]);
+    // Optional 4th value raises children (e.g. so they can see over a table).
+    c.person(p, Math.max(half, Math.min(1000 - half, s[0])), s[1] - (p.child ? (s[3] ?? 0) : 0), s[2]);
   }
 }
 
@@ -154,7 +155,7 @@ const R: Record<SceneKind, Recipe> = {
     clouds(c, 2, 80, 160);
     const range = (base: number, n: number, hMin: number, hMax: number, t: number, snow: boolean) => {
       const step = 1000 / n;
-      for (let i = -1; i <= n; i++) {
+      for (let i = 0; i < n; i++) {
         const x = step * (i + 0.5) + r.range(-step * 0.25, step * 0.25);
         const h = r.range(hMin, hMax);
         const w = step * r.range(0.8, 1.05);
@@ -186,7 +187,7 @@ const R: Record<SceneKind, Recipe> = {
     c.add(rrect(sx - 50, 365, 100, 6, 3), pal.highlight, 0.35);
     waveDashes(c, 10, 360, 470, c.light, 0.45, !c.people.length);
     const bx = r.range(330, 680);
-    sailboat(c, bx, 430, r.range(1.1, 1.4), c.isDark ? pal.accent : pal.accent, c.light);
+    sailboat(c, bx, 430, r.range(1.1, 1.4), pal.accent, c.light);
     c.mover('gull', 'float', [bx, 200], () => c.stroke(`M${bx - 120} 170Q${bx - 108} 160 ${bx - 96} 172Q${bx - 84} 160 ${bx - 72} 170`, c.dark, 3.2, 0.7), 0.4);
     // Sandy shore in the foreground.
     const shore = curve([[0, 500], [180, 492], [380, 520], [560, 556], [760, 580], [1000, 572]], [[1000, 600], [0, 600]]);
@@ -226,6 +227,8 @@ const R: Record<SceneKind, Recipe> = {
       c.mover(`swell-${i}`, 'bob', [x, 420], () => crest(c, x, 410, 260, 60, pal.primary, 0.2), i * 0.4);
     }
     const bx = r.range(380, 620);
+    // Anyone in this scene rides in the boat (drawn first so the hull hides their legs).
+    placePeople(c, [[bx - 30, 486, 120], [bx + 34, 482, 110]], true);
     c.mover('boat', 'bob', [bx, 470], () => {
       c.add(rrect(bx - 3, 360, 6, 104, 2), N.woodDark);
       c.add(`M${bx + 6} 370Q${bx + 50} 410 ${bx + 54} 450L${bx + 6} 452Z`, c.light);
@@ -277,7 +280,8 @@ const R: Record<SceneKind, Recipe> = {
     const riverL: Pt[] = [[600, 360], [640 + s * 40, 400], [560 - s * 60, 460], [600 + s * 70, 530], [500, 600]];
     const riverR: Pt[] = [[630, 360], [690 + s * 40, 400], [660 - s * 60, 460], [790 + s * 70, 530], [860, 600]];
     const river = curve(riverL) + curve([...riverR].reverse()).replace(/^M/, 'L') + 'Z';
-    c.tone(river, pal.primary, 0.35);
+    c.add(river, c.light);
+    c.add(river, pal.primary, 0.4);
     c.glow(curve([[620, 380], [660 + s * 40, 410], [610 - s * 60, 470]]), 0);
     waveDashes(c, 6, 420, 580, c.light, 0.5, !c.people.length);
     // Big fruitful tree by the water.
@@ -358,10 +362,11 @@ const R: Record<SceneKind, Recipe> = {
         c.add(sparkle(x, 80, 10), pal.highlight);
       });
     }
-    c.add(ridgePath(c, 400, 30, 5), c.isDark ? c.light : pal.primary, c.isDark ? 0.9 : 0.6);
-    c.add(ridgePath(c, 400, 30, 5), c.dark, 0.35);
+    const far = ridgePath(c, 400, 30, 5);
+    c.add(far, c.isDark ? pal.surface : pal.primary, c.isDark ? 0.9 : 0.6);
+    c.add(far, c.isDark ? pal.primary : c.dark, c.isDark ? 0.12 : 0.35);
     const hill = ridgePath(c, 470, 26, 4);
-    c.add(hill, c.isDark ? c.light : pal.primary);
+    c.add(hill, c.isDark ? pal.surface : pal.primary);
     c.add(hill, c.dark, c.isDark ? 0.2 : 0.55);
     // A little house with a warm window.
     const hx = r.range(620, 880);
@@ -371,7 +376,7 @@ const R: Record<SceneKind, Recipe> = {
     for (let i = 0; i < 4; i++) pineTree(c, r.range(30, 560), r.range(460, 490), r.range(70, 100), c.dark, 0);
     placePeople(c, [[r.range(300, 450), 570, 220], [r.range(480, 560), 575, 200]]);
     const front = ridgePath(c, 550, 14, 3);
-    c.add(front, c.isDark ? c.light : pal.primary);
+    c.add(front, c.isDark ? pal.surface : pal.primary);
     c.add(front, c.dark, c.isDark ? 0.35 : 0.65);
   },
 
@@ -503,7 +508,7 @@ const R: Record<SceneKind, Recipe> = {
     c.add(rrect(wx + 107, 76, 6, 188, 0) + rrect(wx + 16, 160, 188, 6, 0), c.light, 0.9);
     rays(c, wx + 110, 170, 110, 520, 7, pal.highlight, 0.12, 0, 110, 35);
     c.shade(rrect(0, 330, 1000, 270), 0.05);
-    placePeople(c, [[r.range(220, 340), 600, 470], [r.range(660, 780), 600, 470]], true);
+    placePeople(c, [[r.range(220, 340), 600, 470, 130], [r.range(660, 780), 600, 470, 130]], true);
     // Table.
     c.add(rrect(-20, 380, 1040, 40, 10), N.wood);
     c.add(rrect(-20, 410, 1040, 190, 0), N.woodDark);
@@ -566,6 +571,12 @@ const R: Record<SceneKind, Recipe> = {
     c.add(poly([[dx + 108, 330], [dx + 172, 326], [dx + 172, 470], [dx + 108, 456]]), N.woodDark, 0.35);
     c.add(circle(dx + 120, 320, 7), N.gold);
     c.add(rrect(dx - 110, 470, 220, 14, 4), N.woodDark);
+    // Motes of light drifting in the doorway glow.
+    for (let i = 0; i < 6; i++) {
+      const mx = dx + r.range(-160, 220);
+      const my = r.range(150, 460);
+      c.mover(`mote-${i}`, 'float', [mx, my], () => c.add(sparkle(mx, my, r.range(6, 11)), pal.highlight, 0.9), i * 0.5);
+    }
     placePeople(c, [[dx - 220, 560, 320], [dx - 360, 565, 300]]);
     for (const x of [dx - 300, dx + 300]) if (x > 60 && x < 940 && !c.people.length) bush(c, x, 480, 110, pal.primary, 0.2);
   },
@@ -603,7 +614,8 @@ const R: Record<SceneKind, Recipe> = {
     c.add(capsule([lx, 130], [lx, 168], 2), c.dark, 0.5);
     c.add(roundPoly([[lx - 36, 132], [lx, 98], [lx + 36, 132]], 5), pal.accent);
     c.add(rrect(lx - 12, 360, 24, 50, 12), c.dark, 0.7);
-    waveDashes(c, 14, 430, 590, c.light, 0.35);
+    placePeople(c, [[lx - 110, 452, 120], [lx + 105, 458, 115]]);
+    waveDashes(c, 14, 430, 590, c.light, 0.35, !c.people.length);
     sailboatSmall(c, lx + dir * r.range(300, 380), 455);
   },
 
@@ -688,8 +700,9 @@ const R: Record<SceneKind, Recipe> = {
     stars(c, 34, 260, [[sx, 90, 120]]);
     c.add(poly([[sx - 6, 100], [sx + 6, 100], [sx + 110, 330], [sx - 110, 330]]), pal.highlight, 0.16);
     bigStar(c, sx, 90, 34);
-    c.add(ridgePath(c, 430, 20, 4), c.isDark ? c.light : pal.primary, c.isDark ? 1 : 0.5);
-    c.add(ridgePath(c, 430, 20, 4), c.dark, 0.3);
+    const far = ridgePath(c, 430, 20, 4);
+    c.add(far, c.isDark ? pal.surface : pal.primary, c.isDark ? 1 : 0.5);
+    c.add(far, c.isDark ? pal.primary : c.dark, c.isDark ? 0.1 : 0.3);
     // Stable.
     const bx = sx + r.range(-60, 60);
     c.add(rrect(bx - 200, 290, 400, 220, 6), N.woodDark);
@@ -717,10 +730,10 @@ const R: Record<SceneKind, Recipe> = {
     c.stroke(`M${bx - 44} 426Q${bx - 41.5} 428 ${bx - 39} 426`, N.eye, 1.6);
     c.add(roundPoly([[bx - 100, 440], [bx + 100, 440], [bx + 82, 470], [bx - 82, 470]], 6), N.wood);
     c.shade(rrect(bx - 90, 458, 180, 12, 4), 0.12);
-    placePeople(c, [[bx - 140, 520, 230], [bx + 150, 522, 230], [bx + 280, 540, 220]]);
+    placePeople(c, [[bx - 190, 524, 230], [bx + 190, 526, 230], [bx + 310, 545, 220]]);
     sheep(c, bx + r.pick([-1, 1]) * 300, 520, 1, r.chance(0.5));
     const g = ridgePath(c, 530, 10, 3);
-    c.add(g, c.isDark ? c.light : pal.primary, c.isDark ? 1 : 0.7);
+    c.add(g, c.isDark ? pal.surface : pal.primary, c.isDark ? 1 : 0.7);
     c.add(g, c.dark, 0.35);
   },
 };

@@ -127,7 +127,7 @@ export function sky(c: Ctx, night = false) {
   }
   c.add(rrect(0, 0, 1000, 600), pal.softer);
   // Gentle horizon glow: stacked translucent bands read as a soft gradient.
-  for (let i = 0; i < 6; i++) c.add(rrect(0, 150 + i * 45, 1000, 450 - i * 45), pal.highlight, 0.05);
+  for (let i = 0; i < 6; i++) c.add(rrect(0, 150 + i * 45, 1000, 450 - i * 45), pal.highlight, c.isDark ? 0.025 : 0.05);
 }
 
 export function sun(c: Ctx, x: number, y: number, r: number, color = c.pal.highlight, move = true) {
@@ -141,10 +141,14 @@ export function sun(c: Ctx, x: number, y: number, r: number, color = c.pal.highl
   else draw();
 }
 
-export function rays(c: Ctx, x: number, y: number, r0: number, r1: number, n: number, color: string, op = 0.18, rot = 0, spread = 360, from = 0) {
+export function rays(c: Ctx, x: number, y: number, r0: number, r1max: number, n: number, color: string, op = 0.18, rot = 0, spread = 360, from = 0, box: [number, number] = [1000, 600]) {
   for (let i = 0; i < n; i++) {
     const a = ((from + rot + (spread / n) * (i + 0.5)) * Math.PI) / 180;
     const w = ((spread / n) * 0.32 * Math.PI) / 180;
+    // Trim each ray where it leaves the (slightly padded) canvas so geometry stays near the viewBox.
+    const pad = box[0] * 0.06;
+    const lim = (p: number, d: number, hi: number) => (d > 1e-6 ? (hi + pad - p) / d : d < -1e-6 ? (-pad - p) / d : Infinity);
+    const r1 = Math.max(r0 + 1, Math.min(r1max, ...[a - w, a + w].flatMap((e) => [lim(x, Math.cos(e), box[0]), lim(y, Math.sin(e), box[1])])));
     c.add(
       poly([
         [x + Math.cos(a - w * 0.3) * r0, y + Math.sin(a - w * 0.3) * r0],
