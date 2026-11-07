@@ -17,6 +17,21 @@ import { tableMetrics } from './render/TableQR';
 
 const PAD = 48;
 
+/** Scales a group child (position, size, type, line points) when its group is resized. */
+function scaleElement(el: SlideElement, sx: number, sy: number): SlideElement {
+  const base = { ...el, x: Math.round(el.x * sx), y: Math.round(el.y * sy), width: Math.round(el.width * sx), height: Math.round(el.height * sy) } as SlideElement;
+  switch (base.kind) {
+    case 'text':
+      return { ...base, fontSize: Math.max(6, Math.round(base.fontSize * Math.sqrt(sx * sy))) };
+    case 'line':
+      return { ...base, points: base.points.map((v, i) => Math.round((i % 2 === 0 ? v * sx : v * sy) * 100) / 100) };
+    case 'group':
+      return { ...base, children: base.children.map((c) => scaleElement(c, sx, sy)) };
+    default:
+      return base;
+  }
+}
+
 export function EditorCanvas() {
   const carousel = useDocument((s) => s.carousel)!;
   const plan = useDocument((s) => s.plan);
@@ -33,6 +48,7 @@ export function EditorCanvas() {
   const [viewport, setViewport] = useState({ w: 800, h: 600 });
   const [guides, setGuides] = useState<Guide[]>([]);
   const [marquee, setMarquee] = useState<Box | null>(null);
+  const [scroll, setScroll] = useState({ x: 0, y: 0 });
   const dragStart = useRef<Map<string, { x: number; y: number }>>(new Map());
 
   useLayoutEffect(() => {
@@ -92,7 +108,9 @@ export function EditorCanvas() {
 
   const onMouseDown = (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
     if (e.target.getParent()?.className === 'Transformer') return;
-    const id = elementIdOf(e.target);
+    let id = elementIdOf(e.target);
+    // Locked elements can't be picked on the canvas (select them in Layers to unlock).
+    if (id && slide.elements.find((x) => x.id === id)?.locked) id = null;
     const shift = 'shiftKey' in e.evt && (e.evt.shiftKey || e.evt.metaKey || e.evt.ctrlKey);
     if (id) {
       if (shift) ed.toggleSelect(id);
@@ -110,6 +128,29 @@ export function EditorCanvas() {
     const p = toCanvas(stageRef.current!.getPointerPosition()!);
     setMarquee((m) => (m ? { ...m, width: p.x - m.x, height: p.y - m.y } : m));
   };
+
+  // A marquee released outside the canvas still ends (otherwise it sticks to the cursor).
+  const marqueeActive = marquee !== null;
+  useEffect(() => {
+    if (!marqueeActive) return;
+    const end = () => setMarquee(null);
+    window.addEventListener('mouseup', end);
+    return () => window.removeEventListener('mouseup', end);
+  }, [marqueeActive]);
+
+  // Ctrl/⌘ + wheel zooms the canvas.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onWheel = (ev: WheelEvent) => {
+      if (!ev.ctrlKey && !ev.metaKey) return;
+      ev.preventDefault();
+      const z = useEditor.getState().zoom;
+      useEditor.getState().setZoom(z * (ev.deltaY < 0 ? 1.1 : 1 / 1.1));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
 
   const onMouseUp = () => {
     if (!marquee) return;
@@ -212,6 +253,7 @@ export function EditorCanvas() {
           next = refitText(scaled, corner ? scaled.fontSize : t.fontSize * (t.autoFit && !corner ? 1.6 : 1));
         }
         if (next.kind === 'table') next = { ...next, height: Math.ceil(tableMetrics(next).total) };
+        if (next.kind === 'group') next = { ...next, children: next.children.map((ch) => scaleElement(ch, c.sx, c.sy)) };
         if (next.kind === 'line') {
           const l = next;
           next = { ...l, points: l.points.map((v, i) => Math.round((i % 2 === 0 ? v * c.sx : v * c.sy) * 100) / 100) };
@@ -227,56 +269,59 @@ export function EditorCanvas() {
   const renderSlide: Slide = editing ? { ...slide, elements: slide.elements.map((e) => (e.id === editing.id ? { ...e, hidden: true } : e)) } : slide;
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-auto bg-zinc-200/70 dark:bg-zinc-900" data-testid="editor-canvas">
-      <div className="relative" style={{ width: stageW + rulers, height: stageH + rulers }}>
-        {ed.showRulers && <Rulers zoom={zoom} ox={ox} oy={oy} width={stageW} height={stageH} canvasW={W} canvasH={H} />}
-        <div className="absolute" style={{ left: rulers, top: rulers }}>
-          <Stage
-            ref={stageRef}
-            width={stageW}
-            height={stageH}
-            onMouseDown={onMouseDown}
-            onTouchStart={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onDblClick={onDblClick}
-            onDblTap={onDblClick as never}
-            onDragStart={onDragStart}
-            onDragMove={onDragMove}
-            onDragEnd={onDragEnd}
-          >
-            <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom}>
-              <Rect x={-2 / zoom} y={-2 / zoom} width={W + 4 / zoom} height={H + 4 / zoom} fill="#000" opacity={0.06} listening={false} />
-              <SlideContent slide={renderSlide} width={W} height={H} interactive />
-            </Layer>
-            <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom} listening={false}>
-              {ed.showGrid && <Grid W={W} H={H} zoom={zoom} />}
-              {ed.showSafe && <SafeZones W={W} H={H} zoom={zoom} safe={safeBox} platform={preset.safeZone} />}
-              {guides.map((g, i) => (
-                <Line key={i} points={g.orientation === 'v' ? [g.pos, -PAD, g.pos, H + PAD] : [-PAD, g.pos, W + PAD, g.pos]} stroke="#F43F5E" strokeWidth={1 / zoom} dash={[4 / zoom, 4 / zoom]} />
-              ))}
-              {marquee && <Rect {...marquee} fill="rgba(91,91,240,0.08)" stroke="#5B5BF0" strokeWidth={1 / zoom} />}
-            </Layer>
-            <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom}>
-              <Transformer
-                ref={trRef}
-                rotationSnaps={[0, 45, 90, 135, 180, 225, 270, 315]}
-                rotationSnapTolerance={4}
-                keepRatio={keepRatio}
-                anchorSize={9}
-                anchorCornerRadius={2}
-                borderStroke="#5B5BF0"
-                anchorStroke="#5B5BF0"
-                ignoreStroke
-                flipEnabled={false}
-                boundBoxFunc={(oldBox, newBox) => (newBox.width < 8 || newBox.height < 8 ? oldBox : newBox)}
-                onTransformEnd={onTransformEnd}
-              />
-            </Layer>
-          </Stage>
-          {editing && <InlineTextEditor el={editing} zoom={zoom} ox={ox} oy={oy} slideIndex={ed.slideIndex} />}
+    <div className="relative h-full w-full">
+      <div ref={containerRef} className="relative h-full w-full overflow-auto bg-zinc-200/70 dark:bg-zinc-900" data-testid="editor-canvas" onScroll={(e) => setScroll({ x: e.currentTarget.scrollLeft, y: e.currentTarget.scrollTop })}>
+        <div className="relative" style={{ width: stageW + rulers, height: stageH + rulers }}>
+          <div className="absolute" style={{ left: rulers, top: rulers }}>
+            <Stage
+              ref={stageRef}
+              width={stageW}
+              height={stageH}
+              onMouseDown={onMouseDown}
+              onTouchStart={onMouseDown}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+              onDblClick={onDblClick}
+              onDblTap={onDblClick as never}
+              onDragStart={onDragStart}
+              onDragMove={onDragMove}
+              onDragEnd={onDragEnd}
+            >
+              <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom}>
+                <Rect x={-2 / zoom} y={-2 / zoom} width={W + 4 / zoom} height={H + 4 / zoom} fill="#000" opacity={0.06} listening={false} />
+                <SlideContent slide={renderSlide} width={W} height={H} interactive />
+              </Layer>
+              <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom} listening={false}>
+                {ed.showGrid && <Grid W={W} H={H} zoom={zoom} />}
+                {ed.showSafe && <SafeZones W={W} H={H} zoom={zoom} safe={safeBox} platform={preset.safeZone} />}
+                {guides.map((g, i) => (
+                  <Line key={i} points={g.orientation === 'v' ? [g.pos, -PAD, g.pos, H + PAD] : [-PAD, g.pos, W + PAD, g.pos]} stroke="#F43F5E" strokeWidth={1 / zoom} dash={[4 / zoom, 4 / zoom]} />
+                ))}
+                {marquee && <Rect {...marquee} fill="rgba(91,91,240,0.08)" stroke="#5B5BF0" strokeWidth={1 / zoom} />}
+              </Layer>
+              <Layer x={ox} y={oy} scaleX={zoom} scaleY={zoom}>
+                <Transformer
+                  ref={trRef}
+                  rotationSnaps={[0, 45, 90, 135, 180, 225, 270, 315]}
+                  rotationSnapTolerance={4}
+                  keepRatio={keepRatio}
+                  anchorSize={9}
+                  anchorCornerRadius={2}
+                  borderStroke="#5B5BF0"
+                  anchorStroke="#5B5BF0"
+                  ignoreStroke
+                  flipEnabled={false}
+                  boundBoxFunc={(oldBox, newBox) => (newBox.width < 8 || newBox.height < 8 ? oldBox : newBox)}
+                  onTransformEnd={onTransformEnd}
+                />
+              </Layer>
+            </Stage>
+            {editing && <InlineTextEditor el={editing} zoom={zoom} ox={ox} oy={oy} slideIndex={ed.slideIndex} />}
+          </div>
         </div>
       </div>
+      {/* Rulers sit outside the scroll area so they stay put; ticks follow the scroll position. */}
+      {ed.showRulers && <Rulers zoom={zoom} ox={ox - scroll.x} oy={oy - scroll.y} width={viewport.w} height={viewport.h} canvasW={W} canvasH={H} />}
     </div>
   );
 }

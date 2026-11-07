@@ -1,9 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import {
   cycleEmphasis, defaultOptions, generatePlan, headlineOptions, makeItMore, nextLayoutId, pickProvider, pickVariations, rewriteSlide, setHeadline,
-  type CarouselPlan, type MoreDirection,
+  variationsFromBrief, themeFromBrief, applyBriefExtras, readCarouselBrief, templateVariations, isFaithContent, AUTO_TYPE, type CarouselPlan, type Interpretation, type MoreDirection, type Tone,
 } from '@/engine';
-import { layoutCarousel } from '@/engine/layout';
+import { layoutCarousel, prepareLayout } from '@/engine/layout';
+import { cacheGet, cachePut, hashKey } from '@/engine/aiCache';
+import type { GenerateResult } from '@/engine/types';
+import { applyTheme } from '@/editor/ops';
 import { DEFAULT_PRESET_ID, getPreset } from '@/styles';
 import { newId } from '@/model/id';
 import type { CarouselTheme, Project, ContinuousStyle } from '@/model/types';
@@ -12,8 +15,11 @@ const ExportDialog = lazy(() => import('@/export/ExportDialog').then((m) => ({ d
 const TranslateDialog = lazy(() => import('./TranslateDialog').then((m) => ({ default: m.TranslateDialog })));
 import { importProjectFile, PROJECT_EXT } from '@/export/projectFile';
 import { providers } from './runtime';
+import { readLookPrompt } from './lookPrompt';
+import { recentStyles, rememberStyles } from '@/engine/designHistory';
 import { useDocument, useProjects, useRoute, useSettings } from './store';
-import { InputPanel, type InputState } from './generate/InputPanel';
+import { InputPanel, TemplateDialog, type InputState } from './generate/InputPanel';
+import { getTemplate, themeFromTemplate } from '@/styles/templates';
 import { VariationsGrid, type VariationPreview } from './generate/VariationsGrid';
 import { CarouselView } from './generate/CarouselView';
 import { CaptionPanel } from './CaptionPanel';
@@ -21,7 +27,7 @@ import { SAMPLES } from './sample';
 
 const PROVIDER_LABEL: Record<string, string> = { claude: 'Claude', ollama: 'Ollama', openai: 'Free / local model', rules: 'Built-in rules' };
 
-const initialInput: InputState = { text: '', presetId: DEFAULT_PRESET_ID, opts: defaultOptions, variationCount: 4, handle: '' };
+const initialInput: InputState = { text: '', designPrompt: '', presetId: DEFAULT_PRESET_ID, opts: defaultOptions, variationCount: 4, handle: '', templateId: '' };
 
 export function GeneratePage() {
   const { settings } = useSettings();
@@ -35,6 +41,8 @@ export function GeneratePage() {
   const [showJson, setShowJson] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [translating, setTranslating] = useState(false);
+  const [pickingTemplate, setPickingTemplate] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const openFile = useRef<HTMLInputElement>(null);
   const abort = useRef<AbortController | null>(null);
 
@@ -44,18 +52,36 @@ export function GeneratePage() {
     return () => {
       alive = false;
     };
-  }, [settings.provider, settings.claudeModel, settings.ollamaUrl]);
+    // Any provider setting (keys, models, the free/local model preset) can change what's available.
+  }, [settings]);
 
   const plan = current?.plan as CarouselPlan | undefined;
 
-  /** Lays out a theme for the current plan, saves it as the project's carousel and refreshes the thumbnail. */
-  async function commit(project: Project, nextPlan: CarouselPlan, theme: CarouselTheme, extra: Partial<Project> = {}) {
+  /**
+   * Applies a design (and/or new copy) to a project, saves it and shows it. Design-only changes re-theme
+   * the open document, so edits made in the editor (moved elements, added images, changed words) are kept;
+   * `fresh` lays everything out from scratch (new copy from the AI, a new project).
+   */
+  async function commit(project: Project, nextPlan: CarouselPlan, theme: CarouselTheme, extra: Partial<Project> = {}, fresh = false) {
     const presetId = project.settings?.presetId ?? project.carousel.presetId;
-    const next = await layoutCarousel({ plan: nextPlan, presetId, theme });
+    const doc = useDocument.getState();
+    const isOpen = useProjects.getState().current?.id === project.id;
+    const base = isOpen && doc.carousel ? doc.carousel : project.carousel;
+    let next;
+    if (!fresh && base.slides.length && base.slides.length === nextPlan.slides.length) {
+      await prepareLayout(theme, nextPlan);
+      next = applyTheme({ carousel: base, plan: nextPlan }, theme, presetId).carousel;
+    } else {
+      next = await layoutCarousel({ plan: nextPlan, presetId, theme });
+    }
     const preset = getPreset(presetId);
     const thumbnail = next.slides[0] ? renderSlideToDataURL(next.slides[0], preset.width, preset.height, { pixelRatio: 240 / preset.width, mime: 'image/jpeg', quality: 0.8 }) : undefined;
+    const brandNew = !project.carousel.slides.length;
+    const before = useProjects.getState().current;
     const saved = await save({ ...project, ...extra, plan: nextPlan, carousel: next, thumbnail });
-    open(saved);
+    // If another project was opened while this one was working, save quietly and stay where the user is.
+    if (brandNew || before?.id === project.id) open(saved);
+    else useProjects.setState({ current: before });
     return saved;
   }
 
@@ -74,6 +100,25 @@ export function GeneratePage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewKey]);
+
+  const readPrompt = readLookPrompt;
+
+  type DesignOpts = { count: number; tone: Tone; seed: number; handle?: string; typeId?: string; templateId?: string; series?: string };
+  const designsFor = (pl: CarouselPlan, it: Interpretation | null, o: DesignOpts) => {
+    const opts = { ...o, recent: recentStyles() };
+    const typed = o.typeId && o.typeId !== AUTO_TYPE;
+    let v;
+    if (o.templateId || (typed && !it?.brief.styleId)) {
+      // Templates: the chosen one first, then templates made for this kind of carousel.
+      v = templateVariations(pl, opts);
+      if (it) v = v.map((x, i) => (i === 0 && o.templateId ? x : { ...x, theme: applyBriefExtras(x.theme, it.brief) }));
+    } else if (it) v = variationsFromBrief(pl, it.brief, opts);
+    else if (isFaithContent(pl) && o.seed % 2 === 0) v = templateVariations(pl, opts);
+    else v = pickVariations(pl, opts);
+    if (o.series) v = v.map((x) => ({ ...x, theme: { ...x.theme, series: o.series } }));
+    rememberStyles(v.map((x) => x.theme.styleId));
+    return v;
+  };
 
   const run = async (job: () => Promise<void>) => {
     setBusy(true);
@@ -94,48 +139,97 @@ export function GeneratePage() {
     abort.current = new AbortController();
     setNotice(null);
     await run(async () => {
-      const result = await generatePlan(inp.text, { ...inp.opts, maxSlides: getPreset(inp.presetId).maxSlides }, settings.provider, providers, abort.current!.signal);
-      const variations = pickVariations(result.plan, { count: inp.variationCount, tone: inp.opts.tone, seed: 0, handle: inp.handle });
+      // "What kind of carousel": the chosen type (or the one the description points to), its slide count.
+      const brief = readCarouselBrief(inp.opts.carouselBrief ?? '', inp.opts.carouselType ?? AUTO_TYPE);
+      const genOpts = {
+        ...inp.opts, carouselType: brief.typeId, carouselBrief: inp.opts.carouselBrief ?? '',
+        slideCount: inp.opts.slideCount === 'auto' && brief.slideCount ? Math.min(brief.slideCount, getPreset(inp.presetId).maxSlides) : inp.opts.slideCount,
+        maxSlides: getPreset(inp.presetId).maxSlides,
+      };
+      // The same text with the same settings and model reuses the copy already written (no credits);
+      // "Regenerate copy" asks the AI for a new version.
+      const cacheKey = hashKey(JSON.stringify([inp.text.trim(), genOpts, settings.provider, settings.claudeModel, settings.ollamaModel, settings.openaiPreset, settings.openaiModel]));
+      const cached = settings.provider === 'rules' ? undefined : cacheGet<GenerateResult>('plans', cacheKey);
+      const result = cached ? { ...cached, notice: 'Reused the copy written earlier for this exact text and settings (no AI credits used). Use “↻ Regenerate copy” for a fresh version.' } : await generatePlan(inp.text, genOpts, settings.provider, providers, abort.current!.signal);
+      if (!cached && result.provider !== 'rules') cachePut('plans', cacheKey, { ...result, notice: undefined });
+      const look = await readPrompt(inp.designPrompt, abort.current!.signal);
+      const variations = designsFor(result.plan, look, { count: inp.variationCount, tone: inp.opts.tone, seed: 0, handle: inp.handle, typeId: brief.typeId, templateId: inp.templateId || undefined, series: brief.series });
       const project: Project = {
         id: newId('prj_'), name: result.plan.title || 'Untitled carousel', createdAt: Date.now(), updatedAt: Date.now(),
-        sourceText: inp.text, plan: result.plan, generatedBy: result.provider, variations: variations.map((v) => v.theme), variationSeed: 0,
-        settings: { presetId: inp.presetId, tone: inp.opts.tone, audience: inp.opts.audience, language: inp.opts.language, slideCount: inp.opts.slideCount, variationCount: inp.variationCount },
+        sourceText: inp.text, plan: result.plan, generatedBy: result.provider, variations: variations.map((v) => v.theme), variationSeed: 0, designPrompt: inp.designPrompt.trim() || undefined,
+        settings: { presetId: inp.presetId, tone: inp.opts.tone, audience: inp.opts.audience, language: inp.opts.language, slideCount: inp.opts.slideCount, variationCount: inp.variationCount, carouselType: brief.typeId, carouselBrief: inp.opts.carouselBrief || undefined, templateId: inp.templateId || undefined, series: brief.series },
         carousel: { id: '', presetId: inp.presetId, theme: variations[0]!.theme, slides: [] },
       };
-      const langNote = result.provider === 'rules' && inp.opts.language !== 'auto' ? ' The built-in rules keep the original language; translation needs Claude or Ollama.' : '';
-      setNotice(result.notice ? result.notice + langNote : langNote.trim() || null);
-      await commit(project, result.plan, variations[0]!.theme);
+      const langNote = result.provider === 'rules' && inp.opts.language !== 'auto' ? ' The built-in rules keep the original language; translating needs an AI model (or use Translate…).' : '';
+      const lookNote = (look?.understood.length ? ` Design: ${look.understood.join(', ')}.` : '') + (brief.understood.length ? ` Built as: ${brief.understood.join(', ')}.` : '');
+      const maxSlides = getPreset(inp.presetId).maxSlides;
+      const fitNote = maxSlides < 5 ? ` ${getPreset(inp.presetId).label} allows ${maxSlides} slide${maxSlides > 1 ? 's' : ''}, so the content was condensed.` : '';
+      setNotice(`${result.notice ?? ''}${langNote}${fitNote}${lookNote}`.trim() || null);
+      await commit(project, result.plan, variations[0]!.theme, {}, true);
     });
   }
 
-  const selectedIndex = current?.variations?.findIndex((t) => t.styleId === carousel?.theme.styleId && t.paletteId === carousel?.theme.paletteId) ?? -1;
+  // "Selected" only when the carousel still looks exactly like that design (not after Bolder, Plain…).
+  const designKey = (t: CarouselTheme) => JSON.stringify([t.styleId, t.paletteId, t.headingFont, t.bodyFont, t.modifiers ?? {}, t.customPalette ?? null, t.motion ?? null]);
+  const selectedIndex = carousel ? (current?.variations?.findIndex((t) => designKey(t) === designKey(carousel.theme)) ?? -1) : -1;
 
   /** Runs an action against the open project (no-op if none). */
   const act = (job: (p: Project, pl: CarouselPlan) => Promise<void>) => {
     if (!current || !plan) return;
-    void run(() => job(current, plan));
+    // The open document is the freshest version (editor and caption edits may not be saved yet).
+    const docPlan = useDocument.getState().plan;
+    void run(() => job(current, docPlan && docPlan.slides.length === plan.slides.length ? docPlan : plan));
   };
 
   const pickDesign = (i: number) => act(async (p, pl) => { await commit(p, pl, p.variations![i]!); });
   const newDesigns = () =>
     act(async (p, pl) => {
     const seed = (p.variationSeed ?? 0) + 1;
-    const variations = pickVariations(pl, { count: p.settings?.variationCount ?? 4, tone: (p.settings?.tone ?? 'professional') as InputState['opts']['tone'], seed, handle: p.carousel.theme.handle });
+    const look = await readPrompt(p.designPrompt ?? '');
+    const variations = designsFor(pl, look, { count: p.settings?.variationCount ?? 4, tone: (p.settings?.tone ?? 'professional') as InputState['opts']['tone'], seed, handle: p.carousel.theme.handle, typeId: p.settings?.carouselType, series: p.settings?.series });
     await commit(p, pl, variations[0]!.theme, { variations: variations.map((v) => v.theme), variationSeed: seed });
   });
+  const applyTemplateId = (id: string) =>
+    act(async (p, pl) => {
+      const t = getTemplate(id);
+      if (!t) return;
+      setPickingTemplate(false);
+      await commit(p, pl, themeFromTemplate(t, { handle: p.carousel.theme.handle, series: p.carousel.theme.series ?? p.settings?.series }));
+    });
   const more = (dir: MoreDirection) => act(async (p, pl) => { await commit(p, pl, makeItMore(p.carousel.theme, dir)); });
   const setContinuous = (style: 'off' | ContinuousStyle) =>
     act(async (p, pl) => {
     await commit(p, pl, { ...p.carousel.theme, modifiers: { ...p.carousel.theme.modifiers, panoramic: style !== 'off', continuous: style === 'off' ? undefined : style } });
   });
+  const setMotion = (motion: string | undefined) =>
+    act(async (p, pl) => {
+      if (motion === 'custom') return;
+      await commit(p, pl, { ...p.carousel.theme, motion });
+    });
+  const setIllustrations = (v: 'none' | 'some' | 'rich' | 'story' | undefined) =>
+    act(async (p, pl) => {
+      const modifiers = { ...p.carousel.theme.modifiers, illustrations: v };
+      if (!v) delete modifiers.illustrations;
+      await commit(p, pl, { ...p.carousel.theme, modifiers });
+    });
+  const restyle = (prompt: string) =>
+    act(async (p, pl) => {
+      const look = await readPrompt(prompt);
+      if (!look) return;
+      const theme = look.brief.styleId ? themeFromBrief(look.brief, look.brief.styleId, p.carousel.theme.handle) : applyBriefExtras(p.carousel.theme, look.brief);
+      setNotice(look.understood.length ? `Design: ${look.understood.join(', ')}.` : 'No design words recognised — try style, color, texture or motion words (e.g. “clay, pastel, bouncy”).');
+      await commit(p, pl, theme, { designPrompt: prompt });
+    });
   const regenerateCopy = () =>
     act(async (p) => {
-    const opts = { ...defaultOptions, tone: (p.settings?.tone ?? 'professional') as InputState['opts']['tone'], audience: p.settings?.audience ?? '', language: p.settings?.language ?? 'auto', slideCount: p.settings?.slideCount ?? 'auto', maxSlides: getPreset(p.carousel.presetId).maxSlides };
-    const result = await generatePlan(p.sourceText ?? '', opts, settings.provider, providers);
+    const opts = { ...defaultOptions, tone: (p.settings?.tone ?? 'professional') as InputState['opts']['tone'], audience: p.settings?.audience ?? '', language: p.settings?.language ?? 'auto', slideCount: p.settings?.slideCount ?? 'auto', maxSlides: getPreset(p.carousel.presetId).maxSlides, carouselType: p.settings?.carouselType ?? AUTO_TYPE, carouselBrief: p.settings?.carouselBrief ?? '' };
+    abort.current?.abort();
+    abort.current = new AbortController();
+    const result = await generatePlan(p.sourceText ?? '', opts, settings.provider, providers, abort.current.signal);
     setNotice(result.notice ?? (result.provider === 'rules' ? 'The built-in rules always produce the same copy; connect Claude or Ollama for fresh wording.' : null));
     const { layoutOverrides: _drop, ...theme } = p.carousel.theme;
     void _drop;
-    await commit(p, result.plan, theme, { generatedBy: result.provider, name: result.plan.title || p.name });
+    await commit(p, result.plan, theme, { generatedBy: result.provider, name: result.plan.title || p.name }, true);
   });
 
   const slideActions = {
@@ -146,7 +240,9 @@ export function GeneratePage() {
     newEmphasis: (i: number) => act(async (p, pl) => { await commit(p, cycleEmphasis(pl, i), p.carousel.theme); }),
     rewriteSlide: (i: number) => act(async (p, pl) => {
       const opts = { ...defaultOptions, tone: (p.settings?.tone ?? 'professional') as InputState['opts']['tone'], maxSlides: getPreset(p.carousel.presetId).maxSlides };
-      const r = await rewriteSlide(pl, i, opts, settings.provider, providers);
+      abort.current?.abort();
+      abort.current = new AbortController();
+      const r = await rewriteSlide(pl, i, opts, settings.provider, providers, '', abort.current.signal);
       await commit(p, r.plan, p.carousel.theme);
     }),
     headlineOptions: async (i: number) => {
@@ -159,7 +255,7 @@ export function GeneratePage() {
   const openProject = (p: Project) => {
     open(p);
     setNotice(null);
-    if (p.settings) setInput((v) => ({ ...v, presetId: p.settings!.presetId, variationCount: p.settings!.variationCount, opts: { ...v.opts, tone: p.settings!.tone as InputState['opts']['tone'], audience: p.settings!.audience, language: p.settings!.language, slideCount: p.settings!.slideCount } }));
+    if (p.settings) setInput((v) => ({ ...v, designPrompt: p.designPrompt ?? v.designPrompt, presetId: p.settings!.presetId, variationCount: p.settings!.variationCount, templateId: p.settings!.templateId ?? '', opts: { ...v.opts, tone: p.settings!.tone as InputState['opts']['tone'], audience: p.settings!.audience, language: p.settings!.language, slideCount: p.settings!.slideCount, carouselType: p.settings!.carouselType ?? AUTO_TYPE, carouselBrief: p.settings!.carouselBrief ?? '' } }));
   };
 
   return (
@@ -195,14 +291,19 @@ export function GeneratePage() {
           <div className="card p-4">
             <h2 className="label">Recent projects</h2>
             <ul className="space-y-1" data-testid="project-list">
-              {projects.slice(0, 8).map((p) => (
+              {(showAll ? projects : projects.slice(0, 8)).map((p) => (
                 <li key={p.id} className="group flex items-center gap-2">
                   {p.thumbnail ? <img src={p.thumbnail} alt="" className="h-9 w-7 rounded object-cover ring-1 ring-black/10" /> : <div className="h-9 w-7 rounded bg-zinc-200 dark:bg-zinc-800" />}
-                  <button className={`flex-1 truncate text-left text-sm hover:text-brand-600 ${current?.id === p.id ? 'font-semibold' : ''}`} onClick={() => openProject(p)}>{p.name}</button>
-                  <button className="text-xs text-zinc-400 opacity-0 group-hover:opacity-100 hover:text-red-600" onClick={() => remove(p.id)} aria-label={`Delete ${p.name}`}>Delete</button>
+                  <button className={`min-w-0 flex-1 truncate text-left text-sm hover:text-brand-600 ${current?.id === p.id ? 'font-semibold' : ''}`} onClick={() => openProject(p)}>{p.name}</button>
+                  <button className="text-xs text-zinc-400 opacity-60 hover:text-red-600 group-hover:opacity-100" onClick={() => window.confirm(`Delete “${p.name}”? This can't be undone.`) && void remove(p.id)} aria-label={`Delete ${p.name}`}>Delete</button>
                 </li>
               ))}
             </ul>
+            {projects.length > 8 && (
+              <button className="mt-2 text-xs font-medium text-brand-600 hover:underline" onClick={() => setShowAll((v) => !v)}>
+                {showAll ? 'Show fewer' : `Show all ${projects.length} projects`}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -218,6 +319,7 @@ export function GeneratePage() {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h1 className="text-lg font-semibold">{current.name}</h1>
               <div className="flex gap-2">
+                <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setPickingTemplate(true)}>Templates…</button>
                 <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setTranslating(true)}>Translate…</button>
                 <button className="btn-ghost border border-zinc-300 px-3 py-1.5 text-xs dark:border-zinc-700" onClick={() => setExporting(true)}>Export…</button>
                 <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => useRoute.getState().go('editor')}>Open in editor →</button>
@@ -233,14 +335,18 @@ export function GeneratePage() {
               aiAvailable={aiAvailable}
               onMore={more}
               onContinuous={setContinuous}
+              onMotion={setMotion}
+              onIllustrations={setIllustrations}
+              onRestyle={restyle}
               onRegenerateCopy={regenerateCopy}
               actions={slideActions}
             />
             <VariationsGrid previews={previews} selected={selectedIndex} onPick={pickDesign} onNewDesigns={newDesigns} busy={busy} />
             <section className="card p-4" aria-label="Caption and hashtags">
               <h2 className="mb-2 text-sm font-semibold">Caption, hashtags & alt text</h2>
-              <CaptionPanel compact />
+              <CaptionPanel compact key={current.id} />
             </section>
+            {pickingTemplate && <TemplateDialog presetId={carousel.presetId} templateId={carousel.theme.templateId} typeId={current.settings?.carouselType} plan={plan} pickLabel="Apply template" onPick={applyTemplateId} onClose={() => setPickingTemplate(false)} />}
             {exporting && <Suspense fallback={null}><ExportDialog project={current} carousel={carousel} plan={plan} onClose={() => setExporting(false)} /></Suspense>}
             {translating && (
               <Suspense fallback={null}>

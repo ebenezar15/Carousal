@@ -1,6 +1,6 @@
 // Inline text editing: a textarea laid over the text element, plus a mini toolbar that applies
 // rich-text styles (bold, italic, underline, color, marker highlight) to the selected characters.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { TextElement, TextSpan } from '@/model/types';
 import { fontStack } from '@/styles/fontLoader';
 import { nearestWeight } from '@/styles';
@@ -38,6 +38,8 @@ export function InlineTextEditor({ el, zoom, ox, oy, slideIndex }: { el: TextEle
   const [text, setText] = useState(el.text);
   const [spans, setSpans] = useState<TextSpan[] | undefined>(el.spans);
   const ref = useRef<HTMLTextAreaElement>(null);
+  // Grows with wrapped lines (not just typed line breaks) so nothing scrolls out of view while typing.
+  const [autoH, setAutoH] = useState(0);
   const done = useRef(false);
 
   useEffect(() => {
@@ -46,6 +48,16 @@ export function InlineTextEditor({ el, zoom, ox, oy, slideIndex }: { el: TextEle
     t.focus();
     t.select();
   }, []);
+
+  useLayoutEffect(() => {
+    const t = ref.current;
+    if (!t) return;
+    const prev = t.style.height;
+    t.style.height = '0px';
+    const h = t.scrollHeight;
+    t.style.height = prev;
+    setAutoH(h);
+  }, [text, zoom, el.width, el.fontSize]);
 
   const commit = (save: boolean) => {
     if (done.current) return;
@@ -110,14 +122,14 @@ export function InlineTextEditor({ el, zoom, ox, oy, slideIndex }: { el: TextEle
           left: ox + el.x * zoom,
           top: oy + el.y * zoom,
           width: el.width * zoom,
-          height: Math.max(el.height * zoom, lineHeight * (text.split('\n').length + 0.2)),
+          height: Math.max(el.height * zoom, autoH, lineHeight * (text.split('\n').length + 0.2)),
           transform: el.rotation ? `rotate(${el.rotation}deg)` : undefined,
           transformOrigin: 'center',
           font: `${el.italic ? 'italic ' : ''}${el.fontWeight} ${el.fontSize * zoom}px ${fontStack(el.fontId)}`,
           lineHeight: `${lineHeight}px`,
           letterSpacing: `${el.letterSpacing * zoom}px`,
           textAlign: el.align,
-          color: el.fill,
+          color: el.fill === 'transparent' ? el.stroke?.color ?? el.fxBaseFill ?? '#111111' : el.fill,
           textTransform: el.textCase === 'upper' ? 'uppercase' : el.textCase === 'lower' ? 'lowercase' : el.textCase === 'title' ? 'capitalize' : 'none',
         }}
       />

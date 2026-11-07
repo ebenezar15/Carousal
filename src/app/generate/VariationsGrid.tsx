@@ -23,9 +23,9 @@ export function VariationsGrid({ previews, selected, onPick, onNewDesigns, busy 
         <h2 className="text-sm font-semibold">Pick a design <span className="font-normal text-zinc-500">· same content, {previews.length} different designs</span></h2>
         <button className="btn-ghost text-xs" onClick={onNewDesigns} disabled={busy}>↻ New designs</button>
       </div>
-      <div className="grid gap-3 xl:grid-cols-2" data-testid="variations">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-3 xl:grid-cols-2" data-testid="variations">
         {previews.map((v, i) => (
-          <article key={i} data-testid="variation" className={`card p-3 transition ${i === selected ? 'ring-2 ring-brand-500' : 'hover:ring-1 hover:ring-zinc-300 dark:hover:ring-zinc-700'}`}>
+          <article key={i} data-testid="variation" className={`card min-w-0 p-3 transition ${i === selected ? 'ring-2 ring-brand-500' : 'hover:ring-1 hover:ring-zinc-300 dark:hover:ring-zinc-700'}`}>
             <div className="mb-2 flex items-center justify-between gap-2">
               <h3 className="truncate text-sm font-medium">{v.label}</h3>
               <button className={i === selected ? 'btn-primary px-2.5 py-1 text-xs' : 'btn-ghost border border-zinc-300 px-2.5 py-1 text-xs dark:border-zinc-700'} onClick={() => onPick(i)}>

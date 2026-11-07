@@ -97,9 +97,12 @@ Never invent facts or statistics that aren't in the carousel.`,
       undefined,
       signal,
       'fast',
+      Math.min(8192, 1200 + plan.slides.length * 120),
     );
     const hashtags = value.hashtags.map((h) => (h.startsWith('#') ? h : `#${h}`).replace(/\s+/g, '')).slice(0, rule.hashtags[1] || 30);
-    const alt = value.altText.length === plan.slides.length ? value.altText : altTextFor(plan);
+    // Keep the alt text we paid for even if the count is off: pad from the offline writer, trim extras.
+    const offline = altTextFor(plan);
+    const alt = plan.slides.map((_, i) => value.altText[i]?.trim() || offline[i]!);
     return { caption: value.caption.trim(), hashtags, altText: alt, provider: provider.id };
   } catch (e) {
     return { ...rulesCaption(plan, o), notice: `${provider.label} failed (${(e as Error).message}); used the built-in caption writer.` };

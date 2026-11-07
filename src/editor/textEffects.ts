@@ -11,8 +11,12 @@ export type TextEffectId = 'none' | 'neon' | 'outline' | 'sticker' | 'retro' | '
 
 const CLEAR: Partial<TextElement> = { stroke: undefined, shadow: undefined, extrude: undefined, glitch: undefined, echo: undefined, fillGradient: undefined };
 
-export const TEXT_EFFECTS: { id: TextEffectId; label: string; apply(el: TextElement, pal: PaletteColors): Partial<TextElement> }[] = [
-  { id: 'none', label: 'None', apply: () => ({ ...CLEAR, spans: undefined }) },
+const isFullHighlight = (el: TextElement) => el.spans?.length === 1 && Boolean(el.spans[0]!.highlight) && el.spans[0]!.start === 0 && el.spans[0]!.end >= el.text.length;
+
+type Effect = { id: TextEffectId; label: string; apply(el: TextElement, pal: PaletteColors): Partial<TextElement> };
+
+const RAW: Effect[] = [
+  { id: 'none', label: 'None', apply: () => ({ ...CLEAR }) },
   {
     id: 'neon',
     label: 'Neon glow',
@@ -33,6 +37,27 @@ export const TEXT_EFFECTS: { id: TextEffectId; label: string; apply(el: TextElem
   { id: 'highlighter', label: 'Highlighter', apply: (el, pal) => ({ ...CLEAR, spans: [{ start: 0, end: el.text.length, highlight: pal.highlight }] }) },
 ];
 
+/**
+ * Effects that recolor the text (neon, outline) remember the original color in `fxBaseFill`; every other
+ * effect, and None, restores it. The highlighter's full-text span is removed by the next effect, while
+ * the user's own rich-text spans are kept.
+ */
+export const TEXT_EFFECTS: Effect[] = RAW.map((fx) => ({
+  ...fx,
+  apply: (el, pal) => {
+    const base = el.fxBaseFill ?? (el.fill === 'transparent' ? pal.text : el.fill);
+    const patch = fx.apply({ ...el, fill: base }, pal);
+    const out: Partial<TextElement> = { ...patch };
+    if (patch.fill !== undefined && patch.fill !== base) out.fxBaseFill = base;
+    else {
+      out.fill = patch.fill ?? base;
+      out.fxBaseFill = undefined;
+    }
+    if (fx.id !== 'highlighter' && isFullHighlight(el)) out.spans = undefined;
+    return out;
+  },
+}));
+
 /** Which preset an element currently looks like (for the active state in the panel). */
 export function currentEffect(el: TextElement): TextEffectId | null {
   if (el.glitch) return 'glitch';
@@ -43,7 +68,7 @@ export function currentEffect(el: TextElement): TextEffectId | null {
   if (el.stroke && el.stroke.color.toUpperCase() === '#FFFFFF' && el.stroke.width >= el.fontSize * 0.1) return 'sticker';
   if (el.shadow && el.shadow.offsetX === 0 && el.shadow.offsetY === 0 && el.shadow.blur > 0) return 'neon';
   if (el.shadow && el.shadow.blur === 0) return 'retro';
-  if (el.spans?.length === 1 && el.spans[0]!.highlight && el.spans[0]!.start === 0 && el.spans[0]!.end >= el.text.length) return 'highlighter';
+  if (isFullHighlight(el)) return 'highlighter';
   if (!el.stroke && !el.shadow) return 'none';
   return null;
 }

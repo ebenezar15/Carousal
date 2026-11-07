@@ -3,7 +3,7 @@
 import type { SlideElement, TextElement } from '@/model/types';
 import { contrast, mix } from '@/styles/color';
 import type { Ctx } from './context';
-import { ellipse, label, path, rect } from './primitives';
+import { ellipse, label, line, path, rect } from './primitives';
 import { SHAPES } from './shapes';
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX'];
@@ -19,7 +19,8 @@ export function chrome(ctx: Ctx, index: number): SlideElement[] {
   const { pal, k, box, total } = ctx;
   const n = index + 1;
   const pad = (x: number) => String(x).padStart(2, '0');
-  const numStyle = ctx.style.layout.slideNumber;
+  const numStyle = { ...ctx.style.layout.slideNumber, style: ctx.numbering };
+  if (numStyle.style === 'editorial') return editorial(ctx, index);
   const numPos = parsePos(numStyle.position);
   const cueStyle = ctx.style.layout.swipeCue;
   let cuePos = parsePos(cueStyle.position);
@@ -162,6 +163,42 @@ export function chrome(ctx: Ctx, index: number): SlideElement[] {
       }
     }
   }
+  return out;
+}
+
+/**
+ * Magazine-style page furniture: handle and page count on a hairline header, series label and page on a
+ * hairline footer (the swipe prompt takes the footer's right side on the cover).
+ */
+function editorial(ctx: Ctx, index: number): SlideElement[] {
+  const { pal, k, box, total } = ctx;
+  const pad = (x: number) => String(x).padStart(2, '0');
+  const size = Math.round(24 * k);
+  const rule = mix(pal.text, pal.bg, 0.78);
+  const hair = Math.max(1, Math.round(1.5 * k));
+  const strong = { size, color: pal.text, weight: Math.max(ctx.body.weight, 600), letterSpacing: 0.5 * k };
+  const quiet = { size: Math.round(21 * k), color: pal.mutedText, letterSpacing: 1.5 * k, textCase: 'upper' as const };
+  const handle = ctx.handle ? (ctx.handle.startsWith('@') ? ctx.handle : `@${ctx.handle}`) : '';
+  const out: SlideElement[] = [];
+  const row = (y: number, left: string, right: string, l: Partial<typeof strong>, r: Partial<typeof strong>, rightSlot = 'slide-number') => {
+    if (left) {
+      const el = label(ctx, 'slide-number-label', left.toUpperCase(), box.x, 0, box.w * 0.62, { ...strong, ...l, font: ctx.fonts.body });
+      el.y = Math.round(y - el.height / 2);
+      out.push(el);
+    }
+    const el = label(ctx, rightSlot, right, box.x + box.w * 0.4, 0, box.w * 0.6, { ...strong, ...r, align: 'right', font: ctx.fonts.body });
+    el.y = Math.round(y - el.height / 2);
+    out.push(el);
+  };
+  const topY = ctx.chromeTopY - 6 * k;
+  row(topY, handle, `${pad(index + 1)} / ${pad(total)}`, {}, {});
+  out.push(line('slide-number-rule', [box.x, topY + size * 1.1, box.x + box.w, topY + size * 1.1], rule, hair));
+  const botY = ctx.chromeBottomY + 6 * k;
+  out.push(line('slide-number-rule', [box.x, botY - size * 1.15, box.x + box.w, botY - size * 1.15], rule, hair));
+  const series = ctx.series ? ctx.series.toUpperCase() : '';
+  const isHook = index === 0 && total > 1;
+  const right = isHook ? 'SWIPE  →' : `${handle ? `${handle.replace(/^@/, '').toUpperCase()}  /  ` : ''}${pad(index + 1)}`;
+  row(botY, series, right, quiet, isHook ? { ...quiet, color: ctx.accentText, weight: Math.max(ctx.body.weight, 600) } : quiet, isHook ? 'swipe-cue' : 'slide-number');
   return out;
 }
 

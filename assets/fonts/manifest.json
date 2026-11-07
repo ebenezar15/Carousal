@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14",
+  "generated": "2026-10-29",
   "fonts": [
     {
       "id": "montserrat",
@@ -5002,6 +5002,250 @@
           "weight": 400,
           "style": "normal",
           "file": "kavivanar/tamil-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "sedgwick-ave-display",
+      "family": "Sedgwick Ave Display",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "sedgwick-ave-display/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "sedgwick-ave-display/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "sedgwick-ave-display/vietnamese-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "rubik-wet-paint",
+      "family": "Rubik Wet Paint",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik-wet-paint/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik-wet-paint/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik-wet-paint/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "rubik-wet-paint/cyrillic-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "instrument-serif",
+      "family": "Instrument Serif",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "instrument-serif/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "instrument-serif/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "italic",
+          "file": "instrument-serif/latin-400-italic.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "italic",
+          "file": "instrument-serif/latin-ext-400-italic.woff2"
+        }
+      ]
+    },
+    {
+      "id": "bricolage-grotesque",
+      "family": "Bricolage Grotesque",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "bricolage-grotesque/vietnamese-400-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 600,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-600-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 600,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-ext-600-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 600,
+          "style": "normal",
+          "file": "bricolage-grotesque/vietnamese-600-normal.woff2"
+        },
+        {
+          "subset": "latin",
+          "weight": 800,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-800-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 800,
+          "style": "normal",
+          "file": "bricolage-grotesque/latin-ext-800-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 800,
+          "style": "normal",
+          "file": "bricolage-grotesque/vietnamese-800-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "dela-gothic-one",
+      "family": "Dela Gothic One",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "dela-gothic-one/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "dela-gothic-one/latin-ext-400-normal.woff2"
+        },
+        {
+          "subset": "cyrillic",
+          "weight": 400,
+          "style": "normal",
+          "file": "dela-gothic-one/cyrillic-400-normal.woff2"
+        },
+        {
+          "subset": "greek",
+          "weight": 400,
+          "style": "normal",
+          "file": "dela-gothic-one/greek-400-normal.woff2"
+        },
+        {
+          "subset": "vietnamese",
+          "weight": 400,
+          "style": "normal",
+          "file": "dela-gothic-one/vietnamese-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "shrikhand",
+      "family": "Shrikhand",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "shrikhand/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "shrikhand/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "young-serif",
+      "family": "Young Serif",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "young-serif/latin-400-normal.woff2"
+        },
+        {
+          "subset": "latin-ext",
+          "weight": 400,
+          "style": "normal",
+          "file": "young-serif/latin-ext-400-normal.woff2"
+        }
+      ]
+    },
+    {
+      "id": "gochi-hand",
+      "family": "Gochi Hand",
+      "license": "OFL-1.1",
+      "version": "5.3.0",
+      "faces": [
+        {
+          "subset": "latin",
+          "weight": 400,
+          "style": "normal",
+          "file": "gochi-hand/latin-400-normal.woff2"
         }
       ]
     }

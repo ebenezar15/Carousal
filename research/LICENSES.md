@@ -6,7 +6,7 @@ Every third-party asset bundled with or used by CarouselForge is listed here. Ru
 
 Source: [Fontsource](https://fontsource.org) npm packages, which redistribute the Google Fonts files unmodified. Each font folder contains the original license text from its package. Retrieved 2026-10-13 via `scripts/fetch-fonts.mjs`.
 
-- **SIL Open Font License 1.1** (68 fonts): may be bundled, embedded in exported images/PDFs, and used commercially. The font files may not be sold on their own, and Reserved Font Names may not be used for modified versions. We ship the files unmodified.
+- **SIL Open Font License 1.1** (76 fonts): may be bundled, embedded in exported images/PDFs, and used commercially. The font files may not be sold on their own, and Reserved Font Names may not be used for modified versions. We ship the files unmodified.
 - **Apache License 2.0** (Chewy, Luckiest Guy, Permanent Marker, Satisfy): may be bundled and used commercially. The license text is kept with the files.
 
 | Family | Group | Package | License | License file |
@@ -94,6 +94,14 @@ So a carousel translated into Tamil, Hindi, Arabic, Thai, Russian and more keeps
 | Noto Serif Tamil | Tamil | @fontsource-variable/noto-serif-tamil@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-tamil/LICENSE |
 | Baloo Thambi 2 | Tamil | @fontsource-variable/baloo-thambi-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-thambi-2/LICENSE |
 | Kavivanar | Tamil | @fontsource/kavivanar@5.3.0 | OFL-1.1 | assets/fonts/script/kavivanar/LICENSE |
+| Sedgwick Ave Display | Expressive | @fontsource/sedgwick-ave-display@5.3.0 | OFL-1.1 | assets/fonts/sedgwick-ave-display/LICENSE |
+| Rubik Wet Paint | Expressive | @fontsource/rubik-wet-paint@5.3.0 | OFL-1.1 | assets/fonts/rubik-wet-paint/LICENSE |
+| Instrument Serif | Expressive | @fontsource/instrument-serif@5.3.0 | OFL-1.1 | assets/fonts/instrument-serif/LICENSE |
+| Bricolage Grotesque | Expressive | @fontsource/bricolage-grotesque@5.3.0 | OFL-1.1 | assets/fonts/bricolage-grotesque/LICENSE |
+| Dela Gothic One | Expressive | @fontsource/dela-gothic-one@5.3.0 | OFL-1.1 | assets/fonts/dela-gothic-one/LICENSE |
+| Shrikhand | Expressive | @fontsource/shrikhand@5.3.0 | OFL-1.1 | assets/fonts/shrikhand/LICENSE |
+| Young Serif | Expressive | @fontsource/young-serif@5.3.0 | OFL-1.1 | assets/fonts/young-serif/LICENSE |
+| Gochi Hand | handwritten | @fontsource/gochi-hand@5.3.0 | OFL-1.1 | assets/fonts/gochi-hand/LICENSE |
 | Noto Sans Devanagari | Devanagari | @fontsource-variable/noto-sans-devanagari@5.3.0 | OFL-1.1 | assets/fonts/script/noto-sans-devanagari/LICENSE |
 | Noto Serif Devanagari | Devanagari | @fontsource-variable/noto-serif-devanagari@5.3.0 | OFL-1.1 | assets/fonts/script/noto-serif-devanagari/LICENSE |
 | Baloo 2 | Devanagari | @fontsource-variable/baloo-2@5.3.0 | OFL-1.1 | assets/fonts/script/baloo-2/LICENSE |

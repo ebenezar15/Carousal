@@ -1,5 +1,7 @@
 // No-AI fallback: turns raw text/markdown into a CarouselPlan with deterministic rules derived
 // from research/design-patterns.json. Always available, fully offline.
+import { detectLanguage, phrasesFor } from './phrases';
+import { SCRIPTURE_REF } from './art/topics';
 import { patterns } from '@/styles';
 import { emptySlide, type CarouselPlan, type SlidePlan } from './schema';
 import { clampWords, packSentences, pickEmphasis, sentences, stripMarkdown, wordCount } from './text';
@@ -47,10 +49,31 @@ export function parseBlocks(input: string): Block[] {
     para.push(line);
   }
   flush();
-  // Promote short unpunctuated single-line paragraphs to headings.
-  return blocks.map((b) =>
-    b.kind === 'para' && wordCount(b.text) <= 10 && !/[.!?:]$/.test(b.text) ? { kind: 'heading', text: b.text, level: 2 } : b,
-  );
+  // Promote short unpunctuated single-line paragraphs to headings; a Bible verse with its reference
+  // ("“…” — John 3:16", "John 3:16 — …", "… (Psalm 23:1 NIV)") becomes a scripture quote.
+  return blocks.map((b) => {
+    if (b.kind !== 'para') return b;
+    const verse = scriptureQuote(b.text);
+    if (verse) return { kind: 'quote', ...verse };
+    return wordCount(b.text) <= 10 && !/[.!?:]$/.test(b.text) && !SCRIPTURE_REF.test(b.text) ? { kind: 'heading', text: b.text, level: 2 } : b;
+  });
+}
+
+const REF = SCRIPTURE_REF.source;
+const VERSION = String.raw`(?:\s(?:KJV|NIV|ESV|NKJV|NLT|NASB|CSB|WEB|ASV|MSG|AMP|NRSV|RSV))?`;
+const VERSE_AFTER = new RegExp(String.raw`^["“]?(.{12,400}?)["”]?\s*(?:[—–-]{1,2}\s*|\(\s*)${REF}${VERSION}\)?\.?$`);
+const VERSE_BEFORE = new RegExp(String.raw`^${REF}${VERSION}\s*[:—–-]{1,2}\s*["“]?(.{12,400}?)["”]?$`);
+
+/** A paragraph that is a Bible verse plus its reference, split into text and reference. */
+export function scriptureQuote(text: string): { text: string; attribution: string } | null {
+  const a = VERSE_AFTER.exec(text.trim());
+  if (a) {
+    const ref = text.trim().slice(a[1]!.length).match(SCRIPTURE_REF);
+    if (ref) return { text: a[1]!.trim().replace(/^["“]|["”]$/g, ''), attribution: ref[1]!.trim() };
+  }
+  const b = VERSE_BEFORE.exec(text.trim());
+  if (b) return { text: b[2]!.trim().replace(/^["“]|["”]$/g, ''), attribution: b[1]!.trim() };
+  return null;
 }
 
 const STAT_RE = /(\$?\d[\d,.]*\s?(?:%|x|k|m|bn|million|billion|percent|hours?|days?|minutes?)?)/i;
@@ -154,18 +177,26 @@ export function planFromText(input: string, opts: GenerateOptions): CarouselPlan
     pendingHeading = null;
   }
 
-  // Hook subline fallback: promise the payoff.
-  if (!hook.body && content.length >= 3) hook.body = `${content.length} ideas worth saving`;
+  const language = opts.language === 'auto' ? detectLanguage(input) : opts.language;
+  const words = phrasesFor(language);
   hook.emphasis = pickEmphasis(hook.headline);
   content.forEach((s) => { if (!s.emphasis.length) s.emphasis = pickEmphasis(s.headline); });
+  // Faith content: mark prayers and scripture so layouts and illustrations can treat them specially.
+  content.forEach((s) => {
+    if (/^(a )?(prayer|let'?s pray|pray with me|lord,|father,|dear god)\b/i.test(`${s.headline} ${s.body}`.trim())) {
+      s.layoutHint = 'prayer';
+      s.iconKeywords = ['hands-praying'];
+    } else if (s.quote?.attribution && SCRIPTURE_REF.test(s.quote.attribution)) s.layoutHint = 'verse';
+  });
 
-  const cta = emptySlide('cta', 'Found this useful?', 'Save it for later and share it with someone who needs it.');
-  cta.emphasis = ['useful'];
+  const cta = emptySlide('cta', words.ctaHeadline, words.ctaBody);
+  cta.emphasis = pickEmphasis(words.ctaHeadline);
+  const fallbackSubline = !hook.body;
 
-  return normalizePlan(
+  const plan = normalizePlan(
     {
       title,
-      language: opts.language === 'auto' ? 'en' : opts.language,
+      language,
       paletteMood: opts.tone === 'playful' ? 'playful' : opts.tone === 'bold' ? 'bold' : 'professional',
       slides: [hook, ...content, cta],
       caption: clampWords(title, 20),
@@ -173,4 +204,9 @@ export function planFromText(input: string, opts: GenerateOptions): CarouselPlan
     },
     opts,
   );
+  // Hook subline fallback: promise the payoff, counted after trimming to the platform's slide limit.
+  const middle = plan.slides.filter((s) => s.role !== 'hook' && s.role !== 'cta').length;
+  const first = plan.slides[0];
+  if (fallbackSubline && first?.role === 'hook' && middle >= 3) first.body = words.ideas.replace('{n}', String(middle));
+  return plan;
 }

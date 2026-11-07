@@ -7,31 +7,55 @@ import type { SlidePlan } from '../schema';
 import type { Box, Ctx } from './context';
 import { ellipse, fitStack, label, line, measureSpec, path, rect, textEl, type TextSpec } from './primitives';
 import { SHAPES } from './shapes';
+import { DIAGRAM_LAYOUTS } from './diagrams';
+import { ILLUSTRATED_LAYOUTS } from './illustrated';
 
 export interface LayoutResult { elements: SlideElement[]; overflow: boolean }
 export type LayoutFn = (ctx: Ctx, s: SlidePlan, index: number) => LayoutResult;
 
 // ---------- text spec helpers ----------
 
-function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
+export function headSpec(ctx: Ctx, s: SlidePlan, text: string, max: number, extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot: 'headline', text, font: ctx.fonts.heading, weight: ctx.headline.weight, max, min: Math.min(max, ctx.sizes.minHead),
     lineHeight: ctx.headline.lineHeight, color: ctx.pal.text, textCase: ctx.headline.textCase,
     letterSpacing: ctx.headline.tracking * max, emphasis: s.emphasis.length ? { ...ctx.emphasis, words: s.emphasis } : undefined,
-    gapAfter: 0.42, rotation: ctx.headline.rotateDeg, ...extra,
+    gapAfter: 0.42, rotation: ctx.headline.rotateDeg, ...headlineEffect(ctx), ...extra,
   };
 }
 
-function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
+/** Style-specific headline treatment (styles.json layout.headline.effect). */
+function headlineEffect(ctx: Ctx): Partial<TextSpec> {
+  const { k, pal } = ctx;
+  if (ctx.mod.decoration === 'none') return {};
+  switch (ctx.style.layout.headline.effect) {
+    case 'spray': // Graffiti: a soft spray-paint glow around the letters.
+      return { shadow: { color: pal.primary, blur: Math.round(26 * k), offsetX: 0, offsetY: 0, opacity: ctx.dark ? 0.9 : 0.55 } };
+    case 'clay': // Puffy clay letters: a short soft shadow underneath.
+      return { shadow: { color: '#000000', blur: Math.round(10 * k), offsetX: 0, offsetY: Math.round(6 * k), opacity: 0.18 } };
+    case 'paper': // Cut-paper letters lifted off the page.
+      return { shadow: { color: '#000000', blur: Math.round(6 * k), offsetX: Math.round(3 * k), offsetY: Math.round(5 * k), opacity: 0.2 } };
+    case 'offset': // Maximalist hard offset shadow in the accent color.
+      return { shadow: { color: pal.accent, blur: 0, offsetX: Math.round(6 * k), offsetY: Math.round(6 * k), opacity: 0.9 } };
+    default:
+      return {};
+  }
+}
+
+export function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot, text, font: ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.body, min: ctx.sizes.minBody,
-    lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8, ...extra,
+    lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8,
+    italic: Boolean(ctx.style.layout.body.italic) || undefined, ...extra,
   };
 }
 
-function kickerText(ctx: Ctx, index: number): string | null {
+function kickerText(ctx: Ctx, index: number, s?: SlidePlan): string | null {
   const d = ctx.style.layout.decorations;
   if (ctx.decoration === 'none') return null;
+  // Editorial styles: the slide's own label ("ADOPTIONISM / THE MAN WHO BECAME GOD"), the series on the cover.
+  if (d.includes('dash-kicker')) return s?.kicker?.trim() || (index === 0 && ctx.series && ctx.series.toLowerCase() !== s?.headline.toLowerCase() ? ctx.series : null);
+  if (s?.kicker?.trim() && (d.includes('kicker-label') || d.includes('small-caps-kicker'))) return s.kicker.trim();
   const n = String(index).padStart(2, '0');
   if (d.includes('code-tag')) return `// ${n}`;
   if (d.includes('terminal-prompt')) return `> ${n}`;
@@ -39,7 +63,7 @@ function kickerText(ctx: Ctx, index: number): string | null {
   return null;
 }
 
-function kickerSpec(ctx: Ctx, text: string): TextSpec {
+export function kickerSpec(ctx: Ctx, text: string): TextSpec {
   const mono = ctx.style.layout.decorations.some((x) => x === 'code-tag' || x === 'terminal-prompt');
   return {
     slot: 'kicker', text, font: mono ? ctx.fonts.accent : ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.small, min: ctx.sizes.small,
@@ -66,14 +90,20 @@ type Marker = 'dot' | 'number' | 'check' | 'dash';
 /** Bullet rows with drawn markers; all rows share one font size, fitted to the region. */
 function rows(ctx: Ctx, items: string[], region: Box, marker: Marker, opts: { separators?: boolean; startAt?: number } = {}): LayoutResult {
   const { pal, k } = ctx;
-  let size = Math.round(ctx.sizes.body * 0.98);
+  const headingItems = ctx.style.layout.listItems === 'heading';
+  const serifNumerals = ctx.style.layout.numerals === 'serif-italic';
+  let size = Math.round(ctx.sizes.body * (headingItems ? 1.05 : 0.98));
   const min = ctx.sizes.minBody;
   const lh = Math.max(1.3, ctx.body.lineHeight - 0.05);
   for (let iter = 0; iter < 30; iter++) {
     const markerW = marker === 'number' ? size * 1.9 : size * 1.25;
     const gap = Math.round(size * (opts.separators ? 0.9 : 0.6));
     const textW = region.w - markerW;
-    const specs = items.map((t): TextSpec => ({ slot: 'bullet', text: t, font: ctx.fonts.body, weight: ctx.body.weight, max: size, min: size, lineHeight: lh, color: pal.text }));
+    // Editorial lists set each item in the headline face (condensed caps) instead of body text.
+    const specs = items.map((t): TextSpec =>
+      headingItems
+        ? { slot: 'bullet', text: t, font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: 1.15, color: pal.text, textCase: ctx.headline.textCase, letterSpacing: 0.01 * size }
+        : { slot: 'bullet', text: t, font: ctx.fonts.body, weight: ctx.body.weight, max: size, min: size, lineHeight: lh, color: pal.text });
     const heights = specs.map((sp) => Math.ceil(measureSpec(sp, size, textW).height));
     const total = heights.reduce((a, b) => a + b, 0) + gap * (items.length - 1);
     if (total <= region.h || size <= min) {
@@ -90,7 +120,12 @@ function rows(ctx: Ctx, items: string[], region: Box, marker: Marker, opts: { se
           els.push(rect('bullet-marker', mx, cy - b / 2, b, b, 'transparent', { stroke: pal.primary, strokeWidth: Math.max(2, 3 * k), cornerRadius: b * 0.22 }));
           els.push(path('bullet-check', SHAPES.check.d, SHAPES.check.viewBox, mx + b * 0.12, cy - b * 0.38, b * 0.76, b * 0.76, { stroke: pal.primary, strokeWidth: Math.max(2, 3.5 * k) }));
         } else {
-          els.push(textEl({ slot: 'bullet-number', text: String((opts.startAt ?? 1) + i).padStart(2, '0'), font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left'));
+          const num = String((opts.startAt ?? 1) + i).padStart(2, '0');
+          els.push(
+            serifNumerals
+              ? textEl({ slot: 'bullet-number', text: num, font: ctx.fonts.body, weight: 400, italic: true, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left')
+              : textEl({ slot: 'bullet-number', text: num, font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left'),
+          );
         }
         els.push(textEl(sp, Math.round(region.x + markerW), Math.round(y), Math.round(textW), heights[i]!, size, 0, 'left'));
         y += heights[i]!;
@@ -112,9 +147,9 @@ const listMarker = (ctx: Ctx, layoutId: string): Marker =>
 // ---------- shared compositions ----------
 
 /** Headline (+kicker) on top, then body and/or rows; whole group positioned by valign. */
-function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
+export function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
   const region = opts.region ?? ctx.box;
-  const kick = kickerText(ctx, index);
+  const kick = kickerText(ctx, index, s);
   const specs: TextSpec[] = [];
   if (kick) specs.push(kickerSpec(ctx, kick));
   if (s.headline) specs.push(headSpec(ctx, s, s.headline, opts.headMax ?? ctx.sizes.head));
@@ -168,7 +203,12 @@ const hookSplit: LayoutFn = (ctx, s) => {
   const splitY = Math.round(H * 0.58);
   const els: SlideElement[] = [rect('split-block', 0, 0, W, splitY, pal.primary)];
   const headRegion = { x: ctx.box.x, y: ctx.box.y, w: ctx.box.w, h: splitY - ctx.box.y - Math.round(48 * ctx.k) };
-  const em = s.emphasis.length ? { ...ctx.emphasis, words: s.emphasis, ...(ctx.emphasis.style === 'color' ? { color: pal.bg } : {}) } : undefined;
+  // The headline sits on the primary block: an emphasis color that vanishes there (e.g. italic in the
+  // primary color) switches to a readable one.
+  const onBlock = (c: string) => (contrast(c, pal.primary) >= 3 ? c : contrast(pal.bg, pal.primary) >= 3 ? pal.bg : ctx.onPrimary);
+  const em = s.emphasis.length
+    ? { ...ctx.emphasis, words: s.emphasis, ...(ctx.emphasis.style === 'color' ? { color: onBlock(pal.bg) } : ctx.emphasis.style === 'highlight' || ctx.emphasis.style === 'box' ? {} : { color: onBlock(ctx.emphasis.color) }) }
+    : undefined;
   const head = fitStack([headSpec(ctx, s, s.headline, ctx.sizes.hook, { color: ctx.onPrimary, emphasis: contrast(ctx.onPrimary, pal.primary) >= 4.5 ? em : undefined })], headRegion, 'bottom', 'left');
   els.push(...head.elements);
   const sub = fitStack([bodySpec(ctx, s.body, 'subline', { max: Math.round(50 * ctx.k), color: pal.text })], { x: ctx.box.x, y: splitY + Math.round(56 * ctx.k), w: ctx.box.w, h: H - margin.bottom - splitY - Math.round(140 * ctx.k) }, 'top', 'left');
@@ -242,14 +282,22 @@ const bodyCard: LayoutFn = (ctx, s, i) => {
   const cardH = Math.min(box.h, cBottom - cTop + 2 * pad + chromeH);
   const cardY = box.y + (box.h - cardH) / 2;
   shift(content.elements, cardY + pad + chromeH - cTop);
-  const radius = brutal ? 0 : Math.round(36 * k);
+  const clay = decos.includes('clay-card');
+  const paper = decos.includes('paper-layers');
+  const radius = brutal ? 0 : clay ? Math.round(64 * k) : paper ? Math.round(10 * k) : Math.round(36 * k);
   const fill = glass ? (ctx.dark ? '#FFFFFF' : '#FFFFFF') : pal.surface;
   const card = rect('card', box.x, cardY, box.w, cardH, fill, {
     cornerRadius: radius,
     opacity: glass ? (ctx.dark ? 0.12 : 0.55) : 1,
     stroke: brutal ? pal.text : glass ? '#FFFFFF' : undefined,
     strokeWidth: brutal ? Math.round(5 * k) : glass ? Math.max(1, 2 * k) : undefined,
-    shadow: brutal ? undefined : { color: '#000000', blur: 40 * k, offsetX: 0, offsetY: 14 * k, opacity: ctx.dark ? 0.35 : 0.1 },
+    shadow: brutal
+      ? undefined
+      : clay
+        ? { color: mix(pal.primary, '#000000', 0.35), blur: 60 * k, offsetX: 0, offsetY: 26 * k, opacity: ctx.dark ? 0.45 : 0.22 }
+        : paper
+          ? { color: '#000000', blur: 18 * k, offsetX: 6 * k, offsetY: 10 * k, opacity: ctx.dark ? 0.4 : 0.18 }
+          : { color: '#000000', blur: 40 * k, offsetX: 0, offsetY: 14 * k, opacity: ctx.dark ? 0.35 : 0.1 },
   });
   const els: SlideElement[] = [];
   if (brutal) els.push(rect('card-shadow', box.x + 16 * k, cardY + 16 * k, box.w, cardH, pal.text));
@@ -266,7 +314,7 @@ const bodyTwoColumn: LayoutFn = (ctx, s, i) => {
   const { box, k } = ctx;
   const gap = Math.round(64 * k);
   const leftW = Math.round((box.w - gap) * 0.45);
-  const kick = kickerText(ctx, i);
+  const kick = kickerText(ctx, i, s);
   const left = fitStack([...(kick ? [kickerSpec(ctx, kick)] : []), headSpec(ctx, s, s.headline, ctx.sizes.head)], { x: box.x, y: box.y, w: leftW, h: box.h }, 'middle', 'left');
   const rightRegion = { x: box.x + leftW + gap, y: box.y, w: box.w - leftW - gap, h: box.h };
   const right = s.bullets.length ? rows(ctx, s.bullets, rightRegion, 'dot') : fitStack([bodySpec(ctx, s.body)], rightRegion, 'middle', 'left');
@@ -290,7 +338,7 @@ const bodyIconTop: LayoutFn = (ctx, s, i) => {
 const listLayout = (id: string): LayoutFn => (ctx, s, i) => {
   const items = s.bullets.length ? s.bullets : s.body ? [s.body] : [];
   const sep = id === 'list-numbered-rows';
-  const kick = kickerText(ctx, i);
+  const kick = kickerText(ctx, i, s);
   const head = fitStack([...(kick ? [kickerSpec(ctx, kick)] : []), headSpec(ctx, s, s.headline, ctx.sizes.head)], { ...ctx.box, h: Math.round(ctx.box.h * 0.38) }, 'top', ctx.align === 'center' ? 'center' : 'left');
   const top = head.elements.length ? bottomOf(head.elements) + Math.round(56 * ctx.k) : ctx.box.y;
   const r = rows(ctx, items, { x: ctx.box.x, y: top, w: ctx.box.w, h: ctx.box.y + ctx.box.h - top }, listMarker(ctx, id), { separators: sep });
@@ -524,18 +572,20 @@ export const LAYOUTS: Record<string, LayoutFn> = {
   'cta-centered': ctaCentered,
   'cta-profile': ctaProfile,
   'cta-recap': ctaRecap,
+  ...DIAGRAM_LAYOUTS,
+  ...ILLUSTRATED_LAYOUTS,
 };
 
 /** Layouts that make sense for a role — used by "new layout" and anti-repetition. */
 export const ROLE_LAYOUTS: Record<SlidePlan['role'], string[]> = {
   hook: ['hook-giant-type', 'hook-centered', 'hook-split', 'hook-number'],
-  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column'],
-  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card'],
-  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top'],
+  intro: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-journey'],
+  body: ['body-top-left', 'body-card', 'body-centered', 'body-icon-top', 'body-two-column', 'diagram-venn', 'diagram-tree'],
+  list: ['list-bullets', 'list-numbered-rows', 'list-checklist', 'body-card', 'diagram-flow', 'diagram-cycle', 'diagram-tree', 'diagram-pyramid', 'diagram-stairs'],
+  step: ['step-big-number', 'step-timeline', 'body-card', 'body-icon-top', 'diagram-flow', 'diagram-stairs', 'diagram-journey'],
   stat: ['stat-hero', 'stat-chart', 'body-card'],
   quote: ['quote-big-marks', 'quote-card', 'body-centered'],
-  comparison: ['compare-split', 'body-card', 'list-bullets'],
-  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card'],
+  comparison: ['compare-split', 'body-card', 'list-bullets', 'diagram-versus'],
+  summary: ['list-numbered-rows', 'list-checklist', 'list-bullets', 'body-card', 'diagram-cycle', 'diagram-pyramid', 'diagram-venn'],
   cta: ['cta-centered', 'cta-profile', 'cta-recap'],
 };

@@ -19,8 +19,10 @@ test('animate all slides, preview, tweak one element and export an animated clip
   await page.getByRole('button', { name: 'Open in editor →' }).click();
   await page.waitForFunction(() => Boolean((window as unknown as Partial<Cf>).__cf));
 
-  // Nothing selected → slide panel shows the Animation section (collapsed until a slide is animated).
-  await page.getByRole('button', { name: /^Animation/ }).click();
+  // Nothing selected → slide panel shows the Animation section (open: every style animates by default).
+  const section = page.getByRole('button', { name: /^Animation/ });
+  await expect(section).toBeVisible();
+  if ((await section.getAttribute('aria-expanded')) !== 'true') await section.click();
   await page.getByLabel('Animation style').selectOption('kinetic');
   await page.getByRole('button', { name: 'Animate all slides' }).click();
   const headlineAnim = () => page.evaluate(() => (window as unknown as Cf).__cf.doc.getState().carousel.slides[0]!.elements.find((e) => e.slot === 'headline')?.anim?.text);

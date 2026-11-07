@@ -6,6 +6,8 @@ import { getPreset } from '@/styles';
 import { providers } from './runtime';
 import { useDocument, useProjects, useSettings } from './store';
 
+const PROVIDER_NAMES: Record<string, string> = { claude: 'Claude', ollama: 'Ollama', openai: 'your free / local model' };
+
 /** Caption + hashtags + alt text for the open project (AI when available, offline rules otherwise). */
 export function CaptionPanel({ compact }: { compact?: boolean }) {
   const { settings } = useSettings();
@@ -35,7 +37,9 @@ export function CaptionPanel({ compact }: { compact?: boolean }) {
       const r = await generateCaption(plan, { platform, tone: (current.settings?.tone ?? 'professional') as Tone, length, emoji, cta, language: current.settings?.language ?? 'auto' }, settings.provider, providers);
       setPlan({ caption: r.caption, hashtags: r.hashtags });
       await save({ ...useProjects.getState().current!, plan: { ...useDocument.getState().plan!, caption: r.caption, hashtags: r.hashtags }, altText: r.altText, captionPlatform: platform });
-      setNotice(r.notice ?? (r.provider === 'rules' ? 'Written offline from your slides. Connect Claude or Ollama for more natural copy.' : `Written by ${r.provider === 'claude' ? 'Claude' : 'Ollama'}.`));
+      setNotice(r.notice ?? (r.provider === 'rules' ? 'Written offline from your slides. Connect an AI model in Settings for more natural copy.' : `Written by ${PROVIDER_NAMES[r.provider] ?? r.provider}.`));
+    } catch (e) {
+      setNotice(`Couldn't write the caption: ${(e as Error).message}`);
     } finally {
       setBusy(false);
     }

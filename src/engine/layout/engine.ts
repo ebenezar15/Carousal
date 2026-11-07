@@ -5,9 +5,24 @@ import { label } from './primitives';
 import type { CarouselPlan, SlidePlan } from '../schema';
 import { buildBackground } from './backgrounds';
 import { chrome } from './chrome';
-import { makeCtx, type Ctx } from './context';
+import { alternates, invertPalette, makeCtx, type Ctx } from './context';
 import { decorate } from './decorations';
 import { LAYOUTS, ROLE_LAYOUTS, type LayoutResult } from './layouts';
+import { diagramFor } from './diagrams';
+import { illustratedFor } from './illustrated';
+import { getStyle } from '@/styles';
+import { autoAnimate, ANIMATION_PRESETS, type AnimationPreset } from '@/editor/animation';
+
+/** The motion preset a theme resolves to ('custom' and unknown ids → null = leave animations alone). */
+export function themeMotion(theme: CarouselTheme): AnimationPreset | null {
+  const id = theme.motion ?? getStyle(theme.styleId).motion ?? 'subtle';
+  return ANIMATION_PRESETS.some(([p]) => p === id) ? (id as AnimationPreset) : null;
+}
+
+const animateSlide = (slide: Slide, theme: CarouselTheme): Slide => {
+  const m = themeMotion(theme);
+  return m ? autoAnimate(slide, m) : slide;
+};
 
 export interface BuildInput {
   plan: CarouselPlan;
@@ -22,6 +37,13 @@ export function chooseLayouts(ctx: Ctx, overrides: Record<number, string> = {}):
     const override = overrides[i];
     if (override && LAYOUTS[override]) {
       chosen.push(override);
+      return;
+    }
+    // Content that is a diagram (a cycle, a process, overlapping ideas…) or a story moment gets a
+    // diagram or illustrated layout; everything else uses the style's own layout for the role.
+    const special = diagramFor(s, ctx) ?? illustratedFor(s, ctx, i);
+    if (special && LAYOUTS[special]) {
+      chosen.push(special);
       return;
     }
     let id = ctx.style.roleLayouts[s.role] ?? 'body-top-left';
@@ -82,22 +104,34 @@ export function buildSlide(ctx: Ctx, s: SlidePlan, index: number, requested: str
   };
 }
 
+/**
+ * Layout contexts for a carousel: one per palette. Alternating styles (light/dark rhythm) put every
+ * other slide on the inverted palette; layout choice always uses the first context.
+ */
+export function contexts(input: BuildInput): { main: Ctx; at(index: number): Ctx } {
+  const wm = { watermark: input.theme.watermark };
+  const main = Object.assign(makeCtx(input.plan, input.presetId, input.theme), wm);
+  if (!alternates(input.theme)) return { main, at: () => main };
+  const inv = Object.assign(makeCtx(input.plan, input.presetId, { ...input.theme, customPalette: invertPalette(main.pal) }), wm, { inverted: true });
+  return { main, at: (i) => (i % 2 === 1 ? inv : main) };
+}
+
 export function buildCarousel(input: BuildInput): Carousel {
-  const ctx = Object.assign(makeCtx(input.plan, input.presetId, input.theme), { watermark: input.theme.watermark });
-  const layouts = chooseLayouts(ctx, input.theme.layoutOverrides);
+  const c = contexts(input);
+  const layouts = chooseLayouts(c.main, input.theme.layoutOverrides);
   return {
     id: newId('car_'),
     presetId: input.presetId,
     theme: input.theme,
-    slides: input.plan.slides.map((s, i) => buildSlide(ctx, s, i, layouts[i]!)),
+    slides: input.plan.slides.map((s, i) => animateSlide(buildSlide(c.at(i), s, i, layouts[i]!), input.theme)),
   };
 }
 
 /** Rebuilds a single slide (e.g. after "new layout" or rewriting its copy) with the carousel's design. */
 export function rebuildSlide(plan: CarouselPlan, presetId: string, theme: CarouselTheme, index: number): Slide {
-  const ctx = Object.assign(makeCtx(plan, presetId, theme), { watermark: theme.watermark });
-  const layouts = chooseLayouts(ctx, theme.layoutOverrides);
-  return buildSlide(ctx, plan.slides[index]!, index, layouts[index]!);
+  const c = contexts({ plan, presetId, theme });
+  const layouts = chooseLayouts(c.main, theme.layoutOverrides);
+  return animateSlide(buildSlide(c.at(index), plan.slides[index]!, index, layouts[index]!), theme);
 }
 
 /** Brand watermark (logo and/or handle) in a corner of every slide. */

@@ -1,5 +1,6 @@
 // Plays the current slide's (or the whole carousel's) animation timeline in a dialog, frame by frame,
 // with the same renderer the exports use.
+import { useEscape } from '@/app/useEscape';
 import { useEffect, useRef, useState } from 'react';
 import { useDocument } from '@/app/store';
 import { getPreset } from '@/styles';
@@ -10,6 +11,7 @@ import { useEditor } from './store';
 const HOLD = 1.5;
 
 export function AnimationPreview({ onClose }: { onClose(): void }) {
+  useEscape(onClose);
   const carousel = useDocument((s) => s.carousel)!;
   const startIndex = useEditor((s) => s.slideIndex);
   const preset = getPreset(carousel.presetId);

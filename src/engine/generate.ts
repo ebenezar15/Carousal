@@ -1,6 +1,7 @@
 // Single entry point for turning content into a CarouselPlan. Picks a provider, validates the JSON
 // with Zod, asks the model to repair invalid output, and always falls back to the rules splitter,
 // so generation never hard-fails.
+import { shapeForType } from './carouselTypes';
 import { z } from 'zod';
 import { CarouselPlanSchema, type CarouselPlan } from './schema';
 import { buildSystemPrompt, buildUserMessage } from './prompt';
@@ -96,12 +97,16 @@ export async function completeJson<T>(
   validate: (text: string) => { ok: true; value: T } | { ok: false; error: string } = (t) => parseWith(schema, t),
   signal?: AbortSignal,
   tier: 'quality' | 'fast' = 'quality',
+  maxTokens?: number,
 ): Promise<{ value: T; attempts: number }> {
   const jsonSchema = jsonSchemaOf(schema);
   const messages: ChatMessage[] = [first];
   let lastError = '';
-  for (let attempt = 1; attempt <= MAX_REPAIRS + 1; attempt++) {
-    const text = await provider.complete({ system, messages, jsonSchema, signal, tier });
+  // Claude's structured outputs already guarantee the schema, so one repair (for content rules) is enough.
+  const repairs = provider.id === 'claude' ? 1 : MAX_REPAIRS;
+  for (let attempt = 1; attempt <= repairs + 1; attempt++) {
+    if (signal?.aborted) throw new DOMException('Cancelled', 'AbortError');
+    const text = await provider.complete({ system, messages, jsonSchema, signal, tier, maxTokens });
     const parsed = validate(text);
     if (parsed.ok) return { value: parsed.value, attempts: attempt };
     lastError = parsed.error;
@@ -113,7 +118,7 @@ export async function completeJson<T>(
       },
     );
   }
-  throw new Error(`Output still invalid after ${MAX_REPAIRS} repair attempts: ${lastError}`);
+  throw new Error(`Output still invalid after ${repairs} repair attempt${repairs > 1 ? 's' : ''}: ${lastError}`);
 }
 
 /** Runs one provider for a whole plan. Throws if the provider fails or never yields valid JSON. */
@@ -146,24 +151,30 @@ export async function generatePlan(
   providers: AIProvider[],
   signal?: AbortSignal,
 ): Promise<GenerateResult> {
-  const rules = (notice?: string): GenerateResult => ({ plan: planFromText(content, opts), provider: 'rules', notice, attempts: 1 });
+  const rules = (notice?: string): GenerateResult => ({ plan: shapeForType(planFromText(content, opts), opts.carouselType), provider: 'rules', notice, attempts: 1 });
   if (preference === 'rules') return rules();
 
   const candidates = preference === 'auto' ? providers : providers.filter((p) => p.id === preference);
   const notes: string[] = [];
+  let failed = false;
   for (const p of candidates) {
+    if (signal?.aborted) throw new DOMException('Generation cancelled', 'AbortError');
     if (!(await p.isAvailable())) {
       notes.push(`${p.label} unavailable`);
       continue;
     }
     try {
       const { plan, attempts } = await runProvider(p, content, opts, signal);
-      return { plan, provider: p.id, attempts, notice: notes.length ? notes.join('; ') : undefined };
+      // In Auto mode, skipping providers that aren't set up is normal: no warning for that.
+      return { plan: shapeForType(plan, opts.carouselType), provider: p.id, attempts, notice: notes.length && preference !== 'auto' ? notes.join('; ') : undefined };
     } catch (e) {
       if (signal?.aborted) throw e;
+      failed = true;
       notes.push(`${p.label} failed: ${(e as Error).message}`);
     }
   }
+  // Auto with nothing set up: the built-in rules are the expected path (no warning).
+  if (preference === 'auto' && !failed) return rules();
   const reason = notes.length ? notes.join('; ') : 'No AI provider configured';
   return rules(`${reason}. Used the built-in rules instead.`);
 }

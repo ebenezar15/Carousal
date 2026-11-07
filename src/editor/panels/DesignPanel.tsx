@@ -15,6 +15,10 @@ import { FontPicker } from './TextProps';
 import { ColorField, IconButton, Row, Section, Select, Slider, Toggle } from './fields';
 import { PATTERN_OPTIONS, TEXTURE_OPTIONS } from './bgOptions';
 import { CONTINUOUS_OPTIONS } from '@/app/generate/CarouselView';
+import { ANIMATION_PRESETS } from '../animation';
+import { applyBriefExtras, themeFromBrief } from '@/engine/designPrompt';
+import { readLookPrompt } from '@/app/lookPrompt';
+import { DesignPromptField } from '@/app/generate/InputPanel';
 import type { DesignModifiers } from '@/model/types';
 
 const themeFonts = (t: CarouselTheme) => [t.headingFont, t.bodyFont, ...(getStyle(t.styleId).fonts.accent ? [getStyle(t.styleId).fonts.accent!] : [])];
@@ -75,11 +79,38 @@ export function DesignPanel() {
           Theme changes re-lay out generated slides with your current text. Elements you added are kept{manualCount ? `; ${manualCount} hand-made slide${manualCount > 1 ? 's are' : ' is'} left as is` : ''}.
         </p>
       </Section>
+      {canRebuild && <LookSection theme={theme} />}
       {canRebuild && <BackgroundSection theme={theme} />}
       <PlatformSection />
       <BrandSection />
       <FindReplaceSection />
     </div>
+  );
+}
+
+/** "Describe the look": restyle every slide from a prompt (works offline; AI only for unknown words). */
+function LookSection({ theme }: { theme: CarouselTheme }) {
+  const [prompt, setPrompt] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState('');
+  const apply = async () => {
+    setBusy(true);
+    try {
+      const look = await readLookPrompt(prompt);
+      if (!look) return;
+      const next = look.brief.styleId ? themeFromBrief(look.brief, look.brief.styleId, theme.handle) : applyBriefExtras(theme, look.brief);
+      await retheme({ ...next, watermark: theme.watermark, brandKitId: theme.brandKitId });
+      setNote(look.understood.length ? `Applied: ${look.understood.join(', ')}` : 'No design words recognised — try style, color, texture or motion words.');
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Section title="Describe the look" defaultOpen={false}>
+      <DesignPromptField id="editor-design-prompt" value={prompt} onChange={setPrompt} />
+      <IconButton label="Apply look" onClick={() => void apply()}>{busy ? 'Applying…' : 'Apply to all slides'}</IconButton>
+      {note && <p className="text-[11px] text-zinc-500" role="status">{note}</p>}
+    </Section>
   );
 }
 
@@ -110,6 +141,42 @@ function BackgroundSection({ theme }: { theme: CarouselTheme }) {
         options={[['style', 'Style default'], ...CONTINUOUS_OPTIONS]}
         onChange={(v) => set(v === 'style' ? { panoramic: undefined, continuous: undefined } : v === 'off' ? { panoramic: false, continuous: undefined } : { panoramic: true, continuous: v as DesignModifiers['continuous'] })}
       />
+      <Select
+        label="Motion"
+        value={theme.motion ?? 'style'}
+        options={[['style', `Style default (${ANIMATION_PRESETS.find(([p]) => p === getStyle(theme.styleId).motion)?.[1].split(' (')[0] ?? 'Subtle'})`], ...(theme.motion === 'custom' ? [['custom', 'My own (per element)'] as [string, string]] : []), ...ANIMATION_PRESETS]}
+        onChange={(v) => v !== 'custom' && void retheme({ ...theme, motion: v === 'style' ? undefined : v })}
+      />
+      <Select
+        label="Illustrations"
+        value={m.illustrations ?? 'style'}
+        options={[['style', 'Style default'], ['none', 'None'], ['some', 'Some slides'], ['rich', 'Most slides'], ['story', 'Every slide (story panels)']]}
+        onChange={(v) => set({ illustrations: v === 'style' ? undefined : (v as DesignModifiers['illustrations']) })}
+      />
+      <Row>
+        <Select
+          label="Illustration look"
+          value={m.art ?? 'style'}
+          options={[['style', 'Style default'], ['color', 'Full colour'], ['engraving', 'Engraving'], ['duotone', 'Duotone'], ['line', 'Line drawing'], ['silhouette', 'Silhouette']]}
+          onChange={(v) => set({ art: v === 'style' ? undefined : (v as DesignModifiers['art']) })}
+        />
+        <Select
+          label="Light / dark"
+          value={m.rhythm ?? 'style'}
+          options={[['style', 'Style default'], ['alternate', 'Alternate slides'], ['none', 'Same on all']]}
+          onChange={(v) => set({ rhythm: v === 'style' ? undefined : (v as DesignModifiers['rhythm']) })}
+        />
+      </Row>
+      <Select
+        label="Page header & footer"
+        value={m.numbering ?? 'style'}
+        options={[['style', 'Style default'], ['editorial', 'Editorial (handle, page, series)'], ['fraction', 'Page 01 / 10'], ['dots', 'Dots'], ['none', 'None']]}
+        onChange={(v) => set({ numbering: v === 'style' ? undefined : v })}
+      />
+      <label className="block text-[11px] text-zinc-500">
+        Series label (footer)
+        <input aria-label="Series label" className="field mt-0.5 py-1 text-xs" placeholder="e.g. Theology / Early Church" defaultValue={theme.series ?? ''} onBlur={(e) => e.target.value !== (theme.series ?? '') && void retheme({ ...theme, series: e.target.value.trim() || undefined })} />
+      </label>
       <Select label="Decorations" value={m.decoration ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ['minimal', 'Minimal'], ['normal', 'Normal'], ['rich', 'Rich']]} onChange={(v) => set({ decoration: v === 'style' ? undefined : (v as DesignModifiers['decoration']) })} />
     </Section>
   );

@@ -8,6 +8,7 @@ const Loading = () => <div className="p-10 text-center text-sm text-zinc-500">Lo
 import { endGesture, useDocument, useProjects, useRoute, useSettings } from './store';
 import { ensureSlideFonts, useSlideFonts } from '@/editor/render/fonts';
 import { setScriptFontOverrides } from '@/styles/scriptFonts';
+import { startAutosave } from './autosave';
 
 export function App() {
   const { route, go: setRoute } = useRoute();
@@ -24,6 +25,8 @@ export function App() {
     const slides = useDocument.getState().carousel?.slides ?? useProjects.getState().current?.carousel.slides;
     if (slides) void ensureSlideFonts(slides);
   }, [settings.scriptFonts]);
+
+  useEffect(() => startAutosave(), []);
 
   useEffect(() => {
     void load();

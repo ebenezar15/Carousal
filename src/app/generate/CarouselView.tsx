@@ -4,6 +4,7 @@ import type { MoreDirection } from '@/engine';
 import { getPreset } from '@/styles';
 import { LazyThumb } from '@/editor/SlideStrip';
 import { renderSlide } from '@/export/render';
+import { ANIMATION_PRESETS } from '@/editor/animation';
 
 export interface SlideActions {
   newLayout(i: number): void;
@@ -20,6 +21,9 @@ interface Props {
   aiAvailable: boolean;
   onMore(dir: MoreDirection): void;
   onContinuous(style: 'off' | ContinuousStyle): void;
+  onMotion(motion: string | undefined): void;
+  onIllustrations(v: 'none' | 'some' | 'rich' | 'story' | undefined): void;
+  onRestyle(prompt: string): void;
   onRegenerateCopy(): void;
   actions: SlideActions;
 }
@@ -39,7 +43,8 @@ const MORE: { dir: MoreDirection; label: string }[] = [
 
 export const slug = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '').slice(0, 40) || 'carousel';
 
-export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onContinuous, onRegenerateCopy, actions }: Props) {
+export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onContinuous, onMotion, onIllustrations, onRestyle, onRegenerateCopy, actions }: Props) {
+  const [restyle, setRestyle] = useState('');
   const preset = getPreset(carousel.presetId);
   const displayWidth = preset.width > preset.height ? 380 : 290;
   const [options, setOptions] = useState<{ index: number; items: string[] | 'loading' | string } | null>(null);
@@ -78,10 +83,39 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onCont
             {CONTINUOUS_OPTIONS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         </label>
+        <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+          Motion
+          <select aria-label="Motion" className="rounded border border-zinc-300 bg-white px-1 py-0.5 text-xs dark:border-zinc-700 dark:bg-zinc-900" value={carousel.theme.motion ?? 'style'} onChange={(e) => onMotion(e.target.value === 'style' ? undefined : e.target.value)} disabled={busy}>
+            <option value="style">Style default</option>
+            {carousel.theme.motion === 'custom' && <option value="custom">My own</option>}
+            {ANIMATION_PRESETS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        </label>
+        <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+          Illustrations
+          <select aria-label="Illustrations" className="rounded border border-zinc-300 bg-white px-1 py-0.5 text-xs dark:border-zinc-700 dark:bg-zinc-900" value={carousel.theme.modifiers?.illustrations ?? 'style'} onChange={(e) => onIllustrations(e.target.value === 'style' ? undefined : (e.target.value as 'none'))} disabled={busy}>
+            <option value="style">Style default</option>
+            <option value="none">None</option>
+            <option value="some">Some slides</option>
+            <option value="rich">Most slides</option>
+            <option value="story">Every slide (story)</option>
+          </select>
+        </label>
         <button className="btn-ghost ml-auto px-2.5 py-1 text-xs" onClick={onRegenerateCopy} disabled={busy} title="Generate the copy again with the same settings and design">
           ↻ Regenerate copy
         </button>
       </div>
+
+      <form
+        className="flex flex-wrap items-center gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (restyle.trim()) onRestyle(restyle.trim());
+        }}
+      >
+        <input aria-label="Restyle with a prompt" className="field min-w-0 flex-1 py-1 text-xs" placeholder="Restyle: e.g. “graffiti, dark wall, neon pink” or “make it clay with a ribbon across slides”" value={restyle} onChange={(e) => setRestyle(e.target.value)} />
+        <button className="btn-ghost border border-zinc-300 px-2.5 py-1 text-xs dark:border-zinc-700" disabled={busy || !restyle.trim()}>Apply look</button>
+      </form>
 
       <div className="flex gap-4 overflow-x-auto pb-4" data-testid="slide-strip">
         {carousel.slides.map((slide, i) => (
@@ -100,8 +134,8 @@ export function CarouselView({ carousel, name, busy, aiAvailable, onMore, onCont
               <div className="flex flex-wrap gap-1">
                 <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 dark:border-zinc-700" onClick={() => actions.newLayout(i)} disabled={busy} aria-label={`New layout for slide ${i + 1}`}>↻ Layout</button>
                 <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 dark:border-zinc-700" onClick={() => actions.newEmphasis(i)} disabled={busy} aria-label={`New emphasis for slide ${i + 1}`}>Emphasis</button>
-                <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 disabled:opacity-40 dark:border-zinc-700" onClick={() => actions.rewriteSlide(i)} disabled={busy || !aiAvailable} title={aiAvailable ? 'Rewrite this slide with AI' : 'Needs Claude or Ollama'} aria-label={`Rewrite slide ${i + 1}`}>✎ Rewrite</button>
-                <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 disabled:opacity-40 dark:border-zinc-700" onClick={() => void loadHeadlines(i)} disabled={busy || !aiAvailable} title={aiAvailable ? 'Alternative headlines' : 'Needs Claude or Ollama'} aria-label={`Alternative headlines for slide ${i + 1}`}>Headline</button>
+                <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 disabled:opacity-40 dark:border-zinc-700" onClick={() => actions.rewriteSlide(i)} disabled={busy || !aiAvailable} title={aiAvailable ? 'Rewrite this slide with AI' : 'Needs an AI model (set one up in Settings)'} aria-label={`Rewrite slide ${i + 1}`}>✎ Rewrite</button>
+                <button className="rounded border border-zinc-300 px-1.5 py-0.5 hover:border-brand-500 hover:text-brand-600 disabled:opacity-40 dark:border-zinc-700" onClick={() => void loadHeadlines(i)} disabled={busy || !aiAvailable || options?.items === 'loading'} title={aiAvailable ? 'Alternative headlines' : 'Needs an AI model (set one up in Settings)'} aria-label={`Alternative headlines for slide ${i + 1}`}>Headline</button>
               </div>
               {options?.index === i && (
                 <div className="card space-y-1 p-2" role="listbox" aria-label="Headline options">

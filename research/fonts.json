@@ -46,6 +46,11 @@
       "id": "tamil",
       "label": "Tamil (modern script)",
       "description": "Contemporary Tamil typefaces in the reformed (modern) script, with matching Latin letters. Usable for any text; also the fallbacks for Tamil in every design."
+    },
+    {
+      "id": "expressive",
+      "label": "Expressive display",
+      "description": "Graffiti, poster, surreal and maximalist display faces with strong personality. Headlines only."
     }
   ],
   "fonts": [
@@ -2030,6 +2035,201 @@
       "variable": false,
       "usage": "heading",
       "notes": "Handwritten Tamil; the default in hand-drawn designs."
+    },
+    {
+      "id": "sedgwick-ave-display",
+      "family": "Sedgwick Ave Display",
+      "fontsource": "sedgwick-ave-display",
+      "category": "handwriting",
+      "group": "expressive",
+      "moods": [
+        "graffiti",
+        "street",
+        "bold"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Hand-styled graffiti marker lettering; big headlines only."
+    },
+    {
+      "id": "rubik-wet-paint",
+      "family": "Rubik Wet Paint",
+      "fontsource": "rubik-wet-paint",
+      "category": "display",
+      "group": "expressive",
+      "moods": [
+        "graffiti",
+        "grunge",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Rubik with dripping paint; one or two words at large size."
+    },
+    {
+      "id": "instrument-serif",
+      "family": "Instrument Serif",
+      "fontsource": "instrument-serif",
+      "category": "serif",
+      "group": "expressive",
+      "moods": [
+        "surreal",
+        "editorial",
+        "luxury"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [
+        400
+      ],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Condensed contemporary serif with a dreamy italic; surreal and editorial covers."
+    },
+    {
+      "id": "bricolage-grotesque",
+      "family": "Bricolage Grotesque",
+      "fontsource": "bricolage-grotesque",
+      "category": "sans-serif",
+      "group": "expressive",
+      "moods": [
+        "maximal",
+        "bold",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400,
+        600,
+        800
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": true,
+      "usage": "both",
+      "notes": "Quirky grotesque with ink traps; maximalist headlines and readable body."
+    },
+    {
+      "id": "dela-gothic-one",
+      "family": "Dela Gothic One",
+      "fontsource": "dela-gothic-one",
+      "category": "display",
+      "group": "expressive",
+      "moods": [
+        "maximal",
+        "poster",
+        "bold"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Ultra-heavy poster gothic; stacked maximalist titles."
+    },
+    {
+      "id": "shrikhand",
+      "family": "Shrikhand",
+      "fontsource": "shrikhand",
+      "category": "display",
+      "group": "expressive",
+      "moods": [
+        "maximal",
+        "retro",
+        "playful"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Bold retro italic display; stickers and loud covers."
+    },
+    {
+      "id": "young-serif",
+      "family": "Young Serif",
+      "fontsource": "young-serif",
+      "category": "serif",
+      "group": "expressive",
+      "moods": [
+        "paper",
+        "warm",
+        "editorial"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin",
+        "latin-ext"
+      ],
+      "variable": false,
+      "usage": "heading",
+      "notes": "Soft, heavy old-style serif; paper-craft and cosy editorial titles."
+    },
+    {
+      "id": "gochi-hand",
+      "family": "Gochi Hand",
+      "fontsource": "gochi-hand",
+      "category": "handwriting",
+      "group": "handwritten",
+      "moods": [
+        "handwritten",
+        "journal",
+        "casual"
+      ],
+      "license": "OFL-1.1",
+      "weights": [
+        400
+      ],
+      "italics": [],
+      "subsets": [
+        "latin"
+      ],
+      "variable": false,
+      "usage": "both",
+      "notes": "Neat felt-tip handwriting that stays readable at body sizes."
     }
   ],
   "pairings": [

@@ -10,7 +10,8 @@ import { ARTICLE } from './fixtures';
 beforeAll(() => loadIcons());
 
 const plan = planFromText(ARTICLE, defaultOptions);
-const carousel = () => buildCarousel({ plan, presetId: 'instagram-portrait-4x5', theme: themeFor('bold-gradient') });
+// Static by default here (motion 'none'); the motion tests below opt in.
+const carousel = () => buildCarousel({ plan, presetId: 'instagram-portrait-4x5', theme: { ...themeFor('bold-gradient'), motion: 'none' } });
 
 describe('animation poses', () => {
   it('fades and slides in over the duration after the delay', () => {
@@ -55,11 +56,29 @@ describe('slide timeline', () => {
     const still = carousel().slides[0]!;
     expect(frameOf(still, 0.3)).toBe(still);
   });
-  it('keeps animations when the theme changes', () => {
+  it('keeps hand-tuned (custom) animations when the theme changes', () => {
     const c = carousel();
     const animated = { ...c, slides: c.slides.map((s) => autoAnimate(s, 'lively')) };
-    const doc = applyTheme({ carousel: animated, plan }, themeFor('minimal-swiss'));
+    const doc = applyTheme({ carousel: animated, plan }, { ...themeFor('minimal-swiss'), motion: 'custom' });
     const headline = doc.carousel.slides[0]!.elements.find((e) => e.slot === 'headline')!;
     expect(headline.anim?.text).toBe('word-rise');
+  });
+  it("animates with the style's own motion unless told otherwise", () => {
+    const headline = (theme: ReturnType<typeof themeFor>) => buildCarousel({ plan, presetId: 'instagram-portrait-4x5', theme }).slides[0]!.elements.find((e) => e.slot === 'headline')!;
+    expect(headline(themeFor('handwritten-journal')).anim?.text).toBe('typewriter');
+    expect(headline(themeFor('clay-3d')).anim?.enter).toBe('squash');
+    expect(headline({ ...themeFor('clay-3d'), motion: 'kinetic' }).anim?.text).toBe('word-pop');
+    expect(headline({ ...themeFor('clay-3d'), motion: 'none' }).anim).toBeUndefined();
+    // Switching theme switches motion.
+    const doc = applyTheme({ carousel: buildCarousel({ plan, presetId: 'instagram-portrait-4x5', theme: themeFor('clay-3d') }), plan }, themeFor('graffiti-street'));
+    expect(doc.carousel.slides[0]!.elements.find((e) => e.slot === 'headline')!.anim?.enter).toBe('zoom-out');
+  });
+  it('new style motions settle to the resting pose', () => {
+    for (const enter of ['zoom-out', 'unfold', 'squash'] as const) {
+      expect(poseAt({ enter, delay: 0, duration: 1 }, 1.5, 1)).toMatchObject({ opacity: 1, scale: 1 });
+      const p = poseAt({ enter, delay: 0, duration: 1 }, 1.5, 1);
+      expect((p.sx ?? 1) * 1).toBeCloseTo(1);
+      expect((p.sy ?? 1) * 1).toBeCloseTo(1);
+    }
   });
 });

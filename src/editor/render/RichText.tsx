@@ -15,11 +15,22 @@ function wordProgress(i: number, n: number, p: number): number {
   return Math.max(0, Math.min(1, (p - start) / span));
 }
 
-function wordTransform(kind: TextAnimation, e: number, lp: number, size: number) {
+function dropBounce(t: number) {
+  const n = 7.5625;
+  const d = 2.75;
+  if (t < 1 / d) return n * t * t;
+  if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75;
+  if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;
+  return n * (t -= 2.625 / d) * t + 0.984375;
+}
+
+function wordTransform(kind: TextAnimation, e: number, lp: number, size: number): { dx: number; dy: number; scale: number; opacity: number; rotate?: number } {
   switch (kind) {
     case 'word-rise': return { dx: 0, dy: (1 - e) * size * 0.5, scale: 1, opacity: Math.min(1, lp * 2) };
     case 'word-pop': return { dx: 0, dy: 0, scale: 0.4 + 0.6 * (1 + 2.70158 * (lp - 1) ** 3 + 1.70158 * (lp - 1) ** 2), opacity: Math.min(1, lp * 3) };
     case 'word-slide': return { dx: (1 - e) * size * 0.8, dy: 0, scale: 1, opacity: Math.min(1, lp * 2) };
+    case 'word-drop': return { dx: 0, dy: -(1 - dropBounce(lp)) * size * 1.2, scale: 1, opacity: Math.min(1, lp * 4) };
+    case 'word-spin': return { dx: 0, dy: 0, scale: 0.6 + 0.4 * e, opacity: Math.min(1, lp * 2), rotate: (1 - e) * -90 };
     default: return { dx: 0, dy: 0, scale: 1, opacity: e };
   }
 }
@@ -133,6 +144,7 @@ export function RichText({ el }: { el: TextElement }) {
                         scaleX={t.scale}
                         scaleY={t.scale}
                         opacity={t.opacity}
+                        rotation={t.rotate ?? 0}
                         letterSpacing={trackingFor(m[0], el.letterSpacing)}
                       />
                     );

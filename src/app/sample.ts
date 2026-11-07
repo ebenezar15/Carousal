@@ -26,6 +26,36 @@ Pick one meeting this week and replace it with a written update. Review what you
 export const SAMPLES: { id: string; label: string; emoji: string; preset: string; tone: 'professional' | 'playful' | 'bold' | 'educational'; text: string }[] = [
   { id: 'remote', label: 'Remote team habits', emoji: '🏠', preset: 'instagram-portrait-4x5', tone: 'professional', text: SAMPLE_CONTENT },
   {
+    id: 'psalm23',
+    label: 'Psalm 23 devotional',
+    emoji: '🐑',
+    preset: 'instagram-portrait-4x5',
+    tone: 'educational',
+    // Scripture quoted from the King James Version (public domain).
+    text: `# The Lord is my shepherd
+
+When life feels loud and uncertain, Psalm 23 reminds us who is leading us.
+
+> "The LORD is my shepherd; I shall not want." — Psalm 23:1
+
+## He gives rest
+He makes us lie down in green pastures and leads us beside still waters. Rest is not laziness; it is trust.
+
+## He walks with us in the dark
+Even in the darkest valley we are not alone. His presence is our comfort, not the absence of trouble.
+
+## The daily rhythm of the sheep
+- Listen to his voice
+- Follow where he leads
+- Rest when he says rest
+- Trust him in the valley
+
+> "Surely goodness and mercy shall follow me all the days of my life." — Psalm 23:6
+
+## Prayer
+Lord, be my shepherd today. Quiet my worries, lead me to rest, and walk with me through every valley. Amen.`,
+  },
+  {
     id: 'pricing',
     label: 'Pricing lessons (LinkedIn PDF)',
     emoji: '💡',

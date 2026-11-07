@@ -95,7 +95,7 @@ export function createOpenAIProvider(getConfig: () => OpenAIConfig): AIProvider 
       const body = {
         model,
         temperature: 0.4,
-        max_tokens: 8192,
+        max_tokens: req.maxTokens ?? 8192,
         messages: [{ role: 'system', content: schemaPrompt(req.system, req.jsonSchema) }, ...req.messages],
         response_format: { type: 'json_object' },
       };
@@ -104,7 +104,8 @@ export function createOpenAIProvider(getConfig: () => OpenAIConfig): AIProvider 
       // Some local servers reject json_object mode; the schema is in the prompt anyway.
       if (res.status === 400 || res.status === 422) {
         const err = await res.text().catch(() => '');
-        if (/response_format|json/i.test(err)) {
+        // Only retry when the server says it can't do JSON mode (not for any error that mentions JSON).
+        if (/response_format|json_object|json mode/i.test(err)) {
           const { response_format: _rf, ...rest } = body;
           void _rf;
           res = await send(rest);

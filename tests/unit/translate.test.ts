@@ -156,9 +156,12 @@ describe('carousel translation', () => {
     const units = collectUnits(p);
     const accepted: Accepted = new Map(units.map((u) => [u.id, { tagged: 'نص', text: 'نص' }]));
     const copy = await applyTranslation(p, units, accepted, 'ar', 'Fake');
-    const before = p.carousel.slides.flatMap((s) => s.elements).filter((e): e is TextElement => e.kind === 'text' && e.align === 'left').length;
-    const after = copy.carousel.slides.flatMap((s) => s.elements).filter((e): e is TextElement => e.kind === 'text' && e.align === 'right').length;
+    // Translated (word) boxes flip; number-only boxes such as "01 / 09" keep their place.
+    const texts = (c: Project) => c.carousel.slides.flatMap((s) => s.elements).filter((e): e is TextElement => e.kind === 'text');
+    const before = texts(p).filter((e) => e.align === 'left' && /\p{L}/u.test(e.text)).length;
+    const after = texts(copy).filter((e) => e.align === 'right' && /\p{L}/u.test(e.text)).length;
     expect(after).toBeGreaterThanOrEqual(before);
+    expect(texts(copy).filter((e) => !/\p{L}/u.test(e.text)).every((e, i) => e.align === texts(p).filter((x) => !/\p{L}/u.test(x.text))[i]!.align)).toBe(true);
   });
 
   it('shrinks text that no longer fits its box before growing it', () => {
@@ -169,17 +172,38 @@ describe('carousel translation', () => {
     expect(fitTranslated({ ...el, text: 'சிறிய', height: 200 })).toMatchObject({ fontSize: 40, height: 200 });
   });
 
-  it('batches by size and repairs a batch whose answer missed an item', async () => {
+  it('batches by size and asks again only for the item a batch missed', async () => {
     expect(batchUnits([{ source: 'a'.repeat(5) }, { source: 'b'.repeat(5) }, { source: 'c'.repeat(5) }], 10).map((b) => b.length)).toEqual([2, 1]);
     const complete = vi
       .fn()
       .mockResolvedValueOnce(JSON.stringify({ items: [{ id: 't1', text: 'ஒன்று' }] }))
-      .mockResolvedValueOnce(JSON.stringify({ items: [{ id: 't1', text: 'ஒன்று' }, { id: 't2', text: '<em>இரண்டு</em>' }] }));
+      .mockResolvedValueOnce(JSON.stringify({ items: [{ id: 't2', text: '<em>இரண்டு</em>' }] }));
     const provider: AIProvider = { id: 'claude', label: 'Claude', isAvailable: async () => true, complete };
     const out = await aiTranslator(provider).translate([{ id: 't1', source: 'one' }, { id: 't2', source: '<em>two</em>' }], 'ta', {});
     expect(out.get('t2')).toBe('<em>இரண்டு</em>');
     expect(complete).toHaveBeenCalledTimes(2);
     expect(complete.mock.calls[0]![0]).toMatchObject({ tier: 'fast' });
-    expect(complete.mock.calls[1]![0].messages.at(-1).content).toContain('missing items: t2');
+    // The follow-up is a fresh, small request with only the missing line (not a replay of the batch).
+    const retry = complete.mock.calls[1]![0].messages;
+    expect(retry).toHaveLength(1);
+    expect(retry[0].content).toContain('"t2"');
+    expect(retry[0].content).not.toContain('"t1"');
+  });
+  it('keeps finished batches when another batch fails, and stops starting new ones', async () => {
+    const complete = vi.fn().mockResolvedValueOnce(JSON.stringify({ items: [{ id: 'a', text: 'அ' }] })).mockRejectedValue(new Error('HTTP 500'));
+    const provider: AIProvider = { id: 'ollama', label: 'Ollama', isAvailable: async () => true, complete };
+    const units = ['a', 'b', 'c', 'd'].map((id) => ({ id, source: id.repeat(1500) }));
+    const out = await aiTranslator(provider).translate(units, 'ta', {});
+    expect(out.get('a')).toBe('அ');
+    expect(complete).toHaveBeenCalledTimes(2); // batch 2 failed (its one retry included) → c and d never sent
+  });
+  it('reports a cancel as a cancel, whatever error the SDK throws', async () => {
+    const ctrl = new AbortController();
+    const complete = vi.fn().mockImplementation(async () => {
+      ctrl.abort();
+      throw new Error('Request was aborted.');
+    });
+    const provider: AIProvider = { id: 'claude', label: 'Claude', isAvailable: async () => true, complete };
+    await expect(translateUnits([{ id: 'x', source: 'hello', plain: 'hello' } as never], 'ta', aiTranslator(provider), null as never, { signal: ctrl.signal })).rejects.toMatchObject({ name: 'AbortError' });
   });
 });

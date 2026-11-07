@@ -1,3 +1,5 @@
+import { alternates } from '@/engine/layout/context';
+import { bounds } from '@/editor/ops';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { buildCarousel, themeFor, LAYOUTS, ROLE_LAYOUTS } from '@/engine/layout';
 import { makeCtx } from '@/engine/layout/context';
@@ -33,10 +35,12 @@ function assertSane(c: Carousel, label: string) {
     const chrome = ts.filter((t) => CHROME.has(t.slot ?? ''));
     for (const t of ts) {
       const where = `${label} slide ${si + 1} (${slide.layoutId}) ${t.slot} "${t.text.slice(0, 30)}"`;
-      expect(t.x, where).toBeGreaterThanOrEqual(0);
-      expect(t.y, where).toBeGreaterThanOrEqual(0);
-      expect(t.x + t.width, where).toBeLessThanOrEqual(W + 1);
-      expect(t.y + t.height, where).toBeLessThanOrEqual(H + 1);
+      // Rotated text (e.g. a vertical edge label) is checked by its rotated bounds.
+      const b = Math.abs(t.rotation) >= 45 ? bounds(t) : { x: t.x, y: t.y, width: t.width, height: t.height };
+      expect(b.x, where).toBeGreaterThanOrEqual(-1);
+      expect(b.y, where).toBeGreaterThanOrEqual(-1);
+      expect(b.x + b.width, where).toBeLessThanOrEqual(W + 1);
+      expect(b.y + b.height, where).toBeLessThanOrEqual(H + 1);
     }
     for (let i = 0; i < content.length; i++) {
       for (let j = i + 1; j < content.length; j++) {
@@ -125,7 +129,8 @@ describe('readability', () => {
       const pal = getPalette(pid).colors;
       for (const mod of [undefined, { background: 'gradient' as const }, { background: 'mesh' as const }]) {
         const c = buildCarousel({ plan, presetId: 'instagram-square-1x1', theme: { ...themeFor(s.id, pid), modifiers: mod } });
-        const bg = c.slides[1]!.background;
+        // Alternating styles: odd slides use the inverted palette (checked in templates.test.ts).
+        const bg = c.slides[alternates(c.theme) ? 2 : 1]!.background;
         const colors = bg.type === 'solid' || bg.type === 'image' ? [bg.color] : bg.type === 'mesh' ? [bg.base, ...bg.points.map((p) => p.color)] : bg.stops.map((x) => x.color);
         for (const col of colors) expect(contrast(pal.text, col), `${s.id}/${pid} ${bg.type} ${col}`).toBeGreaterThanOrEqual(4.5);
       }

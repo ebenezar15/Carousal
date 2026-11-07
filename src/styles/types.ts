@@ -61,7 +61,7 @@ export interface StyleSystem {
     alignment: 'left' | 'center' | 'right';
     marginPct: number;
     headline: { scale: number; weight: number; case: 'sentence' | 'upper' | 'title'; tracking: number; lineHeight: number; rotateDeg?: number; [k: string]: unknown };
-    body: { weight: number; lineHeight: number; tracking?: number };
+    body: { weight: number; lineHeight: number; tracking?: number; italic?: boolean };
     emphasis: string;
     decorations: string[];
     slideNumber: { style: string; position: string };
@@ -70,6 +70,8 @@ export interface StyleSystem {
     [k: string]: unknown;
   };
   roleLayouts: Record<SlideRole, string>;
+  /** Motion preset (editor/animation.ts ANIMATION_PRESETS) that suits this style. */
+  motion?: string;
 }
 
 export interface RoleRule {

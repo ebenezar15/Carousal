@@ -10,6 +10,10 @@ export interface GenerateOptions {
   /** BCP-47 code, or 'auto' to keep the input's language. */
   language: string;
   maxSlides: number;
+  /** "What kind of carousel" (engine/carouselTypes.ts id) or 'auto'. */
+  carouselType?: string;
+  /** The author's own words about the carousel they want ("a 10-slide doctrine explainer…"). */
+  carouselBrief?: string;
 }
 
 export const defaultOptions: GenerateOptions = {
@@ -18,6 +22,8 @@ export const defaultOptions: GenerateOptions = {
   audience: '',
   language: 'auto',
   maxSlides: 20,
+  carouselType: 'auto',
+  carouselBrief: '',
 };
 
 export interface ChatMessage { role: 'user' | 'assistant'; content: string }
@@ -33,6 +39,8 @@ export interface CompletionRequest {
    * cheaper/faster model for it (Settings → "Model for quick tasks").
    */
   tier?: 'quality' | 'fast';
+  /** Output ceiling for this task (small for headlines/captions); providers have sensible defaults. */
+  maxTokens?: number;
 }
 
 export type ProviderId = 'claude' | 'ollama' | 'openai' | 'rules';

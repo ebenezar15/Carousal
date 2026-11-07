@@ -20,13 +20,17 @@ const PATTERNS: Record<string, BackgroundPattern['kind']> = {
   'fine-grid': 'grid',
   'perspective-grid': 'perspective-grid',
   diagonal: 'diagonal',
+  waves: 'waves', checker: 'checker', zigzag: 'zigzag', stripes: 'stripes', crosses: 'crosses', rings: 'rings', triangles: 'triangles', dots: 'dots', grid: 'grid',
 };
 
 /** Area-filling patterns read much stronger than line patterns, so they start fainter. */
 const FILLED = new Set<BackgroundPattern['kind']>(['stripes', 'checker', 'triangles']);
 
 /** Texture names used in research/styles.json → procedural texture kinds. */
-const STYLE_TEXTURES: Record<string, TextureKind> = { 'paper-grain': 'paper', 'riso-grain': 'riso', paper: 'paper', grain: 'riso' };
+const STYLE_TEXTURES: Record<string, TextureKind> = {
+  'paper-grain': 'paper', 'riso-grain': 'riso', paper: 'paper', grain: 'riso',
+  kraft: 'kraft', crumpled: 'crumpled', linen: 'linen', canvas: 'canvas', watercolor: 'watercolor', concrete: 'concrete', stucco: 'stucco', grunge: 'grunge', terrazzo: 'terrazzo', brushed: 'brushed', riso: 'riso',
+};
 
 /** Strengths that keep text contrast intact on light and dark palettes (checked by the real-pixel audit). */
 export const DEFAULT_TEXTURE_AMOUNT: Partial<Record<TextureKind, number>> = {
