@@ -20,7 +20,7 @@ const TONE_MOODS: Record<Tone, string[]> = {
   educational: ['educational', 'data', 'professional', 'handdrawn', 'minimal'],
 };
 
-function rng(seed: number) {
+export function rng(seed: number) {
   let a = seed >>> 0 || 0x9e3779b9;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;

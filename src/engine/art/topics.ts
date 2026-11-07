@@ -10,13 +10,17 @@ export type ArtChoice =
   | { kind: 'prop'; prop: PropKind; why: string };
 
 const SCENES: [RegExp, SceneKind][] = [
+  [/\b(baptism|baptiz\w*|baptis\w*|jordan|john the baptist)\b/, 'river-baptism'],
   [/\b(empty tomb|resurrect\w*|risen|he is alive|easter)\b/, 'empty-tomb'],
+  [/\b(heres(?:y|ies)|heretic\w*|orthodox\w*|councils?|nicaea|nicene|chalcedon|creeds?|church fathers|bishops?|synod|arius|arian\w*)\b/, 'council'],
+  [/\b(church history|early church|split|schism\w*|tore|torn|divided|division|ruins?|fallen empire|rome)\b/, 'ruins'],
+  [/\b(upper room|last supper|pentecost)\b/, 'upper-room'],
   [/\b(cross|calvary|golgotha|crucif\w*|salvation|saved|sacrifice|aton\w*|redeem\w*|redemption|gospel)\b/, 'hill-cross'],
   [/\b(christmas|nativity|bethlehem|manger|advent|born to us|emmanuel|immanuel)\b/, 'manger'],
   [/\b(storm|storms|trials?|anxi\w*|fear|afraid|worr\w*|trouble\w*|struggl\w*|waves?)\b/, 'storm-sea'],
   [/\b(shepherd|sheep|flock|lost sheep|psalm 23|green pastures)\b/, 'shepherd'],
   [/\b(living water|thirst\w*|well|samaritan)\b/, 'well'],
-  [/\b(rainbow|covenant|noah|flood)\b/, 'rainbow'],
+  [/\b(rainbow|covenant|flood)\b/, 'rainbow'],
   [/\b(lighthouse|beacon|light of the world|shine|light)\b/, 'lighthouse'],
   [/\b(communion|lord'?s supper|bread|table|feast|meal|hospitality|breaking bread)\b/, 'table'],
   [/\b(door|knock\w*|prodigal|come home|welcome\w*|invit\w*|forgiv\w*)\b/, 'open-door'],
@@ -48,8 +52,24 @@ const POSES: [RegExp, Pose][] = [
 ];
 
 const PROPS: [RegExp, PropKind][] = [
-  [/\b(holy spirit|spirit|dove|baptism|baptized)\b/, 'dove'],
-  [/\b(pentecost|fire|flame|on fire|passion)\b/, 'flame'],
+  // Theology & church history first: these words are specific, the older symbols below are broad.
+  [/\b(trinity|trinitarian|triune|three persons|godhead|three in one|one god in three|father,? son,? and (?:the )?holy spirit)\b/, 'trinity'],
+  [/\b(modalism|modalist\w*|sabellia\w*|masks?|roles|modes)\b/, 'masks'],
+  [/\b(chi[- ]rho|constantine|labarum|christogram)\b/, 'chi-rho'],
+  [/\b(heres(?:y|ies)|heretic\w*|orthodox\w*|councils?|nicaea|nicene|chalcedon|creeds?|church fathers|bishops?|synod)\b/, 'mitre'],
+  [/\b(church history|early church|split|schism\w*|tore|torn|pillars?|columns?)\b/, 'column'],
+  [/\b(veil|shroud|draped?|memorial|monument)\b/, 'drape'],
+  [/\b(ten commandments|commandments?|decalogue|sinai|tablets?|the law|law)\b/, 'tablets'],
+  [/\b(alpha|omega|beginning and (?:the )?end|first and (?:the )?last)\b/, 'alpha-omega'],
+  [/\b(crown of thorns|thorns|passion|suffering)\b/, 'crown-of-thorns'],
+  [/\b(justice|just judge|judge\w*|judgm?ent|righteous\w*)\b/, 'scales'],
+  [/\b(eternity|eternal|everlasting|forever|before time|time)\b/, 'hourglass'],
+  [/\b(wrote|written|writings?|letters?|epistles?|authors?|church father)\b/, 'quill'],
+  [/\b(ichthys|sign of the fish|secret symbol)\b/, 'ichthys'],
+  [/\b(ark|noah)\b/, 'ark'],
+  [/\b(missions?|missionar\w*|nations|world|global|great commission)\b/, 'globe'],
+  [/\b(holy spirit|spirit|dove)\b/, 'dove'],
+  [/\b(pentecost|fire|flame|on fire)\b/, 'flame'],
   [/\b(candle|vigil)\b/, 'candle'],
   [/\b(lamp|lamp unto|light to my path)\b/, 'lamp'],
   [/\b(love|heart|beloved|compassion)\b/, 'heart'],
@@ -63,11 +83,11 @@ const PROPS: [RegExp, PropKind][] = [
   [/\b(keys?|unlock\w*|open the door)\b/, 'key'],
   [/\b(seed|mustard)\b/, 'seed'],
   [/\b(fish\w*|fishers of men|nets?)\b/, 'fish'],
-  [/\b(water|baptism|wash\w*|cleans\w*)\b/, 'water-drop'],
+  [/\b(water|wash\w*|cleans\w*)\b/, 'water-drop'],
   [/\b(songs?|hymns?|music|psalms?)\b/, 'music'],
   [/\b(ideas?|wisdom|insight|understand\w*)\b/, 'lightbulb'],
   [/\b(calling|purpose|direction|guid\w*|compass)\b/, 'compass'],
-  [/\b(law|prophec\w*|prophets?|old testament|scroll|torah|commandments?)\b/, 'scroll'],
+  [/\b(prophec\w*|prophets?|old testament|scroll|torah)\b/, 'scroll'],
   [/\b(peace|olive)\b/, 'olive-branch'],
   [/\b(bell|call to worship)\b/, 'bell'],
   [/\b(bible|scripture|word|verse|gospel of)\b/, 'bible'],
@@ -114,9 +134,13 @@ export function artFor(s: SlidePlan, avoid: SceneKind[] = []): ArtChoice | null 
   if (scene && (['hook', 'cta', 'quote', 'intro'].includes(s.role) || /scene|story|illustrat/.test(hint) || !pose)) {
     return { kind: 'scene', scene, pose: pose?.[0], people: pose ? 1 : 0, why: scene };
   }
+  const headPose = first(POSES, head);
+  // An event named in the headline ("The baptism of Jesus" → the river) beats a pose only hinted at in the body.
+  const headScene = SCENES.find(([re, k]) => re.test(` ${head} ${s.quote?.text.toLowerCase() ?? ''} `) && !avoid.includes(k));
+  if (headScene && !headPose) return { kind: 'scene', scene: headScene[1], people: 0, why: headScene[1] };
   // A symbol named in the headline ("The Holy Spirit" → dove) beats a pose only hinted at in the body.
   const headProp = first(PROPS, head);
-  if (headProp && !first(POSES, head)) return { kind: 'prop', prop: headProp[0], why: `“${headProp[1]}”` };
+  if (headProp && !headPose) return { kind: 'prop', prop: headProp[0], why: `“${headProp[1]}”` };
   if (pose) return { kind: 'character', pose: pose[0], prop: prop?.[0], why: `“${pose[1]}”` };
   if (prop) return { kind: 'prop', prop: prop[0], why: `“${prop[1]}”` };
   return null;

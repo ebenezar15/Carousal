@@ -30,7 +30,7 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
   const soft = (t: number) => mix(pal.primary, pal.bg, t);
 
   // Default motif for left-aligned styles without their own: short accent bar above the headline.
-  const ownMotif = ids.some((d) => ['thin-rule-top', 'kicker-label', 'small-caps-kicker', 'code-tag', 'terminal-prompt', 'brand-bar', 'window-chrome', 'avatar-row', 'masthead', 'spray-drips', 'margin-line', 'swiss-grid', 'whitespace'].includes(d));
+  const ownMotif = ids.some((d) => ['thin-rule-top', 'kicker-label', 'small-caps-kicker', 'code-tag', 'terminal-prompt', 'brand-bar', 'window-chrome', 'avatar-row', 'masthead', 'spray-drips', 'margin-line', 'swiss-grid', 'whitespace', 'dash-kicker', 'headline-rule'].includes(d));
   const stepTracker = ids.includes('step-tracker') && s.role === 'step' && ctx.plan.slides.filter((x) => x.role === 'step').length > 1;
   if (!ownMotif && !stepTracker && headline && ctx.align === 'left' && !['hook-split', 'quote-big-marks', 'compare-split', 'hook-tweet'].includes(layoutId)) {
     // Never above the content box, so it can't collide with a top slide number or swipe cue.
@@ -40,6 +40,39 @@ export function decorate(ctx: Ctx, s: SlidePlan, index: number, content: SlideEl
 
   for (const id of ids) {
     switch (id) {
+      case 'dash-kicker': {
+        // A short accent dash before the kicker label ("— ADOPTIONISM / …"); the label moves right.
+        const kick = firstSlot(content, 'kicker');
+        if (kick && kick.align !== 'right') {
+          const dw = Math.round(34 * k);
+          const gap = Math.round(16 * k);
+          const cy = kick.y + kick.height / 2;
+          if (kick.align === 'center') {
+            const tw = measure(kick.text.toUpperCase(), { fontId: kick.fontId, size: kick.fontSize, weight: kick.fontWeight, italic: false, letterSpacing: kick.letterSpacing });
+            const x0 = kick.x + kick.width / 2 - tw / 2 - gap - dw;
+            front.push(rect('kicker-dash', x0, cy - 3 * k, dw, Math.max(3, 6 * k), pal.primary));
+          } else {
+            front.push(rect('kicker-dash', kick.x, cy - 3 * k, dw, Math.max(3, 6 * k), pal.primary));
+            kick.x += dw + gap;
+            kick.width = Math.max(10, kick.width - dw - gap);
+          }
+        }
+        break;
+      }
+      case 'headline-rule': {
+        // Short accent rule in the gap under the headline (between it and whatever follows).
+        if (!headline || ['quote-big-marks', 'hook-tweet', 'compare-split'].includes(layoutId)) break;
+        const bottom = headline.y + headline.height;
+        const below = content.filter((e) => e !== headline && e.y >= bottom - 2 && e.kind === 'text').sort((a, b) => a.y - b.y)[0];
+        const gapPx = below ? below.y - bottom : box.y + box.h - bottom;
+        const h = Math.max(3, Math.round(6 * k));
+        if (gapPx < 26 * k) break;
+        const y = below ? bottom + gapPx / 2 - h / 2 : bottom + 22 * k;
+        const w = Math.round(96 * k);
+        const x = headline.align === 'center' ? headline.x + headline.width / 2 - w / 2 : headline.align === 'right' ? headline.x + headline.width - w : headline.x;
+        front.push(rect('headline-rule', x, y, w, h, pal.primary));
+        break;
+      }
       case 'thin-rule-top':
         back.push(line('rule-top', [box.x, box.y - Math.round(10 * k), box.x + box.w, box.y - Math.round(10 * k)], mix(pal.text, pal.bg, 0.6), Math.max(1, 2 * k)));
         break;

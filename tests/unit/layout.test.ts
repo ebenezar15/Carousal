@@ -1,3 +1,4 @@
+import { alternates } from '@/engine/layout/context';
 import { bounds } from '@/editor/ops';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { buildCarousel, themeFor, LAYOUTS, ROLE_LAYOUTS } from '@/engine/layout';
@@ -128,7 +129,8 @@ describe('readability', () => {
       const pal = getPalette(pid).colors;
       for (const mod of [undefined, { background: 'gradient' as const }, { background: 'mesh' as const }]) {
         const c = buildCarousel({ plan, presetId: 'instagram-square-1x1', theme: { ...themeFor(s.id, pid), modifiers: mod } });
-        const bg = c.slides[1]!.background;
+        // Alternating styles: odd slides use the inverted palette (checked in templates.test.ts).
+        const bg = c.slides[alternates(c.theme) ? 2 : 1]!.background;
         const colors = bg.type === 'solid' || bg.type === 'image' ? [bg.color] : bg.type === 'mesh' ? [bg.base, ...bg.points.map((p) => p.color)] : bg.stops.map((x) => x.color);
         for (const col of colors) expect(contrast(pal.text, col), `${s.id}/${pid} ${bg.type} ${col}`).toBeGreaterThanOrEqual(4.5);
       }

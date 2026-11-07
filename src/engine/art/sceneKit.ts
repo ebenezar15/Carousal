@@ -4,6 +4,8 @@
 import { luminance } from '@/styles/color';
 import { character, NEUTRALS as N } from './characters';
 import {
+  arcBand,
+  arcLine,
   arcShape,
   capsule,
   circle,
@@ -129,11 +131,12 @@ export function sky(c: Ctx, night = false) {
   for (let i = 0; i < 6; i++) c.add(rrect(0, 150 + i * 45, 1000, 450 - i * 45), pal.highlight, c.isDark ? 0.025 : 0.05);
 }
 
-export function sun(c: Ctx, x: number, y: number, r: number, color = c.pal.highlight, move = true) {
+export function sun(c: Ctx, x: number, y: number, r: number, color = c.pal.highlight, move = true, spot = false) {
   const draw = () => {
-    c.add(circle(x, y, r * 1.9), color, 0.14);
-    c.add(circle(x, y, r * 1.45), color, 0.22);
-    c.add(circle(x, y, r), color);
+    const sp = spot ? { spot: true } : {};
+    c.add(circle(x, y, r * 1.9), color, 0.14, sp);
+    c.add(circle(x, y, r * 1.45), color, 0.22, sp);
+    c.add(circle(x, y, r), color, undefined, sp);
     c.glow(arcShape(x, y, r * 0.78, r * 0.78, 200, 260), 0.35);
   };
   if (move) c.mover('sun', 'drift', [x, y], draw, 0);
@@ -380,6 +383,147 @@ export function bigStar(c: Ctx, x: number, y: number, r: number, name = 'star') 
     c.add(sparkle(x, y, r * 1.6), c.pal.highlight, 0.6);
     c.add(star(x, y, r, 0.48), c.pal.highlight);
   });
+}
+
+// ---------------------------------------------------------------------------------------------
+// Classical & sacred elements (columns, monograms, doves)
+// ---------------------------------------------------------------------------------------------
+
+/** Marble: grey stone lifted toward the light tone (reads as pale stone on light and dark palettes). */
+export function marble(c: Ctx, d: string, op = 0.42) {
+  c.add(d, N.stone);
+  c.add(d, c.light, op);
+}
+
+/** Round-topped arch from x0..x1, springing at y `spring`, down to `bottom` (no SVG arc commands). */
+export function archPath(x0: number, x1: number, spring: number, bottom: number): string {
+  const r = (x1 - x0) / 2;
+  const top = arcLine(x0 + r, spring, r, r, 180, 360).replace(/^M[^C]*/, '');
+  return `M${x0} ${bottom}L${x0} ${spring}${top}L${x1} ${bottom}Z`;
+}
+
+/** Lens (vesica) between two tips, bulging `bulge` units each side (quadratic halves). */
+export function lens(a: Pt, b: Pt, bulge: number): string {
+  const mx = (a[0] + b[0]) / 2;
+  const my = (a[1] + b[1]) / 2;
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+  const nx = -(b[1] - a[1]) / len;
+  const ny = (b[0] - a[0]) / len;
+  const k = bulge * 2;
+  return `M${a[0]} ${a[1]}Q${mx + nx * k} ${my + ny * k} ${b[0]} ${b[1]}Q${mx - nx * k} ${my - ny * k} ${a[0]} ${a[1]}Z`;
+}
+
+/**
+ * Classical column standing on (x, base): plinth, base moulding, tapered fluted shaft and an Ionic
+ * capital. `broken` (0..1) snaps it off at that fraction of its height with a jagged top; `crack`
+ * draws a zigzag fissure down the shaft.
+ */
+export function column(c: Ctx, x: number, base: number, h: number, w: number, o: { broken?: number; crack?: boolean } = {}) {
+  const ph = h * 0.07;
+  marble(c, rrect(x - w * 0.9, base - ph, w * 1.8, ph, ph * 0.15));
+  c.shade(rrect(x - w * 0.9, base - ph * 0.4, w * 1.8, ph * 0.4, ph * 0.1), 0.12);
+  const tb = base - ph;
+  const mh = h * 0.045;
+  marble(c, rrect(x - w * 0.68, tb - mh, w * 1.36, mh, mh * 0.5));
+  c.shade(rrect(x - w * 0.68, tb - mh * 0.45, w * 1.36, mh * 0.45, mh * 0.2), 0.1);
+  const sb = tb - mh;
+  const capH = o.broken ? 0 : h * 0.13;
+  const st = o.broken ? base - h * o.broken : base - h + capH;
+  const tw = w * 0.44;
+  const j = w * 0.22;
+  const shaft = o.broken
+    ? poly([[x - w / 2, sb], [x - tw - 0.02 * w, st + j * 0.6], [x - w * 0.2, st - j * 0.4], [x - w * 0.02, st + j * 0.9], [x + w * 0.16, st - j * 0.1], [x + w * 0.3, st + j * 0.5], [x + tw + 0.02 * w, st - j * 0.3], [x + w / 2, sb]])
+    : poly([[x - w / 2, sb], [x - tw, st], [x + tw, st], [x + w / 2, sb]]);
+  marble(c, shaft);
+  // Fluting, a shaded right flank and a lit left edge give the shaft its roundness.
+  for (let i = 1; i <= 4; i++) {
+    const u = -0.5 + i / 5;
+    c.add(capsule([x + u * tw * 2, st + (o.broken ? j * 1.2 : 2)], [x + u * w, sb - 1], w * 0.028), c.dark, 0.13);
+  }
+  c.shade(poly([[x + w * 0.2, sb], [x + tw * 0.4, st + (o.broken ? j : 0)], [x + tw, st + (o.broken ? 0 : 0)], [x + w / 2, sb]]), 0.14);
+  c.glow(poly([[x - w * 0.42, sb], [x - tw * 0.86, st + (o.broken ? j : 0)], [x - tw * 0.62, st + (o.broken ? j : 0)], [x - w * 0.28, sb]]), 0.35);
+  if (o.crack) {
+    const n = 6;
+    const y0 = st + (sb - st) * 0.04 + (o.broken ? j : 0);
+    const y1 = st + (sb - st) * 0.62;
+    const left: Pt[] = [];
+    const right: Pt[] = [];
+    for (let i = 0; i <= n; i++) {
+      const y = y0 + ((y1 - y0) * i) / n;
+      const cx = x + w * 0.12 + (i % 2 ? -1 : 1) * w * 0.1 - (w * 0.18 * i) / n;
+      const half = w * 0.035 * (1 - i / n) + 0.15;
+      left.push([cx - half, y]);
+      right.push([cx + half, y]);
+    }
+    c.add(poly([...left, ...right.reverse()]), c.dark, 0.75);
+    c.add(capsule([x + w * 0.02, y0 + (y1 - y0) * 0.35], [x - w * 0.2, y0 + (y1 - y0) * 0.5], w * 0.012), c.dark, 0.5);
+  }
+  if (!o.broken) {
+    // Ionic capital: necking, echinus, abacus and two volutes.
+    c.add(rrect(x - tw, st - capH * 0.12, tw * 2, capH * 0.12), c.dark, 0.18);
+    marble(c, rrect(x - w * 0.62, st - capH * 0.55, w * 1.24, capH * 0.45, capH * 0.2));
+    marble(c, rrect(x - w * 0.8, st - capH, w * 1.6, capH * 0.3, capH * 0.06));
+    c.shade(rrect(x - w * 0.8, st - capH * 0.78, w * 1.6, capH * 0.08), 0.12);
+    for (const s of [-1, 1]) {
+      const vx = x + s * w * 0.66;
+      const vy = st - capH * 0.42;
+      const vr = capH * 0.36;
+      marble(c, circle(vx, vy, vr));
+      c.add(arcBand(vx, vy, vr * 0.42, vr * 0.62, 0, 359.9), c.dark, 0.2);
+      c.add(circle(vx, vy, vr * 0.18), c.dark, 0.3);
+    }
+  }
+  return { top: st - capH, shaftTop: st, shaftBottom: sb };
+}
+
+/** Chi-Rho monogram (☧) centred at (x, y), `r` = half height, strokes of radius `t`. */
+export function chiRho(c: Ctx, x: number, y: number, r: number, color: string, t = r * 0.1, op?: number, spot = false) {
+  const d = r * 0.62;
+  const loopR = r * 0.34;
+  const ly = y - r + loopR;
+  c.add(
+    capsule([x, y - r], [x, y + r], t) +
+      capsule([x - d, y - d * 0.55], [x + d, y + d * 0.95], t) +
+      capsule([x + d, y - d * 0.55], [x - d, y + d * 0.95], t) +
+      arcBand(x, ly, loopR - t, loopR + t, -90, 90),
+    color,
+    op,
+    spot ? { spot: true } : {},
+  );
+}
+
+/**
+ * A cloth in the palette primary thrown over the top of a (broken) column whose shaft top is at
+ * (x, top) and shaft width w: a long fold down the left, a short tail on the right. It is the spot colour.
+ */
+export function drapeCloth(c: Ctx, x: number, top: number, w: number, name = 'cloth') {
+  const s = w / 26;
+  const m = mul(translate(x - 54 * s, top - 42 * s), scaleAt(s, s));
+  c.mover(name, 'sway', [x, top], () =>
+    c.at(m, () => {
+      const cloth = `M38 40C44 33 64 33 70 38C74 46 76 54 76 62C72 66 69 61 66 64C64 58 60 55 56 54C51 60 47 70 45 80C43 86 41 90 39 93C33 91 28 95 22 92C24 80 28 64 32 52C34 46 36 42 38 40Z`;
+      c.add(cloth, c.pal.primary, undefined, { spot: true });
+      c.add(`M56 54C51 60 47 70 45 80C43 86 41 90 39 93C37 92 36 92 35 92C38 82 42 66 50 56Z`, c.dark, 0.22, { spot: true });
+      c.add(`M66 40C70 46 72 54 76 62C72 66 69 61 66 64C66 56 66 48 66 40Z`, c.dark, 0.2, { spot: true });
+      c.add(`M40 46C37 60 33 76 30 90M46 47C44 58 40 72 36 86M62 40C60 46 58 50 56 54`, 'none', 0.22, { stroke: c.dark, strokeWidth: 1, spot: true });
+      c.glow(`M42 38C48 35 58 35 64 37C56 37 48 38 42 42Z`, 0.35);
+      c.glow(`M30 60C29 70 27 80 26 90C28 80 30 70 33 58Z`, 0.25);
+    }),
+  );
+}
+
+/** Dove in flight drawn in a 100×100 box (prop units); wrap in `c.at` to place it. */
+export function doveShape(c: Ctx) {
+  const { pal } = c;
+  c.add(`M58 34C46 18 30 16 18 20C28 26 36 34 42 46Z`, N.wool);
+  c.add(`M58 34C46 18 30 16 18 20C28 26 36 34 42 46Z`, c.dark, 0.08);
+  c.add(`M20 58C30 50 44 46 58 46C66 46 72 42 74 36C76 32 82 30 86 34L92 38L86 40C86 54 76 64 60 66C46 68 36 72 26 80C26 72 28 66 32 62Z`, N.wool);
+  c.add(`M60 48C70 30 80 18 90 14C88 30 80 46 66 56Z`, N.wool);
+  c.add(`M60 48C70 30 80 18 90 14C88 30 80 46 66 56Z`, c.dark, 0.05);
+  c.add(circle(80, 36, 2), N.eye);
+  c.add(`M86 34L94 36L86 40Z`, N.gold);
+  c.add(curve([[92, 38], [86, 48], [76, 54]]), 'none', undefined, { stroke: pal.primary, strokeWidth: 2.2 });
+  c.add(ellipse(84, 47, 4, 2) + ellipse(80, 52, 4, 2), pal.primary);
 }
 
 export { N as NEUTRAL };

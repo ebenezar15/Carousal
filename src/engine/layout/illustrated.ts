@@ -3,7 +3,8 @@
 // (art/), so every carousel — and every "New designs" seed — gets fresh compositions.
 import type { SlideElement, TextElement } from '@/model/types';
 import { mix } from '@/styles/color';
-import { artPalette, character, prop, randomCharacter, scene } from '../art';
+import { artPalette, character, prop, randomCharacter, scene, treatArt } from '../art';
+import type { ArtPalette, ArtPiece } from '../art/types';
 import { artFor, FALLBACK_SCENES, type ArtChoice } from '../art/topics';
 import type { SceneKind } from '../art/types';
 import type { SlidePlan } from '../schema';
@@ -13,6 +14,9 @@ import { bodySpec, headSpec, type LayoutFn, type LayoutResult } from './layouts'
 import { fitStack, rect, type TextSpec } from './primitives';
 
 export type IllustrationDensity = 'none' | 'some' | 'rich' | 'story';
+
+/** Applies the design's illustration look (engraving, line drawing, duotone, silhouette…). */
+const look = (ctx: Ctx, piece: ArtPiece, ap: ArtPalette): ArtPiece => (ctx.artTreatment === 'color' ? piece : treatArt(piece, ctx.artTreatment, ap));
 
 const density = (ctx: Ctx): IllustrationDensity =>
   (ctx.mod.illustrations as IllustrationDensity | undefined) ?? (ctx.style.layout.illustrations as IllustrationDensity | undefined) ?? 'none';
@@ -85,7 +89,7 @@ const illusScene: LayoutFn = (ctx, s, i) => {
   const ap = artPalette(ctx.pal);
   const kind: SceneKind = c?.kind === 'scene' ? c.scene : 'sunrise';
   const people = c?.kind === 'scene' && c.pose ? [randomCharacter(seedOf(ctx, i), ap, c.pose)] : undefined;
-  const art = scene(kind, ap, seedOf(ctx, i), { people });
+  const art = look(ctx, scene(kind, ap, seedOf(ctx, i), { people }), ap);
   if (ctx.isLandscape) {
     const artX = Math.round(W * 0.5);
     const el = artToElement(art, artX, 0, W - artX, H, 'illustration', `Scene: ${kind}`, 'cover');
@@ -115,12 +119,12 @@ const illusCharacter: LayoutFn = (ctx, s, i) => {
   const fx = side ? box.x + box.w - figW : Math.round(box.x + box.w / 2 - figW / 2 + (i % 2 ? 1 : -1) * box.w * 0.12);
   const fy = box.y + box.h - figH;
   els.push({ ...rect('art-backdrop', fx - figW * 0.15, fy + figH * 0.18, figW * 1.3, figW * 1.3, mix(ctx.pal.primary, ctx.pal.bg, ctx.dark ? 0.8 : 0.86), { cornerRadius: figW }) });
-  els.push(artToElement(character(spec), fx, fy, figW, figH, 'illustration', `Character: ${pose}`));
+  els.push(artToElement(look(ctx, character(spec), ap), fx, fy, figW, figH, 'illustration', `Character: ${pose}`));
   if (c?.kind === 'character' && c.prop) {
     const ps = Math.round(figW * 0.42);
     // Beside the figure, on the side away from the text when the text is beside it.
     const px = side ? Math.min(box.x + box.w - ps, fx + figW - ps * 0.4) : i % 2 ? fx - ps * 0.9 : fx + figW - ps * 0.1;
-    els.push(artToElement(prop(c.prop, ap, seedOf(ctx, i)), px, fy + figH - ps, ps, ps, 'illustration', `Prop: ${c.prop}`));
+    els.push(artToElement(look(ctx, prop(c.prop, ap, seedOf(ctx, i)), ap), px, fy + figH - ps, ps, ps, 'illustration', `Prop: ${c.prop}`));
   }
   const region = side
     ? { x: box.x, y: box.y, w: fx - figW * 0.15 - box.x - Math.round(40 * k), h: box.h }
@@ -139,7 +143,7 @@ const illusProp: LayoutFn = (ctx, s, i) => {
   const center = ctx.align === 'center';
   const x = center ? box.x + box.w / 2 - size / 2 : box.x;
   const disc = rect('art-backdrop', x, box.y, size, size, mix(ctx.pal.primary, ctx.pal.bg, ctx.dark ? 0.78 : 0.85), { cornerRadius: size / 2 });
-  const art = artToElement(prop(kind, ap, seedOf(ctx, i)), x + size * 0.14, box.y + size * 0.14, size * 0.72, size * 0.72, 'illustration', `Prop: ${kind}`);
+  const art = artToElement(look(ctx, prop(kind, ap, seedOf(ctx, i)), ap), x + size * 0.14, box.y + size * 0.14, size * 0.72, size * 0.72, 'illustration', `Prop: ${kind}`);
   const top = box.y + size + Math.round(40 * k);
   const t = textBlock(ctx, s, { x: box.x, y: top, w: box.w, h: box.y + box.h - top }, center ? 'center' : 'left', 'top');
   return { elements: [disc, art, ...t.elements], overflow: t.overflow };
@@ -156,7 +160,7 @@ const illusPanel: LayoutFn = (ctx, s, i) => {
   const panelH = Math.round(Math.min(box.h * 0.6, panelW * 0.6));
   const stroke = Math.max(3, Math.round(6 * k));
   const frame = rect('panel-frame', box.x, box.y, panelW, panelH, ap.softer, { stroke: pal.text, strokeWidth: stroke, cornerRadius: Math.round(14 * k) });
-  const art = artToElement(scene(kind, ap, seedOf(ctx, i), { people }), box.x + stroke, box.y + stroke, panelW - 2 * stroke, panelH - 2 * stroke, 'illustration', `Scene: ${kind}`);
+  const art = artToElement(look(ctx, scene(kind, ap, seedOf(ctx, i), { people }), ap), box.x + stroke, box.y + stroke, panelW - 2 * stroke, panelH - 2 * stroke, 'illustration', `Scene: ${kind}`);
   const capTop = box.y + panelH + Math.round(28 * k);
   const cap = rect('panel-caption', box.x, capTop, panelW, box.y + box.h - capTop, pal.surface, { stroke: pal.text, strokeWidth: stroke, cornerRadius: Math.round(14 * k) });
   const pad = Math.round(36 * k);

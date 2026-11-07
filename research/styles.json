@@ -2903,6 +2903,1251 @@
         "cta": "cta-centered"
       },
       "motion": "lively"
+    },
+    {
+      "id": "theology-editorial",
+      "name": "Theology Editorial",
+      "description": "Magazine-style theology: condensed caps headlines with a crimson last word, italic serif text, red dash kickers, engraved illustrations, and cream pages alternating with ink-black ones.",
+      "moods": [
+        "editorial",
+        "bold",
+        "faith"
+      ],
+      "palettes": [
+        "codex-crimson",
+        "codex-olive",
+        "codex-navy",
+        "vellum-gold"
+      ],
+      "fonts": {
+        "heading": "roboto-condensed",
+        "body": "cormorant-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "oswald",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "barlow-condensed",
+          "body": "cormorant-garamond"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper-grain",
+        "noise": 0.02
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.25,
+          "weight": 900,
+          "case": "upper",
+          "tracking": -0.005,
+          "lineHeight": 0.98
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.32,
+          "italic": true
+        },
+        "emphasis": "color",
+        "decorations": [
+          "dash-kicker",
+          "headline-rule"
+        ],
+        "slideNumber": {
+          "style": "editorial",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "none",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "rhythm": "alternate",
+        "artTreatment": "engraving",
+        "illustrations": "some",
+        "numerals": "serif-italic",
+        "listItems": "heading"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "doctrine-noir",
+      "name": "Doctrine Noir",
+      "description": "All-dark editorial for apologetics and doctrine: ink-black ground with a soft vignette, condensed caps, an ember accent word, engraved art in the gloom.",
+      "moods": [
+        "dark",
+        "bold",
+        "faith",
+        "editorial"
+      ],
+      "palettes": [
+        "codex-noir",
+        "ember-noir",
+        "jewel-wine"
+      ],
+      "fonts": {
+        "heading": "oswald",
+        "body": "eb-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "roboto-condensed",
+          "body": "cormorant-garamond"
+        },
+        {
+          "heading": "anton",
+          "body": "eb-garamond"
+        }
+      ],
+      "background": {
+        "type": "radial-gradient",
+        "center": [
+          0.5,
+          0.0
+        ],
+        "stops": [
+          "surface",
+          "bg"
+        ]
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.25,
+          "weight": 700,
+          "case": "upper",
+          "tracking": 0.0,
+          "lineHeight": 1.0
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.35,
+          "italic": true
+        },
+        "emphasis": "color",
+        "decorations": [
+          "dash-kicker",
+          "headline-rule"
+        ],
+        "slideNumber": {
+          "style": "editorial",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "none",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "engraving",
+        "illustrations": "some",
+        "numerals": "serif-italic",
+        "listItems": "heading"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-card",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "engraved-classic",
+      "name": "Engraved Classic",
+      "description": "Old-book engraving plates: classic serif caps, sepia ink on warm paper, a large engraved illustration on most slides and a crimson spot colour.",
+      "moods": [
+        "editorial",
+        "calm",
+        "faith"
+      ],
+      "palettes": [
+        "vellum-gold",
+        "codex-crimson",
+        "parchment-sepia"
+      ],
+      "fonts": {
+        "heading": "eb-garamond",
+        "body": "eb-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "cormorant-garamond",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "libre-baskerville",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper",
+        "noise": 0.03
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 800,
+          "case": "upper",
+          "tracking": 0.02,
+          "lineHeight": 1.04
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "small-caps-kicker",
+          "double-rule",
+          "thin-frame"
+        ],
+        "slideNumber": {
+          "style": "roman",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "hairline-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "engraving",
+        "illustrations": "rich"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "manuscript-codex",
+      "name": "Illuminated Manuscript",
+      "description": "Medieval codex pages: carved capitals, drop caps, gold and vermilion on vellum, ornament dividers and a fine frame.",
+      "moods": [
+        "luxury",
+        "faith",
+        "editorial"
+      ],
+      "palettes": [
+        "manuscript-red",
+        "vellum-gold",
+        "parchment-sepia"
+      ],
+      "fonts": {
+        "heading": "cinzel",
+        "body": "cormorant-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "cinzel",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "marcellus",
+          "body": "cormorant-garamond"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "paper-grain",
+        "noise": 0.03
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 11,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.92,
+          "weight": 700,
+          "case": "upper",
+          "tracking": 0.04,
+          "lineHeight": 1.12
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "color",
+        "decorations": [
+          "thin-frame",
+          "drop-cap",
+          "ornament-divider"
+        ],
+        "slideNumber": {
+          "style": "roman",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "text-continue",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some",
+        "artTreatment": "duotone"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "minimal"
+    },
+    {
+      "id": "catechism-qa",
+      "name": "Catechism Q&A",
+      "description": "Question-and-answer cards: a big serif question, a plain answer, mono labels and a fine library grid.",
+      "moods": [
+        "editorial",
+        "professional",
+        "faith"
+      ],
+      "palettes": [
+        "codex-navy",
+        "scripture-ivory",
+        "bone-minimal"
+      ],
+      "fonts": {
+        "heading": "source-serif-4",
+        "body": "ibm-plex-sans"
+      },
+      "altFonts": [
+        {
+          "heading": "newsreader",
+          "body": "inter"
+        },
+        {
+          "heading": "libre-baskerville",
+          "body": "ibm-plex-sans"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "pattern": "fine-grid",
+        "patternOpacity": 0.06
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.95,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "kicker-label",
+          "thin-rule-top"
+        ],
+        "slideNumber": {
+          "style": "mono-index",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "text-arrow-mono",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "history-timeline",
+      "name": "Church History",
+      "description": "Chronicle pages: tall condensed dates, serif storytelling, timelines and a kraft-paper texture.",
+      "moods": [
+        "editorial",
+        "warm",
+        "faith"
+      ],
+      "palettes": [
+        "codex-crimson",
+        "parchment-sepia",
+        "woodcut-red"
+      ],
+      "fonts": {
+        "heading": "bebas-neue",
+        "body": "libre-baskerville"
+      },
+      "altFonts": [
+        {
+          "heading": "league-gothic",
+          "body": "libre-baskerville"
+        },
+        {
+          "heading": "big-shoulders-display",
+          "body": "source-serif-4"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "kraft"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.2,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0.01,
+          "lineHeight": 0.95
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "color",
+        "decorations": [
+          "dash-kicker",
+          "corner-index"
+        ],
+        "slideNumber": {
+          "style": "editorial",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "none",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "engraving",
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-number",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "step-timeline",
+        "step": "step-timeline",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "step-timeline",
+        "cta": "cta-centered"
+      },
+      "motion": "editorial"
+    },
+    {
+      "id": "apologetics-verdict",
+      "name": "Myth vs Truth",
+      "description": "Verdict boards: heavy caps, a split cover, stamped labels, hard borders and a loud warning palette.",
+      "moods": [
+        "bold",
+        "playful"
+      ],
+      "palettes": [
+        "verdict-yellow",
+        "verdict-black",
+        "woodcut-red"
+      ],
+      "fonts": {
+        "heading": "anton",
+        "body": "inter"
+      },
+      "altFonts": [
+        {
+          "heading": "bebas-neue",
+          "body": "inter"
+        },
+        {
+          "heading": "league-gothic",
+          "body": "work-sans"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0.01,
+          "lineHeight": 0.98
+        },
+        "body": {
+          "weight": 500,
+          "lineHeight": 1.4
+        },
+        "emphasis": "box",
+        "decorations": [
+          "stamp-circle",
+          "thick-border"
+        ],
+        "slideNumber": {
+          "style": "boxed-number",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "silhouette"
+      },
+      "roleLayouts": {
+        "hook": "hook-split",
+        "intro": "body-top-left",
+        "body": "body-card",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "kinetic"
+    },
+    {
+      "id": "worship-night",
+      "name": "Worship Night",
+      "description": "Modern worship nights: deep jewel gradients, rounded wide type, glowing orbs and light beams.",
+      "moods": [
+        "dark",
+        "colorful",
+        "faith"
+      ],
+      "palettes": [
+        "worship-violet",
+        "worship-teal",
+        "jewel-night"
+      ],
+      "fonts": {
+        "heading": "unbounded",
+        "body": "outfit"
+      },
+      "altFonts": [
+        {
+          "heading": "syne",
+          "body": "outfit"
+        },
+        {
+          "heading": "sora",
+          "body": "manrope"
+        }
+      ],
+      "background": {
+        "type": "mesh-gradient",
+        "spanAcrossSlides": true
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 10,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.9,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.05
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "color",
+        "decorations": [
+          "glow-orb",
+          "light-rays"
+        ],
+        "slideNumber": {
+          "style": "dots",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "soft-chevron",
+          "position": "middle-right"
+        },
+        "panoramic": false,
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "dreamy"
+    },
+    {
+      "id": "hymn-sheet",
+      "name": "Hymn Sheet",
+      "description": "Hymnal pages: classic serif, staff-like ruled lines, ornament dividers and gentle rose ink.",
+      "moods": [
+        "calm",
+        "faith",
+        "editorial"
+      ],
+      "palettes": [
+        "hymn-rose",
+        "scripture-ivory",
+        "parchment-sepia"
+      ],
+      "fonts": {
+        "heading": "libre-baskerville",
+        "body": "lora"
+      },
+      "altFonts": [
+        {
+          "heading": "playfair-display",
+          "body": "lora"
+        },
+        {
+          "heading": "prata",
+          "body": "lora"
+        }
+      ],
+      "background": {
+        "type": "pattern",
+        "pattern": "lined-paper",
+        "patternOpacity": 0.12
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 11,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.9,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.15
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.6
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "ornament-divider",
+          "hairline-divider"
+        ],
+        "slideNumber": {
+          "style": "small-caps-fraction",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "text-continue",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "some",
+        "artTreatment": "line"
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "minimal"
+    },
+    {
+      "id": "sunday-school",
+      "name": "Sunday School",
+      "description": "Bright, friendly kids pages: rounded type, big drawn characters acting out the story, dots and confetti.",
+      "moods": [
+        "playful",
+        "faith",
+        "colorful"
+      ],
+      "palettes": [
+        "kids-sky",
+        "kids-sun",
+        "storybook-meadow"
+      ],
+      "fonts": {
+        "heading": "baloo-2",
+        "body": "nunito"
+      },
+      "altFonts": [
+        {
+          "heading": "fredoka",
+          "body": "nunito"
+        },
+        {
+          "heading": "chewy",
+          "body": "quicksand"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "pattern": "dot-grid",
+        "patternOpacity": 0.12
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 800,
+          "case": "sentence",
+          "tracking": -0.01,
+          "lineHeight": 1.05
+        },
+        "body": {
+          "weight": 600,
+          "lineHeight": 1.45
+        },
+        "emphasis": "highlight",
+        "decorations": [
+          "confetti-shapes",
+          "rounded-card"
+        ],
+        "slideNumber": {
+          "style": "pill",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "pointing-hand-badge",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "illustrations": "story"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "lively"
+    },
+    {
+      "id": "minimal-verse",
+      "name": "Minimal Verse",
+      "description": "Quiet, gallery-like verse posts: one elegant line per slide, wide margins, tiny labels and nothing else.",
+      "moods": [
+        "minimal",
+        "calm",
+        "faith"
+      ],
+      "palettes": [
+        "bone-minimal",
+        "scripture-ivory",
+        "codex-noir"
+      ],
+      "fonts": {
+        "heading": "instrument-serif",
+        "body": "inter"
+      },
+      "altFonts": [
+        {
+          "heading": "cormorant-garamond",
+          "body": "inter"
+        },
+        {
+          "heading": "newsreader",
+          "body": "karla"
+        }
+      ],
+      "background": {
+        "type": "solid"
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 14,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.95,
+          "weight": 400,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.6
+        },
+        "emphasis": "italic",
+        "decorations": [
+          "whitespace"
+        ],
+        "slideNumber": {
+          "style": "small-caps-fraction",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "hairline-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-centered",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "minimal"
+    },
+    {
+      "id": "sermon-notes",
+      "name": "Sermon Notes",
+      "description": "Notebook sermon notes: handwritten headings, ruled paper, a margin line, taped corners and underlined key words.",
+      "moods": [
+        "playful",
+        "educational",
+        "faith"
+      ],
+      "palettes": [
+        "scripture-ivory",
+        "sunday-warm",
+        "kids-sun"
+      ],
+      "fonts": {
+        "heading": "kalam",
+        "body": "karla"
+      },
+      "altFonts": [
+        {
+          "heading": "patrick-hand",
+          "body": "karla"
+        },
+        {
+          "heading": "gochi-hand",
+          "body": "nunito"
+        }
+      ],
+      "background": {
+        "type": "pattern",
+        "pattern": "lined-paper",
+        "patternOpacity": 0.18
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 9,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.0,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": 0.0,
+          "lineHeight": 1.1
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "underline",
+        "decorations": [
+          "margin-line",
+          "tape-corner",
+          "underline-squiggle"
+        ],
+        "slideNumber": {
+          "style": "handwritten",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "hand-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-checklist",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "handwritten"
+    },
+    {
+      "id": "church-swiss",
+      "name": "Church Swiss",
+      "description": "Swiss-grid church design: heavy grotesk caps, one red accent, mono indexes, strict grid and black/white rhythm.",
+      "moods": [
+        "minimal",
+        "bold",
+        "professional",
+        "faith"
+      ],
+      "palettes": [
+        "bone-minimal",
+        "woodcut-red",
+        "codex-navy"
+      ],
+      "fonts": {
+        "heading": "archivo",
+        "body": "inter"
+      },
+      "altFonts": [
+        {
+          "heading": "inter",
+          "body": "inter"
+        },
+        {
+          "heading": "public-sans",
+          "body": "inter"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "pattern": "fine-grid",
+        "patternOpacity": 0.05
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 7,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.05,
+          "weight": 900,
+          "case": "upper",
+          "tracking": -0.02,
+          "lineHeight": 0.95
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "color",
+        "decorations": [
+          "thin-rule-top",
+          "corner-index"
+        ],
+        "slideNumber": {
+          "style": "mono-index",
+          "position": "top-left"
+        },
+        "swipeCue": {
+          "style": "text-arrow-mono",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "rhythm": "alternate"
+      },
+      "roleLayouts": {
+        "hook": "hook-number",
+        "intro": "body-top-left",
+        "body": "body-top-left",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "swiss"
+    },
+    {
+      "id": "woodcut-poster",
+      "name": "Woodcut Poster",
+      "description": "Printmaking posters: tall gothic caps, silhouettes cut like linocuts, riso grain and a single red ink.",
+      "moods": [
+        "bold",
+        "editorial",
+        "warm"
+      ],
+      "palettes": [
+        "woodcut-red",
+        "codex-crimson",
+        "verdict-black"
+      ],
+      "fonts": {
+        "heading": "league-gothic",
+        "body": "eb-garamond"
+      },
+      "altFonts": [
+        {
+          "heading": "bebas-neue",
+          "body": "eb-garamond"
+        },
+        {
+          "heading": "oswald",
+          "body": "libre-baskerville"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "texture": "riso-grain",
+        "noise": 0.06
+      },
+      "layout": {
+        "alignment": "center",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 1.15,
+          "weight": 400,
+          "case": "upper",
+          "tracking": 0.01,
+          "lineHeight": 0.95
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.45
+        },
+        "emphasis": "color",
+        "decorations": [
+          "starburst"
+        ],
+        "slideNumber": {
+          "style": "fraction",
+          "position": "bottom-center"
+        },
+        "swipeCue": {
+          "style": "big-arrow",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "silhouette",
+        "illustrations": "rich"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-centered",
+        "body": "body-centered",
+        "list": "list-numbered-rows",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "maximal"
+    },
+    {
+      "id": "blueprint-study",
+      "name": "Blueprint Study",
+      "description": "Bible-study blueprints: line drawings, grid paper, diagram-first slides and technical labels.",
+      "moods": [
+        "tech",
+        "calm",
+        "educational"
+      ],
+      "palettes": [
+        "blueprint-ink",
+        "chalk-slate",
+        "codex-navy"
+      ],
+      "fonts": {
+        "heading": "space-grotesk",
+        "body": "ibm-plex-mono"
+      },
+      "altFonts": [
+        {
+          "heading": "ibm-plex-sans",
+          "body": "ibm-plex-mono"
+        },
+        {
+          "heading": "space-grotesk",
+          "body": "inter"
+        }
+      ],
+      "background": {
+        "type": "pattern",
+        "pattern": "fine-grid",
+        "patternOpacity": 0.12
+      },
+      "layout": {
+        "alignment": "left",
+        "marginPct": 8,
+        "grid": {
+          "columns": 12,
+          "baseline": 8,
+          "show": "none"
+        },
+        "headline": {
+          "scale": 0.95,
+          "weight": 700,
+          "case": "sentence",
+          "tracking": -0.02,
+          "lineHeight": 1.08
+        },
+        "body": {
+          "weight": 400,
+          "lineHeight": 1.5
+        },
+        "emphasis": "underline",
+        "decorations": [
+          "code-tag",
+          "thin-rule-top"
+        ],
+        "slideNumber": {
+          "style": "mono-index",
+          "position": "top-right"
+        },
+        "swipeCue": {
+          "style": "text-arrow-mono",
+          "position": "bottom-right"
+        },
+        "panoramic": false,
+        "artTreatment": "line",
+        "illustrations": "some"
+      },
+      "roleLayouts": {
+        "hook": "hook-giant-type",
+        "intro": "body-top-left",
+        "body": "body-two-column",
+        "list": "list-bullets",
+        "step": "step-big-number",
+        "stat": "stat-hero",
+        "quote": "quote-big-marks",
+        "comparison": "compare-split",
+        "summary": "list-numbered-rows",
+        "cta": "cta-centered"
+      },
+      "motion": "typewriter"
     }
   ]
 }

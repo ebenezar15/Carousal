@@ -2,14 +2,17 @@
 // shine, and an animated part where it makes sense (candle flames blink, stars twinkle, bells sway).
 
 import { NEUTRALS as N, SKIN_TONES } from './characters';
-import { arcBand, arcShape, capsule, circle, cloud, curve, ellipse, hashStr, heart, poly, rand, roundPoly, rrect, scaleAt, sparkle, star, translate, mul } from './geom';
-import { Ctx, cross, rays, roundTree, sailboat, sheep } from './sceneKit';
+import { arcBand, arcShape, blob, capsule, circle, cloud, curve, ellipse, hashStr, heart, poly, rand, rotateAt, roundPoly, rrect, scaleAt, sparkle, star, translate, mul } from './geom';
+import { archPath, chiRho, column, Ctx, cross, doveShape, drapeCloth, lens, marble, rays, roundTree, sailboat, sheep } from './sceneKit';
 import type { ArtPalette, ArtPiece, PropKind } from './types';
 
 export const PROP_LIST: PropKind[] = [
   'bible', 'cross', 'dove', 'candle', 'lamp', 'heart', 'bread', 'cup', 'crown', 'sheep', 'star', 'sun', 'cloud', 'tree', 'boat', 'church',
   'door', 'shield', 'hands-praying', 'anchor', 'key', 'seed', 'fish', 'mountain', 'water-drop', 'flame', 'music', 'lightbulb', 'compass',
   'scroll', 'olive-branch', 'bell',
+  // Theology & church history.
+  'column', 'chi-rho', 'masks', 'trinity', 'tablets', 'hourglass', 'scales', 'ichthys', 'alpha-omega', 'crown-of-thorns', 'quill', 'drape',
+  'mitre', 'ark', 'globe',
 ];
 
 const flame = (c: Ctx, x: number, y: number, s: number, name = 'flame') =>
@@ -45,19 +48,8 @@ const P: Record<PropKind, Draw> = {
     c.glow(rrect(46, 12, 2.5, 18, 1), 0.35);
   },
   dove: (c) => {
-    const { pal } = c;
     backdrop(c);
-    c.mover('dove', 'float', [50, 50], () => {
-      c.add(`M58 34C46 18 30 16 18 20C28 26 36 34 42 46Z`, N.wool);
-      c.add(`M58 34C46 18 30 16 18 20C28 26 36 34 42 46Z`, c.dark, 0.08);
-      c.add(`M20 58C30 50 44 46 58 46C66 46 72 42 74 36C76 32 82 30 86 34L92 38L86 40C86 54 76 64 60 66C46 68 36 72 26 80C26 72 28 66 32 62Z`, N.wool);
-      c.add(`M60 48C70 30 80 18 90 14C88 30 80 46 66 56Z`, N.wool);
-      c.add(`M60 48C70 30 80 18 90 14C88 30 80 46 66 56Z`, c.dark, 0.05);
-      c.add(circle(80, 36, 2), N.eye);
-      c.add(`M86 34L94 36L86 40Z`, N.gold);
-      c.add(curve([[92, 38], [86, 48], [76, 54]]), 'none', undefined, { stroke: pal.primary, strokeWidth: 2.2 });
-      c.add(ellipse(84, 47, 4, 2) + ellipse(80, 52, 4, 2), pal.primary);
-    });
+    c.mover('dove', 'float', [50, 50], () => doveShape(c));
   },
   candle: (c) => {
     const { pal } = c;
@@ -347,6 +339,286 @@ const P: Record<PropKind, Draw> = {
       c.shade(`M58 13C68 18 72 30 72 44C72 60 78 70 86 78L66 78C68 64 68 40 58 13Z`, 0.15);
       c.add(rrect(12, 76, 76, 8, 4), N.gold);
       c.glow(capsule([38, 26], [36, 56], 3), 0.45);
+    });
+  },
+  column: (c, seed) => {
+    c.add(ellipse(50, 94, 30, 4), c.dark, 0.12);
+    column(c, 50, 94, 86, 24, { crack: seed % 2 === 1 });
+  },
+  'chi-rho': (c) => {
+    const { pal } = c;
+    backdrop(c);
+    // Laurel wreath: leaves along two arcs that meet under the monogram.
+    for (const [a0, a1, s] of [[100, 250, 1], [80, -70, -1]] as const) {
+      for (let i = 0; i <= 7; i++) {
+        const a = ((a0 + ((a1 - a0) * i) / 7) * Math.PI) / 180;
+        const x = 50 + Math.cos(a) * 36;
+        const y = 52 + Math.sin(a) * 36;
+        const tang = a + (s * Math.PI) / 2;
+        c.add(lens([x, y], [x + Math.cos(tang - s * 0.5) * 11, y + Math.sin(tang - s * 0.5) * 11], 2.6), N.gold);
+      }
+    }
+    c.add(arcBand(50, 52, 34.6, 36.4, 100, 250) + arcBand(50, 52, 34.6, 36.4, -70, 80), N.gold);
+    c.add(poly([[44, 86], [56, 86], [62, 96], [50, 91], [38, 96]]), pal.primary);
+    chiRho(c, 50, 50, 26, pal.primary, 3.4);
+    c.glow(capsule([48.6, 28], [48.6, 46], 1), 0.4);
+    c.mover('sparkle', 'twinkle', [84, 16], () => c.add(sparkle(84, 16, 6), pal.highlight));
+  },
+  masks: (c) => {
+    const { pal } = c;
+    backdrop(c);
+    const mask = (cx: number, cy: number, rot: number, happy: boolean, face: string) =>
+      c.at(mul(translate(cx, cy), rotateAt(rot)), () => {
+        const d = `M-21 -22C-10 -29 10 -29 21 -22C25 -6 21 14 0 27C-21 14 -25 -6 -21 -22Z`;
+        c.add(d, face);
+        c.shade(`M0 -26.5C10 -26.5 16 -25 21 -22C25 -6 21 14 0 27Z`, 0.14);
+        c.glow(`M-17 -19C-10 -24 -4 -24 0 -24C-6 -20 -12 -12 -16 -4Z`, 0.3);
+        const brow = happy ? -14 : -12;
+        c.add(capsule([-15, brow + (happy ? 0 : 3)], [-5, brow - (happy ? 2 : 1)], 1.3) + capsule([15, brow + (happy ? 0 : 3)], [5, brow - (happy ? 2 : 1)], 1.3), c.dark, 0.7);
+        const eye = (s: number) =>
+          happy
+            ? `M${s * 15} -5Q${s * 9.5} -13 ${s * 4} -5Q${s * 9.5} -8 ${s * 15} -5Z`
+            : `M${s * 15} -8Q${s * 9.5} -1 ${s * 4} -8Q${s * 9.5} -11 ${s * 15} -8Z`;
+        c.add(eye(-1) + eye(1), c.dark, 0.85);
+        c.add(happy ? `M-11 5Q0 22 11 5Q0 12 -11 5Z` : `M-10 16Q0 3 10 16Q0 10 -10 16Z`, c.dark, 0.85);
+        if (happy) c.add(circle(-13, 6, 3) + circle(13, 6, 3), pal.accent, 0.35);
+      });
+    c.mover('ribbon', 'sway', [60, 34], () => {
+      c.stroke(curve([[60, 34], [72, 26], [80, 36], [90, 30]]), pal.accent, 2.4);
+      c.stroke(curve([[40, 60], [26, 70], [18, 62], [8, 70]]), pal.accent, 2.4);
+    });
+    mask(62, 56, 12, false, pal.primary);
+    mask(38, 44, -14, true, c.light);
+  },
+  trinity: (c) => {
+    const { pal } = c;
+    backdrop(c);
+    c.add(circle(50, 54, 40), pal.highlight, 0.2);
+    const C: [number, number] = [50, 55];
+    c.add(arcBand(C[0], C[1], 19, 24, 0, 359.9), N.gold);
+    c.shade(arcBand(C[0], C[1], 19, 21, 0, 359.9), 0.12);
+    // Three interlocking leaves (vesicas), 120° apart, each running from near the centre outward.
+    for (const deg of [-90, 30, 150]) {
+      const a = (deg * Math.PI) / 180;
+      const tip0: [number, number] = [C[0] + Math.cos(a) * 3, C[1] + Math.sin(a) * 3];
+      const tip1: [number, number] = [C[0] + Math.cos(a) * 41, C[1] + Math.sin(a) * 41];
+      c.stroke(lens(tip0, tip1, 11), pal.primary, 5.2);
+      c.stroke(lens(tip0, tip1, 11), c.light, 1.2, 0.45);
+    }
+    c.mover('sparkle', 'twinkle', [50, 6], () => c.add(sparkle(86, 18, 6) + sparkle(14, 22, 4.5), pal.highlight));
+  },
+  tablets: (c) => {
+    const numeral = (txt: string, cx: number, cy: number) => {
+      const hgt = 6;
+      const wOf = (ch: string) => (ch === 'I' ? 1.6 : 4.2);
+      const total = [...txt].reduce((s, ch) => s + wOf(ch) + 1, -1);
+      let x = cx - total / 2;
+      let d = '';
+      for (const ch of txt) {
+        const w = wOf(ch);
+        if (ch === 'I') d += capsule([x + 0.8, cy - hgt / 2], [x + 0.8, cy + hgt / 2], 0.75);
+        else if (ch === 'V') d += capsule([x, cy - hgt / 2], [x + w / 2, cy + hgt / 2], 0.75) + capsule([x + w, cy - hgt / 2], [x + w / 2, cy + hgt / 2], 0.75);
+        else d += capsule([x, cy - hgt / 2], [x + w, cy + hgt / 2], 0.75) + capsule([x + w, cy - hgt / 2], [x, cy + hgt / 2], 0.75);
+        x += w + 1;
+      }
+      return d;
+    };
+    c.add(ellipse(50, 92, 42, 5), c.dark, 0.12);
+    const tablet = (x0: number, x1: number, nums: string[]) => {
+      const d = archPath(x0, x1, 12 + (x1 - x0) / 2, 90);
+      marble(c, d, 0.25);
+      c.shade(archPath(x1 - 6, x1, 12 + (x1 - x0) / 2, 90), 0.14);
+      c.add(archPath(x0 + 3, x1 - 3, 15 + (x1 - x0) / 2, 87), c.dark, 0.06);
+      let carved = '';
+      nums.forEach((n, i) => (carved += numeral(n, (x0 + x1) / 2, 40 + i * 10)));
+      c.add(carved, c.dark, 0.6);
+    };
+    tablet(13, 49, ['I', 'II', 'III', 'IV', 'V']);
+    tablet(51, 87, ['VI', 'VII', 'VIII', 'IX', 'X']);
+    c.glow(capsule([17, 34], [17, 80], 1.2), 0.35);
+  },
+  hourglass: (c) => {
+    const { pal } = c;
+    c.add(ellipse(50, 92, 30, 5), c.dark, 0.12);
+    const glass = `M34 17C34 36 46 42 48 50C46 58 34 64 34 83L66 83C66 64 54 58 52 50C54 42 66 36 66 17Z`;
+    c.add(glass, pal.highlight, 0.18);
+    c.add(`M37 30C40 38 46 44 50 48C54 44 60 38 63 30Z`, N.kraft);
+    c.add(`M36 83C38 73 45 66 50 65C55 66 62 73 64 83Z`, N.kraft);
+    c.shade(`M50 65C55 66 62 73 64 83L56 83C56 75 53 68 50 65Z`, 0.14);
+    c.mover('sand', 'blink', [50, 56], () => c.add(capsule([50, 48], [50, 66], 0.9), N.kraft));
+    c.add(glass, c.light, 0.22);
+    c.glow(`M38 20C38 32 42 38 45 42C42 36 40 30 40 20Z`, 0.55);
+    c.add(capsule([30, 16], [30, 84], 2.2) + capsule([70, 16], [70, 84], 2.2), N.wood);
+    c.add(rrect(24, 9, 52, 8, 3) + rrect(24, 83, 52, 8, 3), N.woodDark);
+    c.glow(rrect(26, 10, 48, 2, 1) + rrect(26, 84, 48, 2, 1), 0.25);
+  },
+  scales: (c) => {
+    const { pal } = c;
+    c.add(ellipse(50, 94, 26, 4), c.dark, 0.12);
+    c.add(roundPoly([[32, 94], [38, 84], [62, 84], [68, 94]], 3), N.gold);
+    c.shade(roundPoly([[50, 94], [50, 84], [62, 84], [68, 94]], 2), 0.14);
+    c.add(capsule([50, 84], [50, 20], 2.8), N.gold);
+    c.shade(capsule([51.4, 84], [51.4, 22], 1.2), 0.12);
+    c.mover('beam', 'sway', [50, 24], () => {
+      c.add(capsule([14, 24], [86, 24], 2.2), N.gold);
+      for (const x of [16, 84]) {
+        c.stroke(`M${x} 24L${x - 12} 60M${x} 24L${x + 12} 60M${x} 24L${x} 60`, c.dark, 0.9, 0.55);
+        c.add(arcShape(x, 60, 15, 8, 0, 180), N.gold);
+        c.shade(arcShape(x, 60, 15, 8, 0, 90, true), 0.14);
+        c.add(ellipse(x, 60, 15, 2.2), pal.accent, 0.5);
+      }
+    });
+    c.add(circle(50, 18, 4.5), N.gold);
+    c.glow(circle(48.5, 16.5, 1.6), 0.6);
+  },
+  ichthys: (c) => {
+    const { pal } = c;
+    backdrop(c);
+    c.stroke(curve([[8, 78], [22, 74], [36, 80], [50, 76], [64, 80], [78, 74], [92, 78]]), c.light, 2, 0.6);
+    c.mover('ichthys', 'bob', [50, 50], () => {
+      c.stroke(`M14 50Q46 14 82 64`, pal.primary, 5);
+      c.stroke(`M14 50Q46 86 82 36`, pal.primary, 5);
+      c.stroke(`M20 45Q38 28 52 30`, c.light, 1.2, 0.5);
+    });
+  },
+  'alpha-omega': (c) => {
+    const { pal } = c;
+    backdrop(c);
+    const col = pal.primary;
+    // Α
+    c.add(capsule([30, 28], [18, 72], 3.4) + capsule([30, 28], [42, 72], 3.4) + capsule([23, 56], [37, 56], 2.6), col);
+    c.add(capsule([13, 72], [23, 72], 1.8) + capsule([37, 72], [47, 72], 1.8), col);
+    // Ω
+    const ox = 70;
+    const oy = 47;
+    c.add(arcBand(ox, oy, 10, 16.5, 128, 412), col);
+    const lx = ox + Math.cos((128 * Math.PI) / 180) * 13.2;
+    const rx = ox + Math.cos((52 * Math.PI) / 180) * 13.2;
+    const ly = oy + Math.sin((128 * Math.PI) / 180) * 13.2;
+    c.add(capsule([lx, ly], [lx + 1, 70], 3.2, 2.6) + capsule([rx, ly], [rx - 1, 70], 3.2, 2.6), col);
+    c.add(capsule([lx - 7, 71], [lx + 3, 71], 2.2) + capsule([rx - 3, 71], [rx + 7, 71], 2.2), col);
+    c.shade(arcBand(ox, oy, 10, 12.5, -40, 60), 0.12);
+    c.glow(capsule([28, 32], [21, 60], 1), 0.4);
+    c.mover('sparkle', 'twinkle', [50, 20], () => c.add(sparkle(50, 22, 6) + sparkle(52, 84, 4), N.gold));
+  },
+  'crown-of-thorns': (c) => {
+    const { pal } = c;
+    c.add(circle(50, 52, 40), pal.highlight, 0.25);
+    c.add(ellipse(50, 80, 32, 5), c.dark, 0.1);
+    // Thorns first so the woven ring overlaps their roots.
+    let thorns = '';
+    for (let i = 0; i < 20; i++) {
+      const a = (i / 20) * Math.PI * 2 + (i % 2) * 0.12;
+      const x = 50 + Math.cos(a) * 33;
+      const y = 56 + Math.sin(a) * 15;
+      let nx = Math.cos(a) / 33;
+      let ny = Math.sin(a) / 15;
+      const l = Math.hypot(nx, ny);
+      nx /= l;
+      ny /= l;
+      const len = i % 3 === 0 ? 9 : 6.5;
+      const tx = -ny;
+      const ty = nx;
+      thorns += poly([[x + tx * 1.6, y + ty * 1.6], [x + nx * len + tx * (i % 2 ? 2 : -2), y + ny * len + ty * (i % 2 ? 2 : -2)], [x - tx * 1.6, y - ty * 1.6]]);
+    }
+    c.add(thorns, N.woodDark);
+    c.stroke(ellipse(50, 56, 33, 15), N.woodDark, 4.6);
+    for (let k = 0; k < 3; k++) {
+      let braid = '';
+      for (let i = 0; i < 12; i++) {
+        const a0 = ((i + k / 3) / 12) * Math.PI * 2;
+        const a1 = a0 + 0.42;
+        const p = (a: number, o: number): string => `${50 + Math.cos(a) * (33 + o)} ${56 + Math.sin(a) * (15 + o * 0.5)}`;
+        braid += `M${p(a0, -2.2)}Q${p((a0 + a1) / 2, 0)} ${p(a1, 2.2)}`;
+      }
+      c.stroke(braid, k === 1 ? N.kraft : N.wood, 1.6, 0.9);
+    }
+    c.mover('glow', 'blink', [50, 52], () => c.add(sparkle(50, 30, 7), pal.highlight, 0.9));
+  },
+  quill: (c) => {
+    const { pal } = c;
+    c.add(ellipse(56, 92, 40, 4), c.dark, 0.12);
+    c.at(rotateAt(-6, 36, 60), () => {
+      c.add(rrect(12, 32, 46, 58, 2), N.kraft);
+      c.add(rrect(12, 32, 46, 58, 2), c.light, 0.45);
+      for (let i = 0; i < 6; i++) c.add(rrect(18, 42 + i * 7, i === 5 ? 20 : 34, 1.6, 0.8), N.woodDark, 0.5);
+      c.shade(rrect(12, 84, 46, 6, 2), 0.1);
+    });
+    c.add(rrect(65, 70, 26, 20, 7), N.charcoal);
+    c.add(rrect(70, 63, 16, 9, 2), N.charcoal);
+    c.add(rrect(67, 61, 22, 4, 2), N.eye);
+    c.add(ellipse(78, 63, 8, 1.6), pal.primary, 0.8);
+    c.glow(capsule([69, 75], [69, 84], 1.6), 0.35);
+    c.mover('quill', 'sway', [78, 62], () => {
+      c.add(`M78 60C64 46 44 26 32 4C48 10 70 30 82 50Z`, N.wool);
+      c.add(`M78 60C72 44 56 22 32 4C48 10 70 30 82 50Z`, c.dark, 0.08);
+      for (const t of [0.3, 0.48, 0.66]) {
+        const x = 78 - 46 * t;
+        const y = 60 - 56 * t;
+        c.add(poly([[x - 4, y - 1], [x - 9, y - 1.5], [x - 5, y + 1.5]]), c.dark, 0.12);
+      }
+      c.stroke(`M80 64Q60 34 32 4`, N.woodDark, 1.3);
+    });
+  },
+  drape: (c, seed) => {
+    c.add(ellipse(52, 94, 34, 4), c.dark, 0.12);
+    column(c, 54, 94, 86, 26, { broken: 0.6, crack: seed % 2 === 0 });
+    chiRho(c, 61, 76, 6.5, c.dark, 0.9, 0.5);
+    drapeCloth(c, 54, 42, 26);
+  },
+  mitre: (c) => {
+    const { pal } = c;
+    backdrop(c);
+    c.add(capsule([40, 80], [35, 96], 3.6, 3) + capsule([60, 80], [65, 96], 3.6, 3), pal.primary);
+    c.add(capsule([35, 92], [35, 96], 3) + capsule([65, 92], [65, 96], 3), N.gold);
+    const body = `M24 82L22 42C22 28 36 16 50 6C64 16 78 28 78 42L76 82Z`;
+    c.add(body, N.wool);
+    c.shade(`M50 6C64 16 78 28 78 42L76 82L50 82Z`, 0.12);
+    c.add(poly([[46.5, 11], [53.5, 11], [55, 82], [45, 82]]), N.gold);
+    c.add(rrect(23, 70, 54, 11, 1.5), N.gold);
+    c.shade(rrect(23, 77, 54, 4, 1.5), 0.12);
+    c.add(circle(33, 75.5, 2.4) + circle(67, 75.5, 2.4), pal.accent);
+    cross(c, 50, 54, 22, pal.primary);
+    c.glow(`M28 42C28 32 36 22 44 16C38 24 32 34 32 44L32 66L28 66Z`, 0.4);
+    c.mover('sparkle', 'twinkle', [84, 16], () => c.add(sparkle(84, 16, 6), pal.highlight));
+  },
+  ark: (c) => {
+    const { pal } = c;
+    c.add(circle(50, 50, 44), pal.soft);
+    c.mover('ark', 'bob', [50, 66], () => {
+      c.add(roundPoly([[20, 42], [50, 22], [80, 42]], 3), N.woodDark);
+      c.add(rrect(27, 40, 46, 24, 1), N.kraft);
+      c.shade(rrect(56, 40, 17, 24, 1), 0.14);
+      c.add(rrect(36, 46, 8, 8, 1) + rrect(56, 46, 8, 8, 1), N.woodDark);
+      c.add(`M6 60L94 60C90 74 78 82 62 82L38 82C22 82 10 74 6 60Z`, N.wood);
+      c.shade(`M10 70L90 70C86 76 76 82 62 82L38 82C24 82 14 76 10 70Z`, 0.16);
+      c.add(rrect(6, 59, 88, 4, 2), N.woodDark);
+      c.add(capsule([14, 66], [86, 66], 0.6) + capsule([18, 74], [82, 74], 0.6), N.woodDark, 0.5);
+      c.glow(rrect(28, 41, 18, 2, 1), 0.35);
+    });
+    c.mover('waves', 'bob', [50, 86], () => {
+      const wave = curve([[2, 82], [14, 78], [26, 84], [38, 79], [50, 84], [62, 79], [74, 84], [86, 78], [98, 82]], [[98, 94], [2, 94]]);
+      c.add(wave, pal.primary);
+      c.add(wave, c.light, 0.25);
+      c.stroke(curve([[8, 88], [22, 85], [36, 89]]) + curve([[56, 89], [70, 85], [86, 89]]), c.light, 1.4, 0.6);
+    }, 0.4);
+    c.mover('dove', 'float', [78, 16], () => c.at(mul(translate(68, 6), scaleAt(0.22, 0.22)), () => doveShape(c)), 0.8);
+  },
+  globe: (c) => {
+    const { pal } = c;
+    c.add(ellipse(50, 94, 24, 3.5), c.dark, 0.12);
+    c.add(rrect(32, 88, 36, 6, 3), N.woodDark);
+    c.add(capsule([50, 88], [50, 80], 3), N.gold);
+    c.add(arcBand(50, 44, 38, 41.5, 100, 290), N.gold);
+    c.mover('globe', 'sway', [50, 44], () => {
+      c.add(circle(50, 44, 34), pal.primary);
+      c.add(blob([[28, 26], [40, 20], [50, 26], [46, 36], [36, 42], [26, 38]]), c.light, 0.85);
+      c.add(blob([[54, 46], [66, 42], [76, 50], [70, 66], [58, 70], [52, 58]]), c.light, 0.85);
+      c.add(blob([[26, 54], [36, 52], [38, 62], [30, 66]]), c.light, 0.85);
+      c.stroke(ellipse(50, 44, 14, 34) + ellipse(50, 44, 34, 11), c.light, 0.9, 0.35);
+      c.stroke(`M16 44L84 44`, c.light, 0.9, 0.35);
+      c.shade(`M60 12.5C76 18 84 30 84 44C84 62 70 78 50 78C66 70 72 56 72 42C72 30 68 20 60 12.5Z`, 0.18);
+      c.glow(ellipse(36, 26, 7, 4), 0.35);
     });
   },
 };

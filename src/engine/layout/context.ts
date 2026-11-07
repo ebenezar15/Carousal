@@ -35,6 +35,14 @@ export interface Ctx {
   accentText: string;
   decoration: Density;
   handle: string;
+  /** Series label for editorial footers (theme.series, else the carousel title). */
+  series: string;
+  /** How drawn illustrations are rendered (modifiers.art → style layout.artTreatment → full colour). */
+  artTreatment: NonNullable<DesignModifiers['art']>;
+  /** Slide-number style after the modifiers override (styles.json layout.slideNumber.style). */
+  numbering: string;
+  /** True on the inverted slides of an alternating light/dark carousel. */
+  inverted: boolean;
   plan: CarouselPlan;
   /** Varies generated art between designs (theme.seed, or derived from the style and palette). */
   seed: number;
@@ -110,6 +118,10 @@ export function makeCtx(plan: CarouselPlan, presetId: string, theme: CarouselThe
     accentText,
     decoration: mod.decoration ?? defaultDensity,
     handle: theme.handle?.trim() ?? '',
+    series: (theme.series?.trim() || plan.title || '').slice(0, 48),
+    artTreatment: mod.art ?? (style.layout.artTreatment as DesignModifiers['art'] | undefined) ?? 'color',
+    numbering: mod.numbering ?? style.layout.slideNumber.style,
+    inverted: false,
     plan,
     seed: theme.seed ?? [...`${theme.styleId}|${theme.paletteId}`].reduce((h, c) => (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0, 7) % 100000,
     total: plan.slides.length,
@@ -136,4 +148,38 @@ function resolveEmphasis(kind: string, pal: PaletteColors, accentText: string, o
       // color, accent-color, gradient-text, glow, outline → accent color (renderer adds nothing extra)
       return { style: 'color', color: accentText };
   }
+}
+
+/** Whether a carousel alternates light and dark slides (modifiers.rhythm → style layout.rhythm). */
+export const alternates = (theme: CarouselTheme): boolean =>
+  (theme.modifiers?.rhythm ?? (getStyle(theme.styleId).layout.rhythm as string | undefined)) === 'alternate';
+
+/** Moves a color toward white/black until it reads (≥ min) on `bg`. */
+function readableOn(c: string, bg: string, min: number): string {
+  if (contrast(c, bg) >= min) return c;
+  const toward = contrast('#FFFFFF', bg) > contrast('#000000', bg) ? '#FFFFFF' : '#000000';
+  for (let t = 0.1; t <= 1; t += 0.1) {
+    const m = mix(c, toward, t);
+    if (contrast(m, bg) >= min) return m;
+  }
+  return toward;
+}
+
+/**
+ * The opposite-scheme twin of a palette for alternating carousels: a cream page becomes the ink-dark
+ * page (and the reverse), keeping the same accent hue where it still reads.
+ */
+export function invertPalette(p: PaletteColors): PaletteColors {
+  const darkBg = contrast('#000000', p.bg) < contrast('#FFFFFF', p.bg);
+  const bg = darkBg ? mix(p.text, '#FFFFFF', 0.04) : mix(p.text, '#000000', 0.18);
+  const text = p.bg;
+  return {
+    bg,
+    surface: mix(bg, text, 0.08),
+    text,
+    mutedText: readableOn(mix(text, bg, 0.28), bg, 4.5),
+    primary: readableOn(p.primary, bg, 3),
+    accent: readableOn(p.accent, bg, 3),
+    highlight: p.highlight,
+  };
 }

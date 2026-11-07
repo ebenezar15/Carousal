@@ -24,6 +24,11 @@ export interface ArtPart {
   /** In art units (scaled with the piece). */
   strokeWidth?: number;
   opacity?: number;
+  /**
+   * The picture's spot colour: monochrome treatments (engraving, duotone…) keep this part's own colours.
+   * When no part of a piece is marked, parts filled with the palette primary act as the spot.
+   */
+  spot?: boolean;
 }
 
 /** Looping motions a moving part can have in animations (rotation pivots on `pivot`). */
@@ -69,9 +74,14 @@ export interface CharacterSpec {
 export type SceneKind =
   | 'hill-cross' | 'sunrise' | 'road' | 'mountains' | 'sea-boat' | 'storm-sea' | 'shepherd' | 'tree-river' | 'garden'
   | 'desert' | 'night-sky' | 'empty-tomb' | 'city' | 'rainbow' | 'church' | 'table' | 'open-door' | 'lighthouse'
-  | 'field-seeds' | 'well' | 'manger';
+  | 'field-seeds' | 'well' | 'manger'
+  // Church history & the life of Jesus.
+  | 'river-baptism' | 'council' | 'ruins' | 'upper-room';
 
 export type PropKind =
   | 'bible' | 'cross' | 'dove' | 'candle' | 'lamp' | 'heart' | 'bread' | 'cup' | 'crown' | 'sheep' | 'star' | 'sun'
   | 'cloud' | 'tree' | 'boat' | 'church' | 'door' | 'shield' | 'hands-praying' | 'anchor' | 'key' | 'seed' | 'fish'
-  | 'mountain' | 'water-drop' | 'flame' | 'music' | 'lightbulb' | 'compass' | 'scroll' | 'olive-branch' | 'bell';
+  | 'mountain' | 'water-drop' | 'flame' | 'music' | 'lightbulb' | 'compass' | 'scroll' | 'olive-branch' | 'bell'
+  // Theology & church history.
+  | 'column' | 'chi-rho' | 'masks' | 'trinity' | 'tablets' | 'hourglass' | 'scales' | 'ichthys' | 'alpha-omega' | 'crown-of-thorns'
+  | 'quill' | 'drape' | 'mitre' | 'ark' | 'globe';

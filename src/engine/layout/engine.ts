@@ -5,7 +5,7 @@ import { label } from './primitives';
 import type { CarouselPlan, SlidePlan } from '../schema';
 import { buildBackground } from './backgrounds';
 import { chrome } from './chrome';
-import { makeCtx, type Ctx } from './context';
+import { alternates, invertPalette, makeCtx, type Ctx } from './context';
 import { decorate } from './decorations';
 import { LAYOUTS, ROLE_LAYOUTS, type LayoutResult } from './layouts';
 import { diagramFor } from './diagrams';
@@ -104,22 +104,34 @@ export function buildSlide(ctx: Ctx, s: SlidePlan, index: number, requested: str
   };
 }
 
+/**
+ * Layout contexts for a carousel: one per palette. Alternating styles (light/dark rhythm) put every
+ * other slide on the inverted palette; layout choice always uses the first context.
+ */
+export function contexts(input: BuildInput): { main: Ctx; at(index: number): Ctx } {
+  const wm = { watermark: input.theme.watermark };
+  const main = Object.assign(makeCtx(input.plan, input.presetId, input.theme), wm);
+  if (!alternates(input.theme)) return { main, at: () => main };
+  const inv = Object.assign(makeCtx(input.plan, input.presetId, { ...input.theme, customPalette: invertPalette(main.pal) }), wm, { inverted: true });
+  return { main, at: (i) => (i % 2 === 1 ? inv : main) };
+}
+
 export function buildCarousel(input: BuildInput): Carousel {
-  const ctx = Object.assign(makeCtx(input.plan, input.presetId, input.theme), { watermark: input.theme.watermark });
-  const layouts = chooseLayouts(ctx, input.theme.layoutOverrides);
+  const c = contexts(input);
+  const layouts = chooseLayouts(c.main, input.theme.layoutOverrides);
   return {
     id: newId('car_'),
     presetId: input.presetId,
     theme: input.theme,
-    slides: input.plan.slides.map((s, i) => animateSlide(buildSlide(ctx, s, i, layouts[i]!), input.theme)),
+    slides: input.plan.slides.map((s, i) => animateSlide(buildSlide(c.at(i), s, i, layouts[i]!), input.theme)),
   };
 }
 
 /** Rebuilds a single slide (e.g. after "new layout" or rewriting its copy) with the carousel's design. */
 export function rebuildSlide(plan: CarouselPlan, presetId: string, theme: CarouselTheme, index: number): Slide {
-  const ctx = Object.assign(makeCtx(plan, presetId, theme), { watermark: theme.watermark });
-  const layouts = chooseLayouts(ctx, theme.layoutOverrides);
-  return animateSlide(buildSlide(ctx, plan.slides[index]!, index, layouts[index]!), theme);
+  const c = contexts({ plan, presetId, theme });
+  const layouts = chooseLayouts(c.main, theme.layoutOverrides);
+  return animateSlide(buildSlide(c.at(index), plan.slides[index]!, index, layouts[index]!), theme);
 }
 
 /** Brand watermark (logo and/or handle) in a corner of every slide. */

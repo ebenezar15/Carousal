@@ -2,9 +2,15 @@
 // composition with the seed, and can host people standing on its ground line.
 
 import { NEUTRALS as N, SKIN_TONES } from './characters';
-import { arcBand, arcShape, blob, capsule, circle, curve, ellipse, hashStr, poly, rand, roundPoly, rrect, sparkle, type Pt } from './geom';
+import { arcBand, arcShape, blob, capsule, circle, curve, ellipse, hashStr, mul, poly, rand, roundPoly, rrect, scaleAt, sparkle, translate, type Pt } from './geom';
 import {
+  archPath,
   birds,
+  chiRho,
+  column,
+  doveShape,
+  drapeCloth,
+  marble,
   bigStar,
   bush,
   clouds,
@@ -32,7 +38,8 @@ import type { ArtPalette, ArtPiece, CharacterSpec, SceneKind } from './types';
 
 export const SCENE_LIST: SceneKind[] = [
   'hill-cross', 'sunrise', 'road', 'mountains', 'sea-boat', 'storm-sea', 'shepherd', 'tree-river', 'garden', 'desert', 'night-sky',
-  'empty-tomb', 'city', 'rainbow', 'church', 'table', 'open-door', 'lighthouse', 'field-seeds', 'well', 'manger',
+  'empty-tomb', 'city', 'rainbow', 'church', 'table', 'open-door', 'lighthouse', 'field-seeds', 'well', 'manger', 'river-baptism', 'council',
+  'ruins', 'upper-room',
 ];
 
 /** Where people stand: [x, groundY, height] candidates in preference order. */
@@ -735,6 +742,215 @@ const R: Record<SceneKind, Recipe> = {
     const g = ridgePath(c, 530, 10, 3);
     c.add(g, c.isDark ? pal.surface : pal.primary, c.isDark ? 1 : 0.7);
     c.add(g, c.dark, 0.35);
+  },
+
+  'river-baptism': (c) => {
+    const { pal, r } = c;
+    sky(c);
+    const rx = r.range(410, 590);
+    // The heavens opening: a bright gap in the sky and light falling onto the river.
+    c.add(circle(rx, -10, 190), pal.highlight, 0.16, { spot: true });
+    c.add(circle(rx, -10, 120), pal.highlight, 0.28, { spot: true });
+    rays(c, rx, -30, 70, 720, 9, pal.highlight, 0.15, r.range(-4, 4), 100, 40);
+    clouds(c, 3, 40, 120, c.light, 0.9, [rx, 230]);
+    c.tone(ridgePath(c, 318, 20, 6, 380), pal.primary, 0.78);
+    c.tone(ridgePath(c, 340, 14, 5, 380), pal.primary, 0.66);
+    // The Jordan, from the horizon to the viewer.
+    waterBands(c, 350);
+    c.add(poly([[rx - 30, 352], [rx + 30, 352], [rx + 140, 600], [rx - 140, 600]]), pal.highlight, 0.22, { spot: true });
+    // Dove descending in the light.
+    const dy = r.range(140, 180);
+    c.mover('dove', 'float', [rx, dy], () => {
+      c.add(circle(rx, dy, 70), pal.highlight, 0.3, { spot: true });
+      c.at(mul(translate(rx - 55, dy - 50), scaleAt(1.1, 1.1)), () => doveShape(c));
+    }, 0.3);
+    // Someone standing waist-deep in the river: drawn before the near water so it hides their legs.
+    const [first, ...rest] = c.people;
+    const wl = 455;
+    if (first) {
+      c.person(first, rx, 560, 290);
+      c.people = rest;
+    }
+    c.tone(rrect(0, wl, 1000, 600 - wl), pal.primary, 0.42);
+    c.add(rrect(0, wl, 1000, 6), c.light, 0.35);
+    if (first) c.stroke(ellipse(rx, wl + 4, 92, 12), c.light, 4, 0.6);
+    waveDashes(c, 8, 370, 590, c.light, 0.4, false);
+    // Banks.
+    const left = curve([[-10, 344], [rx - 170, 360], [rx - 150, 400], [rx - 175, 465], [rx - 230, 600]], [[0, 600]]);
+    const right = curve([[1010, 342], [rx + 170, 358], [rx + 150, 400], [rx + 170, 465], [rx + 230, 600]], [[1000, 600]]);
+    c.tone(left, pal.primary, 0.32);
+    c.tone(right, pal.primary, 0.36);
+    c.shade(curve([[rx - 150, 400], [rx - 175, 465], [rx - 230, 600]], [[rx - 300, 600], [rx - 210, 400]]), 0.08);
+    c.shade(curve([[rx + 150, 400], [rx + 170, 465], [rx + 230, 600]], [[rx + 300, 600], [rx + 210, 400]]), 0.08);
+    roundTree(c, r.range(40, Math.max(60, rx - 300)), 372, 160, pal.primary, 0.3);
+    palmTree(c, r.range(Math.min(940, rx + 300), 960), 380, 200, pal.primary, -1);
+    // Reeds along the water's edge.
+    for (const s of [-1, 1])
+      for (let i = 0; i < 6; i++) {
+        const x = rx + s * (180 + i * 14 + r.range(-6, 6));
+        const y = 470 + i * 18;
+        c.add(capsule([x, y], [x + s * r.range(2, 8), y - r.range(40, 70)], 2.2, 1.2), pal.primary, 0.9);
+      }
+    grassTufts(c, 6, 520, 590, c.dark, 0.14);
+    placePeople(c, [[Math.max(80, (rx - 230) / 2), 575, 210], [(1000 + rx + 230) / 2, 578, 210]]);
+    birds(c, 2, 120, 880, 60, 140);
+  },
+
+  council: (c) => {
+    const { pal, r } = c;
+    sky(c);
+    sun(c, r.pick([r.range(90, 200), r.range(800, 910)]), r.range(80, 130), 46);
+    clouds(c, 2, 50, 120, c.light, 0.9, [500, 260]);
+    c.tone(ridgePath(c, 400, 22, 5), pal.primary, 0.78);
+    c.tone(rrect(0, 490, 1000, 110), pal.primary, 0.5);
+    const tx = r.range(440, 560);
+    const n = r.pick([4, 6]);
+    const W = n === 6 ? 560 : 440;
+    // Steps.
+    marble(c, rrect(tx - W / 2 - 60, 494, W + 120, 28, 2));
+    marble(c, rrect(tx - W / 2 - 34, 470, W + 68, 26, 2));
+    marble(c, rrect(tx - W / 2 - 12, 448, W + 24, 24, 2));
+    for (const y of [494, 470, 448]) c.shade(rrect(tx - W / 2 - 60 + (494 - y), y + 16, W + 120 - (494 - y) * 2, y === 494 ? 12 : 10), 0.12);
+    // Shadowed portico behind the columns.
+    c.add(rrect(tx - W / 2 + 6, 226, W - 12, 224), c.dark, 0.3);
+    c.add(`M${tx - 40} 450L${tx - 40} 330C${tx - 40} 300 ${tx + 40} 300 ${tx + 40} 330L${tx + 40} 450Z`, c.dark, 0.35);
+    const gap = W / n;
+    const xs = Array.from({ length: n }, (_, i) => tx - W / 2 + gap * (i + 0.5));
+    // Banners between the central columns sway in the breeze.
+    const bi = n / 2 - 1;
+    const bx = (xs[bi]! + xs[bi + 1]!) / 2;
+    c.mover('banner', 'sway', [bx, 240], () => {
+      c.add(poly([[bx - 26, 236], [bx + 26, 236], [bx + 26, 360], [bx, 342], [bx - 26, 360]]), pal.primary, undefined, { spot: true });
+      c.shade(poly([[bx + 6, 236], [bx + 26, 236], [bx + 26, 360], [bx + 6, 348]]), 0.16);
+      chiRho(c, bx, 282, 18, N.gold, 2.4, undefined, true);
+    });
+    for (const x of xs) column(c, x, 448, 226, 34, { crack: r.chance(0.2) });
+    // Entablature + pediment.
+    marble(c, rrect(tx - W / 2 - 16, 196, W + 32, 30, 2));
+    c.shade(rrect(tx - W / 2 - 16, 214, W + 32, 12), 0.12);
+    for (let i = 0; i < n * 3; i++) c.add(rrect(tx - W / 2 + 4 + (i * (W - 8)) / (n * 3), 200, 6, 10, 1), c.dark, 0.14);
+    marble(c, roundPoly([[tx - W / 2 - 30, 198], [tx, 118], [tx + W / 2 + 30, 198]], 6));
+    c.add(roundPoly([[tx - W / 2 + 6, 190], [tx, 132], [tx + W / 2 - 6, 190]], 3), c.dark, 0.1);
+    chiRho(c, tx, 166, 18, c.dark, 2.2, 0.45);
+    c.glow(rrect(tx - W / 2 - 16, 196, W + 32, 4, 2), 0.4);
+    placePeople(c, [[tx - W / 2 + 40, 585, 220], [tx + W / 2 - 40, 588, 220], [tx - W / 2 - 110, 595, 210], [tx + W / 2 + 110, 595, 210]]);
+    grassTufts(c, 8, 540, 595, c.dark, 0.12);
+    birds(c, 3, 100, 900, 50, 120);
+  },
+
+  ruins: (c) => {
+    const { pal, r } = c;
+    sky(c);
+    // Dusk: warm bands low in the sky and a big sun sinking behind the hill.
+    for (let i = 0; i < 5; i++) c.add(rrect(0, 180 + i * 50, 1000, 420 - i * 50), pal.accent, c.isDark ? 0.03 : 0.05);
+    const hx = r.range(420, 580);
+    const sx = hx + r.pick([-1, 1]) * r.range(300, 360);
+    rays(c, sx, 330, 80, 700, 12, pal.highlight, 0.12, r.range(0, 15), 180, 180);
+    sun(c, sx, 330, 72, pal.highlight, false, true);
+    clouds(c, 2, 60, 150, c.light, 0.7, [sx, 160]);
+    c.tone(ridgePath(c, 400, 26, 6), pal.primary, 0.75);
+    c.tone(moundPath(hx, 330, 440, 480), pal.primary, 0.5);
+    // Broken colonnade on the summit.
+    const cols: [number, number, number, number | undefined, boolean][] = [
+      [hx - 175, 362, 200, r.range(0.55, 0.72), r.chance(0.5)],
+      [hx - 62, 340, 230, undefined, true],
+      [hx + 62, 340, 230, r.chance(0.5) ? undefined : r.range(0.7, 0.85), false],
+      [hx + 178, 362, 170, r.range(0.35, 0.55), r.chance(0.5)],
+    ];
+    for (const [x, base, h, broken, crack] of cols) column(c, x, base, h, 32, { broken, crack });
+    // A red cloth thrown over the first broken column.
+    drapeCloth(c, cols[0]![0], cols[0]![1] - cols[0]![2] * cols[0]![3]!, 32);
+    // A lintel still resting across the two whole columns — or fallen beside them.
+    if (cols[2]![3] === undefined) {
+      marble(c, rrect(hx - 100, 88, 200, 22, 2));
+      c.shade(rrect(hx - 100, 100, 200, 10), 0.14);
+      c.add(poly([[hx + 60, 88], [hx + 100, 88], [hx + 100, 110], [hx + 76, 110]]), c.dark, 0.08);
+    } else {
+      const fx = hx + 260;
+      marble(c, rrect(fx - 60, 392, 120, 26, 4));
+      c.shade(rrect(fx - 60, 406, 120, 12, 4), 0.14);
+    }
+    // A fallen drum lying on the slope.
+    const dx = hx - Math.sign(sx - hx) * r.range(250, 320);
+    marble(c, rrect(dx - 46, 402, 92, 34, 8));
+    c.shade(rrect(dx - 46, 420, 92, 16, 8), 0.14);
+    marble(c, ellipse(dx + 46, 419, 9, 17));
+    c.add(ellipse(dx + 46, 419, 5, 11), c.dark, 0.12);
+    for (let i = 0; i < 5; i++) c.add(ellipse(hx + r.range(-320, 320), r.range(440, 470), r.range(8, 16), 5), N.stone, 0.7);
+    c.tone(ridgePath(c, 520, 16, 4), pal.primary, 0.3);
+    placePeople(c, [[hx - 300, 570, 210], [hx + 320, 575, 210]]);
+    c.tone(ridgePath(c, 568, 10, 3), pal.primary, 0.16);
+    grassTufts(c, 10, 480, 590, c.dark, 0.16);
+    birds(c, 4, 100, 900, 60, 200);
+  },
+
+  'upper-room': (c) => {
+    const { pal, r } = c;
+    // Stone-walled room at night, lit by hanging oil lamps.
+    c.add(rrect(0, 0, 1000, 600), pal.softer);
+    c.add(rrect(0, 0, 1000, 600), pal.highlight, 0.08);
+    for (let row = 0; row < 7; row++)
+      for (let k = 0; k < 7; k++) if (r.chance(0.35)) c.add(rrect(k * 150 + (row % 2) * 75 - 40, row * 56 + 6, 140, 48, 6), c.dark, 0.035);
+    c.add(rrect(0, 0, 1000, 26), N.woodDark);
+    for (let i = 0; i < 6; i++) c.add(rrect(i * 190 + 20, 26, 22, 14, 2), N.woodDark);
+    const wx = r.range(380, 620);
+    // Arched window onto the night.
+    c.add(archPath(wx - 116, wx + 116, 186, 352), N.stone);
+    c.add(archPath(wx - 116, wx + 116, 186, 352), c.light, 0.3);
+    const view = archPath(wx - 96, wx + 96, 190, 340);
+    if (c.isDark) c.add(view, pal.bg);
+    else {
+      c.add(view, pal.primary);
+      c.add(view, pal.ink, 0.55);
+    }
+    for (let i = 0; i < 6; i++) {
+      const sx = wx + r.range(-80, 80);
+      const sy = r.range(118, 250);
+      c.mover(`star-${i}`, 'twinkle', [sx, sy], () => c.add(sparkle(sx, sy, r.range(5, 9)), pal.highlight, 0.9), i * 0.4);
+    }
+    c.add(curve([[wx - 96, 300], [wx - 40, 284], [wx + 10, 296], [wx + 60, 280], [wx + 96, 292]], [[wx + 96, 340], [wx - 96, 340]]), c.dark, c.isDark ? 0.4 : 0.6);
+    c.add(rrect(wx - 4, 120, 8, 222, 1) + rrect(wx - 96, 252, 192, 7, 1), N.woodDark);
+    c.add(rrect(wx - 126, 346, 252, 16, 3), N.stone);
+    // Floor.
+    c.add(rrect(0, 470, 1000, 130), c.dark, 0.1);
+    // Hanging lamps.
+    const lamps = [r.range(130, 260), r.range(740, 870)];
+    lamps.forEach((lx, i) => {
+      const ly = r.range(150, 180);
+      c.stroke(`M${lx} 26L${lx} ${ly - 34}`, N.woodDark, 2.6);
+      c.add(circle(lx + 20, ly, 170), pal.highlight, 0.1, { spot: true });
+      c.at(scaleAt(1.6, 1.6, lx, ly), () => {
+        c.add(`M${lx - 30} ${ly}C${lx - 30} ${ly - 16} ${lx + 30} ${ly - 16} ${lx + 30} ${ly}C${lx + 30} ${ly + 16} ${lx - 30} ${ly + 22} ${lx - 30} ${ly}Z`, pal.accent);
+        c.shade(`M${lx - 30} ${ly}C${lx - 20} ${ly + 8} ${lx + 20} ${ly + 8} ${lx + 30} ${ly}C${lx + 30} ${ly + 16} ${lx - 30} ${ly + 22} ${lx - 30} ${ly}Z`, 0.18);
+        c.add(capsule([lx - 22, ly - 8], [lx, ly - 22], 1.2) + capsule([lx + 22, ly - 8], [lx, ly - 22], 1.2), N.woodDark);
+        c.mover(`lamp-${i}`, 'blink', [lx + 34, ly - 4], () => {
+          c.add(circle(lx + 34, ly - 12, 26), pal.highlight, 0.3, { spot: true });
+          c.add(`M${lx + 34} ${ly - 30}C${lx + 42} ${ly - 18} ${lx + 41} ${ly - 6} ${lx + 34} ${ly - 4}C${lx + 27} ${ly - 6} ${lx + 26} ${ly - 18} ${lx + 34} ${ly - 30}Z`, N.gold, undefined, { spot: true });
+          c.add(`M${lx + 34} ${ly - 18}C${lx + 37} ${ly - 13} ${lx + 37} ${ly - 7} ${lx + 34} ${ly - 6}C${lx + 31} ${ly - 7} ${lx + 31} ${ly - 13} ${lx + 34} ${ly - 18}Z`, c.light, undefined, { spot: true });
+        }, i * 0.7);
+      });
+    });
+    // People gathered behind a long, low table.
+    placePeople(c, [[wx - 250, 610, 400, 110], [wx + 250, 610, 400, 110], [wx, 615, 390, 110], [wx - 430, 620, 380, 110], [wx + 430, 620, 380, 110]], true);
+    c.add(rrect(60, 430, 880, 26, 8), N.wood);
+    c.add(rrect(90, 424, 820, 20, 6), c.light, 0.9);
+    c.add(rrect(60, 452, 880, 148, 0), N.woodDark);
+    c.add(rrect(60, 452, 880, 8, 0), c.dark, 0.2);
+    for (let i = 0; i < 4; i++) c.add(rrect(120 + i * 250, 476, 150, 110, 6), N.wood, 0.25);
+    // Bread, a cup and bowls on the table.
+    const bx = wx + r.pick([-1, 1]) * r.range(110, 170);
+    c.add(`M${bx - 58} 428C${bx - 60} 398 ${bx - 32} 382 ${bx} 382C${bx + 32} 382 ${bx + 60} 398 ${bx + 58} 428Z`, N.bread);
+    for (let i = -1; i <= 1; i++) c.add(capsule([bx + i * 22 - 6, 404], [bx + i * 22 + 8, 394], 3), N.wool, 0.55);
+    const kx = wx + (bx > wx ? -1 : 1) * r.range(40, 90);
+    c.add(rrect(kx - 22, 418, 44, 10, 5), N.gold);
+    c.add(capsule([kx, 420], [kx, 394], 5), N.gold);
+    c.add(`M${kx - 30} 352L${kx + 30} 352C${kx + 30} 382 ${kx + 18} 396 ${kx} 396C${kx - 18} 396 ${kx - 30} 382 ${kx - 30} 352Z`, N.gold);
+    c.add(ellipse(kx, 352, 30, 6), pal.accent);
+    c.glow(capsule([kx - 20, 362], [kx - 16, 380], 3), 0.4);
+    for (const x of [180, 820]) {
+      c.add(ellipse(x, 426, 44, 8), N.stone);
+      c.add(ellipse(x, 422, 34, 5), c.dark, 0.15);
+    }
   },
 };
 

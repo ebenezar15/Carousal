@@ -118,6 +118,18 @@ Troubleshooting:
 
 **Endless designs.** Every *New designs* press remixes styles with freshly generated palettes (always contrast-checked), other font pairings, alternative layouts, textures and new art, and styles you've seen recently step back — so designs keep changing.
 
+## Carousel types and 230 templates
+
+**What kind of carousel?** After adding your content, pick a type or describe it in your own words, e.g. *“a 10-slide doctrine explainer on the Trinity, one heresy per slide with the verse that answers it, series: Theology / Early Church”*. The app reads the type, the slide count and the series name (offline), tells the AI exactly how to structure the slides, and shapes the built-in writer's plan too (numbered labels like *CLAIM 01* or *POINT 02*, timelines, versus slides, story scenes). 24 types:
+- **Faith:** doctrine explainer, church history, myth vs truth, verse breakdown, sermon recap, Bible story, Bible character study, Greek/Hebrew word study, devotional, prayer guide, Q&A / catechism, reading plan, testimony, church event.
+- **Teaching and business:** list of tips, step-by-step, framework, this vs that, timeline, data story, case study, quote collection, mistakes to avoid, checklist.
+
+**230 built-in templates** in 12 categories (theology & doctrine, church history, apologetics, scripture, devotional & prayer, sermons, Bible stories & kids, worship/youth/events, education, business, tech, lifestyle). Browse them with live previews from **Template** on the Generate page, **Templates…** above a generated carousel, or the editor's **Templates** tab; search by look (“engraving”, “crimson”, “noir”, “kids”). Choosing a carousel type suggests the templates made for it. Notes on the research behind them: [research/template-inspiration.md](research/template-inspiration.md).
+
+**15 new styles**, led by **Theology Editorial**: condensed caps headlines with a crimson last word, italic serif text, a red dash before each slide's label, a short rule under the headline, an editorial header and footer (*@handle · 03 / 10*, *THEOLOGY / EARLY CHURCH*), engraved illustrations and cream pages alternating with ink-black ones. Also Doctrine Noir, Engraved Classic, Illuminated Manuscript, Catechism Q&A, Church History, Myth vs Truth, Worship Night, Hymn Sheet, Sunday School, Minimal Verse, Sermon Notes, Church Swiss, Woodcut Poster and Blueprint Study.
+
+**New design options** (Design → Background, or by describing the look): **Illustration look** — full colour, engraving, duotone, line drawing or silhouette; **Light / dark** — alternate slides; **Page header & footer** — editorial; **Series label**. New drawn symbols and scenes for theology and church history: column, Chi-Rho, masks, Trinity knot, tablets, hourglass, scales, ichthys, Alpha & Omega, crown of thorns, quill, mitre, ark, globe; river baptism, council hall, ruins and the upper room.
+
 ## Backgrounds, graphics, text effects and animation
 
 **Backgrounds.** Set these for all slides in **Design → Background**, or for one slide in the slide panel.

@@ -1,6 +1,7 @@
 // Single entry point for turning content into a CarouselPlan. Picks a provider, validates the JSON
 // with Zod, asks the model to repair invalid output, and always falls back to the rules splitter,
 // so generation never hard-fails.
+import { shapeForType } from './carouselTypes';
 import { z } from 'zod';
 import { CarouselPlanSchema, type CarouselPlan } from './schema';
 import { buildSystemPrompt, buildUserMessage } from './prompt';
@@ -150,7 +151,7 @@ export async function generatePlan(
   providers: AIProvider[],
   signal?: AbortSignal,
 ): Promise<GenerateResult> {
-  const rules = (notice?: string): GenerateResult => ({ plan: planFromText(content, opts), provider: 'rules', notice, attempts: 1 });
+  const rules = (notice?: string): GenerateResult => ({ plan: shapeForType(planFromText(content, opts), opts.carouselType), provider: 'rules', notice, attempts: 1 });
   if (preference === 'rules') return rules();
 
   const candidates = preference === 'auto' ? providers : providers.filter((p) => p.id === preference);
@@ -165,7 +166,7 @@ export async function generatePlan(
     try {
       const { plan, attempts } = await runProvider(p, content, opts, signal);
       // In Auto mode, skipping providers that aren't set up is normal: no warning for that.
-      return { plan, provider: p.id, attempts, notice: notes.length && preference !== 'auto' ? notes.join('; ') : undefined };
+      return { plan: shapeForType(plan, opts.carouselType), provider: p.id, attempts, notice: notes.length && preference !== 'auto' ? notes.join('; ') : undefined };
     } catch (e) {
       if (signal?.aborted) throw e;
       failed = true;

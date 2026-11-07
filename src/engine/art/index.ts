@@ -8,6 +8,7 @@ export { character, randomCharacter, SKIN_TONES, HAIR_COLORS, NEUTRALS, NEUTRAL_
 export { scene, SCENE_LIST } from './scenes';
 export { prop, PROP_LIST } from './props';
 export { transformPath, parsePath, pathBounds } from './geom';
+export { treatArt, TREATMENT_LIST, type ArtTreatment } from './treatments';
 
 /** Resolve the carousel palette into the colors illustrations may use. */
 export function artPalette(p: { bg: string; surface: string; text: string; mutedText: string; primary: string; accent: string; highlight: string }): ArtPalette {

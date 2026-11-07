@@ -18,6 +18,7 @@ export const SlidePlanSchema = z.object({
   emphasis: z.array(z.string()).describe('1-2 words from the headline to visually emphasize'),
   layoutHint: z.string().describe('Short free-text layout suggestion, e.g. "giant number left"'),
   iconKeywords: z.array(z.string()),
+  kicker: z.string().optional().describe('Optional short label above the headline, e.g. "ADOPTIONISM / THE MAN WHO BECAME GOD"'),
 });
 
 export const CarouselPlanSchema = z.object({

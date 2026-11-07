@@ -3,8 +3,7 @@
 import { newId } from '@/model/id';
 import type { Carousel, CarouselTheme, GroupElement, Slide, SlideElement, TextElement } from '@/model/types';
 import { emptySlide, type CarouselPlan, type SlidePlan } from '@/engine/schema';
-import { buildCarousel } from '@/engine/layout/engine';
-import { makeCtx } from '@/engine/layout/context';
+import { buildCarousel, contexts } from '@/engine/layout/engine';
 import { chrome } from '@/engine/layout/chrome';
 import { isPanoramic } from '@/engine/layout/backgrounds';
 import { panoramicSlice } from '@/engine/layout/decorations';
@@ -226,12 +225,18 @@ const PANORAMA_SLOT = /^(panorama-|seam-|route-stop)/;
  * slide. Hand-made slides are left alone.
  */
 export function refreshSequence(doc: Doc): Doc {
-  let ctx: ReturnType<typeof makeCtx>;
+  let ctxs: ReturnType<typeof contexts>;
   try {
-    ctx = makeCtx(doc.plan, doc.carousel.presetId, doc.carousel.theme);
+    ctxs = contexts({ plan: doc.plan, presetId: doc.carousel.presetId, theme: doc.carousel.theme });
   } catch {
     return doc;
   }
+  const ctx = ctxs.main;
+  // Alternating light/dark carousels: chrome follows the palette the slide was actually built on.
+  const ctxFor = (bg: Slide['background'], i: number) => {
+    if (bg.type === 'solid') for (const c of [ctxs.at(0), ctxs.at(1)]) if (c.pal.bg.toLowerCase() === bg.color.toLowerCase()) return c;
+    return ctxs.at(i);
+  };
   const total = doc.carousel.slides.length;
   const pano = isPanoramic(ctx);
   const slides = doc.carousel.slides.map((s, i) => {
@@ -241,7 +246,7 @@ export function refreshSequence(doc: Doc): Doc {
     let elements = s.elements.filter((e) => !(e.slot && (CHROME_SLOT.test(e.slot) || PANORAMA_SLOT.test(e.slot))));
     if (pano) elements = [...panoramicSlice(ctx, i), ...elements];
     elements = elements.map((e) => (e.slot === 'masthead-issue' && e.kind === 'text' ? { ...e, text: `No. ${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}` } : e));
-    if (hadChrome) elements = [...elements, ...chrome(ctx, i)];
+    if (hadChrome) elements = [...elements, ...chrome(ctxFor(s.background, i), i)];
     return { ...s, background, elements };
   });
   return { ...doc, carousel: { ...doc.carousel, slides } };

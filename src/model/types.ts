@@ -308,6 +308,12 @@ export interface DesignModifiers {
   continuous?: ContinuousStyle;
   /** Illustrations (scenes, characters, objects) matched to the content: none, some slides, most slides, or a picture on every slide (story). */
   illustrations?: 'none' | 'some' | 'rich' | 'story';
+  /** 'alternate' flips every other slide to the inverted (light ↔ dark) palette; 'none' keeps one. */
+  rhythm?: 'alternate' | 'none';
+  /** How drawn illustrations are rendered: full colour, engraving, duotone, line drawing or silhouette. */
+  art?: 'color' | 'engraving' | 'duotone' | 'line' | 'silhouette';
+  /** Override the style's slide-number / page chrome (e.g. 'editorial' header and footer). */
+  numbering?: string;
 }
 
 export type ContinuousStyle = 'flow' | 'ribbon' | 'path' | 'blocks' | 'word';
@@ -324,6 +330,10 @@ export interface CarouselTheme {
   layoutOverrides?: Record<number, string>;
   /** Shown on CTA slides and footers, e.g. "@studio". */
   handle?: string;
+  /** Series label in editorial footers, e.g. "Theology / Early Church" (defaults to the plan title). */
+  series?: string;
+  /** Built-in template this design started from (research/templates). */
+  templateId?: string;
   /** Human label for the variation, e.g. "Bold Gradient · Sunset". */
   label?: string;
   /** Brand-kit colors mapped onto palette roles; overrides `paletteId`'s colors. */
@@ -360,7 +370,7 @@ export interface Project {
   /** "Describe the look" prompt the designs were made from (kept for "New designs"). */
   designPrompt?: string;
   /** Generation settings, so "regenerate" reuses them. */
-  settings?: { presetId: string; tone: string; audience: string; language: string; slideCount: number | 'auto'; variationCount: number };
+  settings?: { presetId: string; tone: string; audience: string; language: string; slideCount: number | 'auto'; variationCount: number; carouselType?: string; carouselBrief?: string; templateId?: string; series?: string };
   carousel: Carousel;
   /** Small PNG data URL used in the project list. */
   thumbnail?: string;

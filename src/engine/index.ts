@@ -1,7 +1,7 @@
 export * from './schema';
 export * from './types';
 export { generatePlan, parsePlan, parseWith, extractJson, runProvider, completeJson, pickProvider, type ProviderPreference } from './generate';
-export { pickVariations, makeItMore, type Variation, type MoreDirection } from './variations';
+export { pickVariations, makeItMore, isFaithContent, type Variation, type MoreDirection } from './variations';
 export { rewriteSlide, headlineOptions, setHeadline, cycleEmphasis, nextLayoutId, NeedsAIError } from './regenerate';
 export { planFromText, parseBlocks } from './rules';
 export { normalizePlan } from './normalize';
@@ -9,3 +9,5 @@ export { createClaudeProvider, CLAUDE_MODELS, DEFAULT_CLAUDE_MODEL, DEFAULT_CLAU
 export { createOllamaProvider, listOllamaModels, pullOllamaModel, deleteOllamaModel, RECOMMENDED_OLLAMA_MODELS, DEFAULT_OLLAMA_URL, type OllamaModel, type PullProgress } from './providers/ollama';
 export { createOpenAIProvider, listOpenAIModels, OPENAI_PRESETS, getOpenAIPreset, type OpenAIPresetId, type OpenAIModelInfo } from './providers/openai';
 export { interpretPrompt, interpretPromptWithAI, themeFromBrief, applyBriefExtras, needsAI, variationsFromBrief, STYLE_PROMPTS, FAITH_PROMPTS, type DesignBrief, type Interpretation } from './designPrompt';
+export { CAROUSEL_TYPES, AUTO_TYPE, getCarouselType, readCarouselBrief, shapeForType, typeInstructions, type CarouselType, type CarouselBrief } from './carouselTypes';
+export { templateVariations, type TemplatePickOptions } from './templatePicks';

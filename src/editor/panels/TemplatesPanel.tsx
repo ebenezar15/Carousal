@@ -15,6 +15,8 @@ import { ensureFonts } from '@/styles/fontLoader';
 import { loadIcons } from '@/styles/icons';
 import { applyTheme } from '../ops';
 import { Section, Select } from './fields';
+import { TemplateDialog } from '@/app/generate/InputPanel';
+import { getTemplate, TEMPLATES, themeFromTemplate } from '@/styles/templates';
 
 interface Item { id: string; name: string; styleId: string; presetId: string; carousel: Carousel; builtIn: boolean; record?: TemplateRecord }
 
@@ -23,6 +25,7 @@ const samplePlan = () => planFromText(SAMPLE_CONTENT, defaultOptions);
 async function applyDesign(theme: CarouselTheme) {
   const fontsToLoad = [theme.headingFont, theme.bodyFont, ...(getStyle(theme.styleId).fonts.accent ? [getStyle(theme.styleId).fonts.accent!] : [])];
   await Promise.all([ensureFonts(fontsToLoad), loadIcons()]);
+  // Keep the carousel's handle and series label.
   useDocument.getState().apply((d) => applyTheme(d, { ...theme, handle: d.carousel.theme.handle ?? theme.handle }));
 }
 
@@ -36,6 +39,7 @@ export function TemplatesPanel() {
   const [platformFilter, setPlatformFilter] = useState('current');
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
+  const [browsing, setBrowsing] = useState(false);
 
   const builtIn = useMemo<Item[]>(() => {
     const p = samplePlan();
@@ -66,6 +70,23 @@ export function TemplatesPanel() {
         <input aria-label="Template name" className="field py-1 text-xs" placeholder="Template name" value={name} onChange={(e) => setName(e.target.value)} />
         <button className="btn-primary w-full px-2.5 py-1 text-xs" onClick={() => void saveTemplate()}>Save current design</button>
         {msg && <p role="status" className="text-[11px] text-emerald-700">{msg}</p>}
+      </Section>
+      <Section title="Template library">
+        <button className="btn-primary w-full px-2.5 py-1 text-xs" onClick={() => setBrowsing(true)}>Browse {TEMPLATES.length} templates…</button>
+        {browsing && (
+          <TemplateDialog
+            presetId={carousel.presetId}
+            templateId={carousel.theme.templateId}
+            plan={plan ?? undefined}
+            pickLabel="Apply template"
+            onClose={() => setBrowsing(false)}
+            onPick={(id) => {
+              const t = getTemplate(id);
+              setBrowsing(false);
+              if (t) void applyDesign(themeFromTemplate(t, { series: carousel.theme.series }));
+            }}
+          />
+        )}
       </Section>
       <Section title="Gallery">
         <Select label="Style" value={styleFilter} options={[['all', 'All styles'], ...styles.map((s) => [s.id, s.name] as [string, string])]} onChange={setStyleFilter} />

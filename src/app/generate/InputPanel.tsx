@@ -3,7 +3,10 @@ import type { GenerateOptions, Tone } from '@/engine';
 import { ACCEPTED_FILE_TYPES, ImportError, importFile, importUrl } from '@/engine/import';
 import { presets } from '@/styles';
 import { SAMPLE_CONTENT } from '../sample';
-import { FAITH_PROMPTS, interpretPrompt, STYLE_PROMPTS } from '@/engine';
+import { getTemplate, TEMPLATES } from '@/styles/templates';
+import { TemplateGallery } from './TemplateGallery';
+import { useEscape } from '../useEscape';
+import { AUTO_TYPE, CAROUSEL_TYPES, FAITH_PROMPTS, interpretPrompt, readCarouselBrief, STYLE_PROMPTS } from '@/engine';
 
 
 const TONES: Tone[] = ['professional', 'playful', 'bold', 'educational'];
@@ -20,6 +23,8 @@ export interface InputState {
   opts: GenerateOptions;
   variationCount: number;
   handle: string;
+  /** Built-in template to start from ('' = let the app choose designs). */
+  templateId: string;
 }
 
 interface Props {
@@ -106,6 +111,14 @@ export function InputPanel({ value, onChange, onGenerate, busy }: Props) {
         {importMsg && <p role="status" className={`mt-2 text-xs ${importMsg.kind === 'ok' ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400'}`}>{importMsg.text}</p>}
       </div>
 
+      <CarouselTypeField
+        type={value.opts.carouselType ?? AUTO_TYPE}
+        brief={value.opts.carouselBrief ?? ''}
+        onChange={(carouselType, carouselBrief) => setOpts({ carouselType, carouselBrief })}
+      />
+
+      <TemplateField presetId={value.presetId} templateId={value.templateId} typeId={value.opts.carouselType} onChange={(templateId) => set({ templateId })} />
+
       <DesignPromptField value={value.designPrompt} onChange={(designPrompt) => set({ designPrompt })} />
 
       <div className="grid grid-cols-2 gap-3">
@@ -188,6 +201,67 @@ export function DesignPromptField({ value, onChange, id = 'design-prompt' }: { v
         ))}
       </div>
       {understood.length > 0 && <p className="mt-1 text-[11px] text-zinc-500" data-testid="design-understood">Understood: {understood.join(' · ')}</p>}
+    </div>
+  );
+}
+
+const GROUPS: [string, string][] = [['faith', 'Faith'], ['story', 'Stories'], ['teach', 'Teaching'], ['business', 'Business']];
+
+/** "What kind of carousel?": a type (or Auto) plus the author's own description of the carousel they want. */
+export function CarouselTypeField({ type, brief, onChange }: { type: string; brief: string; onChange(type: string, brief: string): void }) {
+  const read = brief.trim() || type !== AUTO_TYPE ? readCarouselBrief(brief, type) : null;
+  const chosen = CAROUSEL_TYPES.find((t) => t.id === type);
+  return (
+    <div data-testid="carousel-type">
+      <label className="label" htmlFor="carousel-type">What kind of carousel? <span className="font-normal text-zinc-400">(optional)</span></label>
+      <select id="carousel-type" className="field" value={type} onChange={(e) => onChange(e.target.value, brief)}>
+        <option value={AUTO_TYPE}>Auto — decide from the content and my description</option>
+        {GROUPS.map(([g, name]) => (
+          <optgroup key={g} label={name}>
+            {CAROUSEL_TYPES.filter((t) => t.group === g).map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
+          </optgroup>
+        ))}
+      </select>
+      {chosen && <p className="mt-1 text-[11px] text-zinc-500">{chosen.description}</p>}
+      <textarea
+        id="carousel-brief"
+        aria-label="Describe the carousel you want"
+        className="field mt-1.5 h-16 resize-y text-sm"
+        placeholder="e.g. a 10-slide doctrine explainer on the Trinity: one heresy per slide with the verse that answers it, series: Theology / Early Church"
+        value={brief}
+        onChange={(e) => onChange(type, e.target.value)}
+      />
+      {read && read.understood.length > 0 && <p className="mt-1 text-[11px] text-zinc-500" data-testid="type-understood">Building: {read.understood.join(' · ')}</p>}
+    </div>
+  );
+}
+
+/** "Start from a template": the chosen template (first design) and a gallery to browse all of them. */
+function TemplateField({ presetId, templateId, typeId, onChange }: { presetId: string; templateId: string; typeId?: string; onChange(id: string): void }) {
+  const [open, setOpen] = useState(false);
+  const chosen = getTemplate(templateId);
+  return (
+    <div data-testid="template-field">
+      <span className="label">Template <span className="font-normal text-zinc-400">(optional)</span></span>
+      <div className="flex items-center gap-2">
+        <button type="button" className="btn-ghost flex-1 border border-zinc-300 px-2.5 py-1.5 text-left text-xs dark:border-zinc-700" onClick={() => setOpen(true)}>
+          {chosen ? <>Using <strong>{chosen.name}</strong></> : `Browse ${TEMPLATES.length} templates…`}
+        </button>
+        {chosen && <button type="button" className="text-xs text-zinc-500 hover:text-red-600" onClick={() => onChange('')} aria-label="Clear template">Clear</button>}
+      </div>
+      {open && <TemplateDialog presetId={presetId} templateId={templateId} typeId={typeId} onPick={(id) => { onChange(id); setOpen(false); }} onClose={() => setOpen(false)} />}
+    </div>
+  );
+}
+
+export function TemplateDialog({ presetId, templateId, typeId, onPick, onClose, plan, pickLabel }: { presetId: string; templateId?: string; typeId?: string; onPick(id: string): void; onClose(): void; plan?: import('@/engine').CarouselPlan; pickLabel?: string }) {
+  useEscape(onClose);
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4" role="dialog" aria-modal="true" aria-label="Templates" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="card w-full max-w-4xl p-4">
+        <h2 className="mb-3 text-sm font-semibold">Templates</h2>
+        <TemplateGallery presetId={presetId} selectedId={templateId} typeId={typeId} plan={plan} onPick={(t) => onPick(t.id)} onClose={onClose} pickLabel={pickLabel} />
+      </div>
     </div>
   );
 }

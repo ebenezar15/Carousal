@@ -45,13 +45,17 @@ function headlineEffect(ctx: Ctx): Partial<TextSpec> {
 export function bodySpec(ctx: Ctx, text: string, slot = 'body', extra: Partial<TextSpec> = {}): TextSpec {
   return {
     slot, text, font: ctx.fonts.body, weight: ctx.body.weight, max: ctx.sizes.body, min: ctx.sizes.minBody,
-    lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8, ...extra,
+    lineHeight: ctx.body.lineHeight, color: slot === 'subline' ? ctx.pal.mutedText : ctx.pal.text, gapAfter: 0.8,
+    italic: Boolean(ctx.style.layout.body.italic) || undefined, ...extra,
   };
 }
 
-function kickerText(ctx: Ctx, index: number): string | null {
+function kickerText(ctx: Ctx, index: number, s?: SlidePlan): string | null {
   const d = ctx.style.layout.decorations;
   if (ctx.decoration === 'none') return null;
+  // Editorial styles: the slide's own label ("ADOPTIONISM / THE MAN WHO BECAME GOD"), the series on the cover.
+  if (d.includes('dash-kicker')) return s?.kicker?.trim() || (index === 0 && ctx.series && ctx.series.toLowerCase() !== s?.headline.toLowerCase() ? ctx.series : null);
+  if (s?.kicker?.trim() && (d.includes('kicker-label') || d.includes('small-caps-kicker'))) return s.kicker.trim();
   const n = String(index).padStart(2, '0');
   if (d.includes('code-tag')) return `// ${n}`;
   if (d.includes('terminal-prompt')) return `> ${n}`;
@@ -86,14 +90,20 @@ type Marker = 'dot' | 'number' | 'check' | 'dash';
 /** Bullet rows with drawn markers; all rows share one font size, fitted to the region. */
 function rows(ctx: Ctx, items: string[], region: Box, marker: Marker, opts: { separators?: boolean; startAt?: number } = {}): LayoutResult {
   const { pal, k } = ctx;
-  let size = Math.round(ctx.sizes.body * 0.98);
+  const headingItems = ctx.style.layout.listItems === 'heading';
+  const serifNumerals = ctx.style.layout.numerals === 'serif-italic';
+  let size = Math.round(ctx.sizes.body * (headingItems ? 1.05 : 0.98));
   const min = ctx.sizes.minBody;
   const lh = Math.max(1.3, ctx.body.lineHeight - 0.05);
   for (let iter = 0; iter < 30; iter++) {
     const markerW = marker === 'number' ? size * 1.9 : size * 1.25;
     const gap = Math.round(size * (opts.separators ? 0.9 : 0.6));
     const textW = region.w - markerW;
-    const specs = items.map((t): TextSpec => ({ slot: 'bullet', text: t, font: ctx.fonts.body, weight: ctx.body.weight, max: size, min: size, lineHeight: lh, color: pal.text }));
+    // Editorial lists set each item in the headline face (condensed caps) instead of body text.
+    const specs = items.map((t): TextSpec =>
+      headingItems
+        ? { slot: 'bullet', text: t, font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: 1.15, color: pal.text, textCase: ctx.headline.textCase, letterSpacing: 0.01 * size }
+        : { slot: 'bullet', text: t, font: ctx.fonts.body, weight: ctx.body.weight, max: size, min: size, lineHeight: lh, color: pal.text });
     const heights = specs.map((sp) => Math.ceil(measureSpec(sp, size, textW).height));
     const total = heights.reduce((a, b) => a + b, 0) + gap * (items.length - 1);
     if (total <= region.h || size <= min) {
@@ -110,7 +120,12 @@ function rows(ctx: Ctx, items: string[], region: Box, marker: Marker, opts: { se
           els.push(rect('bullet-marker', mx, cy - b / 2, b, b, 'transparent', { stroke: pal.primary, strokeWidth: Math.max(2, 3 * k), cornerRadius: b * 0.22 }));
           els.push(path('bullet-check', SHAPES.check.d, SHAPES.check.viewBox, mx + b * 0.12, cy - b * 0.38, b * 0.76, b * 0.76, { stroke: pal.primary, strokeWidth: Math.max(2, 3.5 * k) }));
         } else {
-          els.push(textEl({ slot: 'bullet-number', text: String((opts.startAt ?? 1) + i).padStart(2, '0'), font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left'));
+          const num = String((opts.startAt ?? 1) + i).padStart(2, '0');
+          els.push(
+            serifNumerals
+              ? textEl({ slot: 'bullet-number', text: num, font: ctx.fonts.body, weight: 400, italic: true, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left')
+              : textEl({ slot: 'bullet-number', text: num, font: ctx.fonts.heading, weight: ctx.headline.weight, max: size, min: size, lineHeight: lh, color: ctx.accentText }, mx, Math.round(y), Math.round(markerW), Math.ceil(lineH), size, 0, 'left'),
+          );
         }
         els.push(textEl(sp, Math.round(region.x + markerW), Math.round(y), Math.round(textW), heights[i]!, size, 0, 'left'));
         y += heights[i]!;
@@ -134,7 +149,7 @@ const listMarker = (ctx: Ctx, layoutId: string): Marker =>
 /** Headline (+kicker) on top, then body and/or rows; whole group positioned by valign. */
 export function standard(ctx: Ctx, s: SlidePlan, index: number, opts: { valign: 'top' | 'middle'; align: TextElement['align']; marker?: Marker; region?: Box; headMax?: number }): LayoutResult {
   const region = opts.region ?? ctx.box;
-  const kick = kickerText(ctx, index);
+  const kick = kickerText(ctx, index, s);
   const specs: TextSpec[] = [];
   if (kick) specs.push(kickerSpec(ctx, kick));
   if (s.headline) specs.push(headSpec(ctx, s, s.headline, opts.headMax ?? ctx.sizes.head));
@@ -299,7 +314,7 @@ const bodyTwoColumn: LayoutFn = (ctx, s, i) => {
   const { box, k } = ctx;
   const gap = Math.round(64 * k);
   const leftW = Math.round((box.w - gap) * 0.45);
-  const kick = kickerText(ctx, i);
+  const kick = kickerText(ctx, i, s);
   const left = fitStack([...(kick ? [kickerSpec(ctx, kick)] : []), headSpec(ctx, s, s.headline, ctx.sizes.head)], { x: box.x, y: box.y, w: leftW, h: box.h }, 'middle', 'left');
   const rightRegion = { x: box.x + leftW + gap, y: box.y, w: box.w - leftW - gap, h: box.h };
   const right = s.bullets.length ? rows(ctx, s.bullets, rightRegion, 'dot') : fitStack([bodySpec(ctx, s.body)], rightRegion, 'middle', 'left');
@@ -323,7 +338,7 @@ const bodyIconTop: LayoutFn = (ctx, s, i) => {
 const listLayout = (id: string): LayoutFn => (ctx, s, i) => {
   const items = s.bullets.length ? s.bullets : s.body ? [s.body] : [];
   const sep = id === 'list-numbered-rows';
-  const kick = kickerText(ctx, i);
+  const kick = kickerText(ctx, i, s);
   const head = fitStack([...(kick ? [kickerSpec(ctx, kick)] : []), headSpec(ctx, s, s.headline, ctx.sizes.head)], { ...ctx.box, h: Math.round(ctx.box.h * 0.38) }, 'top', ctx.align === 'center' ? 'center' : 'left');
   const top = head.elements.length ? bottomOf(head.elements) + Math.round(56 * ctx.k) : ctx.box.y;
   const r = rows(ctx, items, { x: ctx.box.x, y: top, w: ctx.box.w, h: ctx.box.y + ctx.box.h - top }, listMarker(ctx, id), { separators: sep });

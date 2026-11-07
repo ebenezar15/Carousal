@@ -153,6 +153,30 @@ function BackgroundSection({ theme }: { theme: CarouselTheme }) {
         options={[['style', 'Style default'], ['none', 'None'], ['some', 'Some slides'], ['rich', 'Most slides'], ['story', 'Every slide (story panels)']]}
         onChange={(v) => set({ illustrations: v === 'style' ? undefined : (v as DesignModifiers['illustrations']) })}
       />
+      <Row>
+        <Select
+          label="Illustration look"
+          value={m.art ?? 'style'}
+          options={[['style', 'Style default'], ['color', 'Full colour'], ['engraving', 'Engraving'], ['duotone', 'Duotone'], ['line', 'Line drawing'], ['silhouette', 'Silhouette']]}
+          onChange={(v) => set({ art: v === 'style' ? undefined : (v as DesignModifiers['art']) })}
+        />
+        <Select
+          label="Light / dark"
+          value={m.rhythm ?? 'style'}
+          options={[['style', 'Style default'], ['alternate', 'Alternate slides'], ['none', 'Same on all']]}
+          onChange={(v) => set({ rhythm: v === 'style' ? undefined : (v as DesignModifiers['rhythm']) })}
+        />
+      </Row>
+      <Select
+        label="Page header & footer"
+        value={m.numbering ?? 'style'}
+        options={[['style', 'Style default'], ['editorial', 'Editorial (handle, page, series)'], ['fraction', 'Page 01 / 10'], ['dots', 'Dots'], ['none', 'None']]}
+        onChange={(v) => set({ numbering: v === 'style' ? undefined : v })}
+      />
+      <label className="block text-[11px] text-zinc-500">
+        Series label (footer)
+        <input aria-label="Series label" className="field mt-0.5 py-1 text-xs" placeholder="e.g. Theology / Early Church" defaultValue={theme.series ?? ''} onBlur={(e) => e.target.value !== (theme.series ?? '') && void retheme({ ...theme, series: e.target.value.trim() || undefined })} />
+      </label>
       <Select label="Decorations" value={m.decoration ?? 'style'} options={[['style', 'Style default'], ['none', 'None'], ['minimal', 'Minimal'], ['normal', 'Normal'], ['rich', 'Rich']]} onChange={(v) => set({ decoration: v === 'style' ? undefined : (v as DesignModifiers['decoration']) })} />
     </Section>
   );

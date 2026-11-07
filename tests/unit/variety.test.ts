@@ -6,6 +6,7 @@ import { isFaithContent, pickVariations } from '@/engine/variations';
 import { generatePalette } from '@/styles/generatePalette';
 import { contrast } from '@/styles/color';
 import { loadIcons } from '@/styles/icons';
+import { styles } from '@/styles';
 import { ARTICLE } from './fixtures';
 
 beforeAll(() => loadIcons());
@@ -66,7 +67,7 @@ Lord, be my shepherd today. Amen.`, defaultOptions);
   it('leads with faith styles for Christian content, not for other content', () => {
     expect(isFaithContent(devotional)).toBe(true);
     expect(isFaithContent(plan)).toBe(false);
-    const faith = ['scripture-serif', 'stained-glass', 'parchment', 'sunday-light', 'illustrated-story', 'night-prayer', 'bible-comic'];
+    const faith = styles.filter((s) => s.moods.includes('faith')).map((s) => s.id);
     const picks = pickVariations(devotional, { count: 4, tone: 'educational', seed: 0 }).map((v) => v.theme.styleId);
     expect(picks.filter((id) => faith.includes(id)).length).toBeGreaterThanOrEqual(2);
     expect(faith).toContain(picks[0]);

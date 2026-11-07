@@ -136,7 +136,7 @@ describe('characters', () => {
 
 describe('scenes', () => {
   it('builds every scene kind on both palettes with valid paths and palette colors', () => {
-    expect(SCENE_LIST).toHaveLength(21);
+    expect(SCENE_LIST).toHaveLength(25);
     for (const pal of [LIGHT, DARK]) {
       const allowed = allowedColors(pal);
       for (const kind of SCENE_LIST)
@@ -179,7 +179,7 @@ describe('scenes', () => {
 
 describe('props', () => {
   it('builds every prop kind on both palettes', () => {
-    expect(PROP_LIST).toHaveLength(32);
+    expect(PROP_LIST).toHaveLength(47);
     for (const pal of [LIGHT, DARK]) {
       const allowed = allowedColors(pal);
       for (const kind of PROP_LIST) {
@@ -192,6 +192,69 @@ describe('props', () => {
   });
   it('animates the candle flame', () => {
     expect(prop('candle', LIGHT).movers?.some((m) => m.loop === 'blink')).toBe(true);
+  });
+});
+
+const THEOLOGY_PROPS = ['column', 'chi-rho', 'masks', 'trinity', 'tablets', 'hourglass', 'scales', 'ichthys', 'alpha-omega', 'crown-of-thorns', 'quill', 'drape', 'mitre', 'ark', 'globe'] as const;
+const HISTORY_SCENES = ['river-baptism', 'council', 'ruins', 'upper-room'] as const;
+
+describe('theology & church-history art', () => {
+  it('lists every new prop and scene', () => {
+    for (const k of THEOLOGY_PROPS) expect(PROP_LIST).toContain(k);
+    for (const k of HISTORY_SCENES) expect(SCENE_LIST).toContain(k);
+  });
+  it('builds the new props on both palettes and several seeds: valid, in the viewBox, palette colours, deterministic', () => {
+    for (const pal of [LIGHT, DARK]) {
+      const allowed = allowedColors(pal);
+      for (const kind of THEOLOGY_PROPS)
+        for (const seed of [0, 1, 2, 7]) {
+          const a = prop(kind, pal, seed);
+          expect(a.viewBox).toEqual([100, 100]);
+          checkPiece(a, allowed, 0.06, 0.95);
+          expect(prop(kind, pal, seed)).toEqual(a);
+        }
+    }
+  });
+  it('cracks the column on some seeds and drapes the plinth in the primary colour', () => {
+    expect(JSON.stringify(prop('column', LIGHT, 1))).not.toBe(JSON.stringify(prop('column', LIGHT, 2)));
+    const drape = prop('drape', LIGHT, 1);
+    const cloth = drape.movers!.find((m) => m.name === 'cloth')!;
+    expect(cloth.loop).toBe('sway');
+    expect(cloth.parts.some((p) => p.fill === LIGHT.primary && p.spot)).toBe(true);
+  });
+  it('gives the new props natural motion', () => {
+    const loops = (k: (typeof THEOLOGY_PROPS)[number]) => (prop(k, LIGHT, 1).movers ?? []).map((m) => m.loop);
+    expect(loops('scales')).toContain('sway');
+    expect(loops('hourglass')).toContain('blink');
+    expect(loops('ark')).toContain('bob');
+    expect(loops('quill')).toContain('sway');
+  });
+  it('builds the new scenes on both palettes, with and without people', () => {
+    for (const pal of [LIGHT, DARK]) {
+      const allowed = allowedColors(pal);
+      for (const kind of HISTORY_SCENES)
+        for (const seed of [1, 2, 3]) {
+          const a = scene(kind, pal, seed);
+          expect(a.viewBox).toEqual([1000, 600]);
+          checkPiece(a, allowed, 0.08, 0.75);
+          expect(scene(kind, pal, seed)).toEqual(a);
+          expect(JSON.stringify(scene(kind, pal, seed + 10))).not.toBe(JSON.stringify(a));
+          const people = [randomCharacter(seed, pal, 'pray'), randomCharacter(seed + 1, pal, 'stand')];
+          checkPiece(scene(kind, pal, seed, { people }), allowed, 0.08, 0.75);
+        }
+    }
+  });
+  it('lets the dove descend over the river and puts the first person in the water', () => {
+    const s = scene('river-baptism', LIGHT, 2);
+    const dove = s.movers!.find((m) => m.name === 'dove')!;
+    expect(dove.loop).toBe('float');
+    expect(dove.pivot[1]).toBeLessThan(250);
+    const withPerson = scene('river-baptism', LIGHT, 2, { people: [randomCharacter(1, LIGHT, 'pray')] });
+    // The figure is drawn before the near water, so the water hides their legs.
+    const firstSkin = withPerson.parts.findIndex((p) => SKIN_TONES.includes(p.fill ?? ''));
+    const nearWater = withPerson.parts.findIndex((p, i) => i > firstSkin && p.d.startsWith('M0 455'));
+    expect(firstSkin).toBeGreaterThan(0);
+    expect(nearWater).toBeGreaterThan(firstSkin);
   });
 });
 

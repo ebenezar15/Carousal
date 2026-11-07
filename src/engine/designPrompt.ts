@@ -32,6 +32,8 @@ export interface DesignBrief {
   typeScale?: number;
   headlineCase?: 'none' | 'upper';
   illustrations?: 'none' | 'some' | 'rich' | 'story';
+  art?: DesignModifiers['art'];
+  rhythm?: DesignModifiers['rhythm'];
 }
 
 export interface Interpretation {
@@ -45,6 +47,21 @@ export interface Interpretation {
 type Rule = [RegExp, (b: DesignBrief) => void, string];
 
 const STYLE_WORDS: [RegExp, string, string][] = [
+  [/\b(theolog(y|ical) editorial|theology|doctrine|doctrinal|heres(y|ies)|early church|crimson editorial)\b/, 'theology-editorial', 'Theology editorial'],
+  [/\b(doctrine noir|dark theology|noir editorial|apologetics dark)\b/, 'doctrine-noir', 'Doctrine noir'],
+  [/\b(engrav(ed|ing|ings)|etching|etched|old book plates?|copperplate)\b/, 'engraved-classic', 'Engraved classic'],
+  [/\b(illuminated|manuscript|codex|medieval)\b/, 'manuscript-codex', 'Illuminated manuscript'],
+  [/\b(catechism|q ?& ?a|question and answer|faq cards?)\b/, 'catechism-qa', 'Catechism Q&A'],
+  [/\b(church history|chronicle|historical timeline)\b/, 'history-timeline', 'Church history'],
+  [/\b(myths? vs\.? truths?|myth vs|verdict|debunk(ing)?|apologetics)\b/, 'apologetics-verdict', 'Myth vs truth'],
+  [/\b(worship night|worship|concert|youth night)\b/, 'worship-night', 'Worship night'],
+  [/\b(hymn(al|s)?|sheet music)\b/, 'hymn-sheet', 'Hymn sheet'],
+  [/\b(sunday school|kids church|vbs|children'?s ministry)\b/, 'sunday-school', 'Sunday school'],
+  [/\b(minimal verse|gallery|museum|quiet verse)\b/, 'minimal-verse', 'Minimal verse'],
+  [/\b(sermon notes|fill in the blanks?|study notes)\b/, 'sermon-notes', 'Sermon notes'],
+  [/\b(church swiss|swiss church)\b/, 'church-swiss', 'Church Swiss'],
+  [/\b(linocut|lino cut|woodcut|block print(ed)?|printmaking)\b/, 'woodcut-poster', 'Woodcut poster'],
+  [/\b(blueprint|bible study diagram|schematic)\b/, 'blueprint-study', 'Blueprint study'],
   [/\b(bible stor(y|ies) comic|comic|comics|panels?|graphic novel)\b/, 'bible-comic', 'Bible story comic'],
   [/\b(storybook|picture book|children'?s|kids|sunday school|illustrated story)\b/, 'illustrated-story', 'Illustrated story'],
   [/\b(stained[- ]glass|cathedral|jewel tones?)\b/, 'stained-glass', 'Stained glass'],
@@ -127,6 +144,11 @@ const PATTERNS: [RegExp, PatternKind, string][] = [
 ];
 
 const RULES: Rule[] = [
+  [/\b(engrav(ed|ing|ings)|etching|etched|hatch(ed|ing))\b/, (b) => (b.art = 'engraving'), 'engraved illustrations'],
+  [/\b(line art|line drawings?|outline drawings?|sketch art)\b/, (b) => (b.art = 'line'), 'line-art illustrations'],
+  [/\b(silhouettes?|cut ?outs? art|linocut|woodcut)\b/, (b) => (b.art ??= 'silhouette'), 'silhouette illustrations'],
+  [/\b(duotone|two[- ]tone)\b/, (b) => (b.art = 'duotone'), 'duotone illustrations'],
+  [/\b(alternat(e|ing)|light and dark|dark and light|cream and black|black and cream|black and white slides)\b/, (b) => (b.rhythm = 'alternate'), 'alternating light and dark slides'],
   [/\b(dark( mode)?|black|night|midnight|noir|moody)\b/, (b) => (b.scheme = 'dark'), 'dark colors'],
   [/\b(light|white|bright|airy)\b/, (b) => (b.scheme ??= 'light'), 'light colors'],
   [/\b(pastel|soft colou?rs?|muted)\b/, (b) => (b.moods = [...(b.moods ?? []), 'pastel']), 'pastel colors'],
@@ -298,6 +320,8 @@ export function themeFromBrief(brief: DesignBrief, fallbackStyleId: string, hand
   if (brief.typeScale) m.typeScale = brief.typeScale;
   if (brief.headlineCase) m.headlineCase = brief.headlineCase;
   if (brief.illustrations) m.illustrations = brief.illustrations;
+  if (brief.art) m.art = brief.art;
+  if (brief.rhythm) m.rhythm = brief.rhythm;
   if (brief.continuous === 'off') m.panoramic = false;
   else if (brief.continuous) Object.assign(m, { panoramic: true, continuous: brief.continuous });
   const theme: CarouselTheme = {
@@ -416,4 +440,13 @@ export const FAITH_PROMPTS: { label: string; prompt: string }[] = [
   { label: 'Night prayer', prompt: 'night prayer, starry sky, candle glow' },
   { label: 'Storybook', prompt: 'storybook illustrated story with characters and scenes, playful' },
   { label: 'Bible comic', prompt: 'bible story comic panels, tell the story with characters' },
+  { label: 'Theology editorial', prompt: 'theology editorial, condensed caps, crimson accent word, italic serif, engraved illustrations, alternating cream and black slides' },
+  { label: 'Doctrine noir', prompt: 'doctrine noir, dark theology, condensed caps, ember accent, engraved illustrations' },
+  { label: 'Engraving', prompt: 'engraved classic, old book plates, sepia ink, serif capitals' },
+  { label: 'Manuscript', prompt: 'illuminated manuscript, gold and vermilion, ornaments, drop caps' },
+  { label: 'Church history', prompt: 'church history chronicle, tall condensed dates, kraft paper, timeline' },
+  { label: 'Myth vs truth', prompt: 'myth vs truth verdict boards, heavy caps, stamps, bold yellow' },
+  { label: 'Worship night', prompt: 'worship night, deep violet gradient, glowing orbs, light beams, dreamy motion' },
+  { label: 'Sunday school', prompt: 'sunday school, bright friendly characters on every slide, rounded type' },
+  { label: 'Linocut', prompt: 'linocut woodcut poster, silhouettes, red ink, riso grain' },
 ];
